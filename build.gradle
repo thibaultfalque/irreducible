@@ -1,0 +1,229 @@
+/*
+ * This is the build.gradle configuration file of approximation.
+ */
+
+/************************
+ * Plugin Configuration *
+ ************************/
+
+apply plugin: "eclipse"
+apply plugin: "java"
+apply plugin: "jacoco"
+apply plugin: "maven-publish"
+
+/**********************
+ * Main Configuration *
+ **********************/
+
+def outDir = "${rootDir}/dist"
+def jarDir = "${outDir}/home"
+
+group = "fr.cril"
+version = "0.1.0"
+
+ext.moduleName = "fr.univartois.cril.approximation"
+
+sourceCompatibility = "10"
+targetCompatibility = "10"
+
+
+/****************
+ * Dependencies *
+ ****************/
+
+repositories {
+    mavenCentral()
+    maven {
+            url = uri("https://maven.pkg.github.com/crillab/*")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+}
+
+dependencies {
+    implementation files("lib/aceurancetourix-0.1.0.jar")
+    implementation files("lib/ACE.jar")
+    implementation group: "org.xcsp", name: "xcsp3-tools", version: "2.1.0"
+    implementation group: 'fr.cril', name:'juniverse', version: '0.1.5'
+    implementation group: 'net.sourceforge.argparse4j', name:'argparse4j', version: '0.9.0'
+    testImplementation group: "org.junit.jupiter", name: "junit-jupiter-engine", version: "5.6.0"
+    testImplementation group: "org.junit.jupiter", name: "junit-jupiter-params", version: "5.6.0"
+    testImplementation group: "org.junit.platform", name: "junit-platform-launcher", version: "1.6.0"
+    testImplementation group: "org.junit.platform", name: "junit-platform-runner", version: "1.6.0"
+}
+
+
+
+/*************************
+ * Eclipse Configuration *
+ *************************/
+
+eclipse.classpath.file.whenMerged {
+    // Modularizing project dependencies.
+    entries.findAll{ isModule(it) }.each{ it.entryAttributes["module"] = "true" }
+}
+
+/****************************************
+ * Compilation Configuration for Jigsaw *
+ ****************************************/
+
+afterEvaluate {
+    compileJava {
+        // Setting the module name.
+        inputs.property("moduleName", moduleName)
+
+        // Adding the classpath to the module path.
+        doFirst {
+            options.compilerArgs = [
+                "--module-path", classpath.asPath
+            ]
+            classpath = files()
+        }
+    }
+}
+
+/**********************
+ * Test Configuration *
+ **********************/
+
+// Making test resources available during test execution.
+task copyTestResources(type: Copy) {
+    from "${projectDir}/src/test/resources"
+    into "${buildDir}/classes/java/test"
+}
+processTestResources.dependsOn copyTestResources
+
+// Configuring the use of JUnit 5.
+test {
+    useJUnitPlatform()
+}
+
+// Configuring the version of JaCoCo to use.
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+// Asking for an XML output for JaCoCo.
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+
+/*************************
+ * Javadoc Configuration *
+ *************************/
+
+tasks.withType(Javadoc) {
+    // Adding the classpath to the module path.
+    doFirst {
+        options.modulePath = [] + classpath.files
+        options.classpath = []
+    }
+
+    // Specifying how to deal with '@implSpec' tags.
+    configure(options) {
+        tags('implSpec:a:Implementation Requirements:')
+    }
+}
+
+/****************
+ * Distribution *
+ ****************/
+
+// Adding the Javadoc and source JARs to the generated artifacts.
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+// Configuring the POM file to publish.
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+
+            pom {
+                name = "JNarcotics"
+                description = "a veRy quiCkly cOded constraint pRogramming Solver in java"
+                url = "https://github.com/crillab/jnarcotics"
+
+                licenses {
+                    license {
+                        name = "GNU Lesser General Public License, Version 3"
+                        url = "https://www.gnu.org/licenses/lgpl-3.0.html"
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = "thibaultfalque"
+                        name = "Thibault Falque"
+                        email = "falque@cril.fr"
+                    }
+
+                    developer {
+                        id = "romainwallon"
+                        name = "Romain Wallon"
+                        email = "wallon@cril.fr"
+                    }
+                }
+
+                scm {
+                    connection = "scm:git:https://github.com/crillab/jnarcotics"
+                    developerConnection = "scm:git:https://github.com/crillab/jnarcotics"
+                    url = "https://github.com/crillab/jnarcotics"
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/crillab/jnarcotics")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
+
+
+/*************
+ * Packaging *
+ *************/
+
+// Putting the generated jars in the output directory.
+tasks.withType(Jar) {
+    destinationDirectory = file("${jarDir}")
+}
+
+// Removes the binary files of jnarcotics when cleaning.
+task removeBinaries(type: Delete) {
+    delete "dist"
+}
+clean.dependsOn removeBinaries
+
+/*************
+ * Functions *
+ *************/
+
+// Checking whether an Eclipse classpath entry must be put in the module path.
+boolean isModule(entry) {
+    (entry.kind == "src") || ((entry.kind == "lib") && (entry.entryAttributes["gradle_used_by_scope"] != "test"))
+}
