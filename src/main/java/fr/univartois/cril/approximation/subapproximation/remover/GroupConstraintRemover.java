@@ -21,10 +21,13 @@
 package fr.univartois.cril.approximation.subapproximation.remover;
 
 import java.util.List;
-import java.util.Set;
 
 import constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import fr.univartois.cril.approximation.core.constraint.GroupConstraint;
+import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
+import fr.univartois.cril.approximation.util.CollectionFactory;
+import fr.univartois.cril.approximation.util.collections.heaps.HeapFactory;
 
 /**
  * The GroupConstraintRemover
@@ -34,7 +37,7 @@ import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
  *
  * @version 0.1.0
  */
-public class GroupConstraintRemover extends AbstractConstraintRemover {
+public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConstraint> {
 	public GroupConstraintRemover(IConstraintGroupSolver groupSolver) {
 		super(groupSolver);
 	}
@@ -50,16 +53,31 @@ public class GroupConstraintRemover extends AbstractConstraintRemover {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#getIgnoredConstraints()
-	 */
-	@Override
-	public Set<Constraint> getIgnoredConstraints() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.subapproximation.remover.AbstractConstraintRemover#setConstraintMeasure(fr.univartois.cril.approximation.core.measure.IConstraintMeasure)
+     */
+    @Override
+    public void setConstraintMeasure(IConstraintMeasure measure) {
+        super.setConstraintMeasure(measure);
+        this.heapConstraint = HeapFactory.newMaximumHeap(this.groupSolver.nGroups(),
+                () -> CollectionFactory.newMapInt(GroupConstraint.class, k -> k.getnGroup(),
+                        i -> this.groupSolver.getGroup(i), this.groupSolver.nGroups()),
+                (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
+    }
 
+    @Override
+    public void whenEffectiveFilteringChange(Constraint c, int oldValue, int newValue) {
+        GroupConstraint g = this.groupSolver.getGroup(c.group);
+        measure.updateMeasureNEffectiveFiltering(heapConstraint, g, oldValue, newValue);
+    }
+
+    @Override
+    public void whenWDEGWeightChange(Constraint c, double oldValue, double newValue) {
+        GroupConstraint g = this.groupSolver.getGroup(c.group);
+        measure.updateMeasureWDEGWeight(heapConstraint, g, oldValue, newValue);
+        
+    }
 }
 

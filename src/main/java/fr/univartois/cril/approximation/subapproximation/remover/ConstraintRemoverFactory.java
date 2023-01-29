@@ -20,6 +20,9 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
+import java.lang.reflect.InvocationTargetException;
+
+import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
 import fr.univartois.cril.approximation.util.AbstractFactory;
 
@@ -31,28 +34,36 @@ import fr.univartois.cril.approximation.util.AbstractFactory;
  *
  * @version 0.1.0
  */
-public class ConstraintRemoverFactory extends AbstractFactory<IConstraintsRemover>{
-	
+public class ConstraintRemoverFactory extends AbstractFactory<IConstraintsRemover> {
+
     private static final String CLASNAME_SUFFIX = "ConstraintsRemover";
-	private static final String PACKAGE = "fr.univartois.cril.approximation.subapproximation.remover.";
-	/**
+
+    private static final String PACKAGE = "fr.univartois.cril.approximation.subapproximation.remover.";
+
+    /**
      * The single instance of this class.
      */
     private static final ConstraintRemoverFactory INSTANCE = new ConstraintRemoverFactory();
-    
-    private ConstraintRemoverFactory() {
-    	
-    }
-	
-	public IConstraintsRemover createConstraintRemoverByName(String name) {
-		if(name.contains(".")) {
-			return createByName(name);
-		}
-		return  createByName(PACKAGE+name+CLASNAME_SUFFIX);
-	}
-	
-	public static ConstraintRemoverFactory instance() {
-		return INSTANCE;
-	}
-}
 
+    private ConstraintRemoverFactory() {
+
+    }
+
+    public IConstraintsRemover createConstraintRemoverByName(String name,
+            IConstraintGroupSolver groupSolver) {
+        try {
+            if (name.contains(".")) {
+                return createByName(name).newInstance(groupSolver);
+            }
+            return createByName(PACKAGE + name + CLASNAME_SUFFIX).newInstance(groupSolver);
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ConstraintRemoverFactory instance() {
+        return INSTANCE;
+    }
+}

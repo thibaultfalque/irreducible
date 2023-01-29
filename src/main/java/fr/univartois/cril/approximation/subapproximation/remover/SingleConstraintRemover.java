@@ -21,12 +21,11 @@
 package fr.univartois.cril.approximation.subapproximation.remover;
 
 import java.util.List;
-import java.util.Set;
 
 import constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
-import fr.univartois.cril.approximation.util.collections.heaps.Heap;
+import fr.univartois.cril.approximation.util.CollectionFactory;
 import fr.univartois.cril.approximation.util.collections.heaps.HeapFactory;
 
 /**
@@ -37,51 +36,51 @@ import fr.univartois.cril.approximation.util.collections.heaps.HeapFactory;
  *
  * @version 0.1.0
  */
-public class SingleConstraintRemover extends AbstractConstraintRemover {
-	
-	protected Heap<Constraint> heapConstraint;
-	
-	private List<Constraint> constraints;
-	
-	public SingleConstraintRemover(IConstraintGroupSolver groupSolver) {
-		super(groupSolver)
-		this.constraints=groupSolver.getConstraints();
-	}
-
-	
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#computeNextConstraintsToRemove()
-	 */
-	@Override
-	public List<Constraint> computeNextConstraintsToRemove() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#getIgnoredConstraints()
-	 */
-	@Override
-	public Set<Constraint> getIgnoredConstraints() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public class SingleConstraintRemover extends AbstractConstraintRemover<Constraint>  {
 
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.univartois.cril.approximation.subapproximation.remover.AbstractConstraintRemover#setConstraintMeasure(fr.univartois.cril.approximation.core.measure.IConstraintMeasure)
-	 */
-	@Override
-	public void setConstraintMeasure(IConstraintMeasure measure) {
-		super.setConstraintMeasure(measure);
-		this.heapConstraint = HeapFactory.newMaximumHeap(this.constraints.size(), (a,b)->measure.computeScore(a).compareTo(measure.computeScore(b)));
-	}
-	
+    public SingleConstraintRemover(IConstraintGroupSolver groupSolver) {
+        super(groupSolver);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#
+     * computeNextConstraintsToRemove()
+     */
+    @Override
+    public List<Constraint> computeNextConstraintsToRemove() {
+        var c = heapConstraint.peek();
+        ignoredConstraint.add(c);
+        return List.of(c);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * fr.univartois.cril.approximation.subapproximation.remover.AbstractConstraintRemover
+     * #setConstraintMeasure(fr.univartois.cril.approximation.core.measure.
+     * IConstraintMeasure)
+     */
+    @Override
+    public void setConstraintMeasure(IConstraintMeasure measure) {
+        super.setConstraintMeasure(measure);
+        this.heapConstraint = HeapFactory.newMaximumHeap(this.groupSolver.nConstraints(),
+                () -> CollectionFactory.newMapInt(Constraint.class, k -> k.num,
+                        i -> this.groupSolver.getConstraint(i), this.groupSolver.nConstraints()),
+                (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
+    }
+    
+    @Override
+    public void whenEffectiveFilteringChange(Constraint c, int old, int newValue) {
+        measure.updateMeasureNEffectiveFiltering(heapConstraint, c, old, newValue);
+    }
+
+    @Override
+    public void whenWDEGWeightChange(Constraint c, double old, double newValue) {
+        measure.updateMeasureWDEGWeight(heapConstraint, c, old, newValue);
+    }
+
 }
-

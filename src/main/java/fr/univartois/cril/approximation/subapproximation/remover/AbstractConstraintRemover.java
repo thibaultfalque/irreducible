@@ -20,9 +20,15 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
+import fr.univartois.cril.approximation.util.collections.heaps.Heap;
+import interfaces.Observers.ObserverOnConstraintScore;
 
 /**
  * The AbstractConstraintRemover
@@ -32,14 +38,19 @@ import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
  *
  * @version 0.1.0
  */
-public abstract class AbstractConstraintRemover implements IConstraintsRemover {
+public abstract class AbstractConstraintRemover<T> implements IConstraintsRemover, ObserverOnConstraintScore {
 
 	protected IConstraintMeasure measure;
 
 	protected IConstraintGroupSolver groupSolver;
+	
+	protected Set<Constraint> ignoredConstraint;
+	
+	protected Heap<T> heapConstraint;
 
 	public AbstractConstraintRemover(IConstraintGroupSolver groupSolver) {
 		this.groupSolver = groupSolver;
+		this.ignoredConstraint=new HashSet<>(groupSolver.getConstraints().size());
 	}
 
 	/*
@@ -53,5 +64,10 @@ public abstract class AbstractConstraintRemover implements IConstraintsRemover {
 	public void setConstraintMeasure(IConstraintMeasure measure) {
 		this.measure = measure;
 	}
+
+    @Override
+    public Set<Constraint> getIgnoredConstraints() {
+    	return ignoredConstraint;
+    }
 
 }
