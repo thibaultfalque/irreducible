@@ -20,22 +20,27 @@
 
 package fr.univartois.cril.approximation.solver;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import constraints.Constraint;
+import fr.univartois.cril.aceurancetourix.AceHead;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
+import fr.univartois.cril.aceurancetourix.reader.XCSP3Reader;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IRemovableConstraintSolver;
+import fr.univartois.cril.approximation.core.constraint.GroupConstraint;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
-import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseAssumption;
+import fr.univartois.cril.juniverse.core.UniverseContradictionException;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 import fr.univartois.cril.juniverse.core.problem.IUniverseVariable;
-
+import solver.AceBuilder;
 
 /**
  * The ApproximationSolverDecorator
@@ -45,18 +50,22 @@ import fr.univartois.cril.juniverse.core.problem.IUniverseVariable;
  *
  * @version 0.1.0
  */
-public class ApproximationSolverDecorator implements IUniverseSolver,IConstraintGroupSolver,IRemovableConstraintSolver {
-    
+public class ApproximationSolverDecorator
+        implements IConstraintGroupSolver, IRemovableConstraintSolver {
+
     private JUniverseAceProblemAdapter solver;
-    
+
+    private List<GroupConstraint> groupConstraints;
+
     private ISolverState state;
-    
+
     /**
      * Creates a new ApproximationSolverDecorator.
      */
     public ApproximationSolverDecorator(JUniverseAceProblemAdapter solver) {
-        this.solver=solver;
+        this.solver = solver;
         this.state = NormalStateSolver.getInstance();
+        this.groupConstraints = new ArrayList<>();
     }
 
     @Override
@@ -93,7 +102,7 @@ public class ApproximationSolverDecorator implements IUniverseSolver,IConstraint
     @Override
     public void setVerbosity(int level) {
         solver.setVerbosity(level);
-        
+
     }
 
     @Override
@@ -103,20 +112,28 @@ public class ApproximationSolverDecorator implements IUniverseSolver,IConstraint
 
     @Override
     public UniverseSolverResult solve() {
-        // TODO Auto-generated method stub
-        return null;
+        state.solve();
     }
 
     @Override
     public UniverseSolverResult solve(String filename) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            return solve(new FileInputStream(filename));
+        } catch (UniverseContradictionException | IOException e) {
+            e.printStackTrace();
+        }
+        return UniverseSolverResult.UNKNOWN;
+    }
+    
+    public UniverseSolverResult solve(FileInputStream stream) throws UniverseContradictionException, IOException {
+        XCSP3Reader reader = new XCSP3Reader(solver);
+        reader.parseInstance(stream);
+        return solve();
     }
 
     @Override
     public UniverseSolverResult solve(List<UniverseAssumption<BigInteger>> assumptions) {
-        // TODO Auto-generated method stub
-        return null;
+        return solver.solve(assumptions);
     }
 
     @Override
@@ -134,39 +151,79 @@ public class ApproximationSolverDecorator implements IUniverseSolver,IConstraint
         return solver.mapSolution();
     }
 
-	@Override
-	public List<Constraint> getConstraints() {
-		return List.of(solver.getHead().problem.constraints);
-	}
+    @Override
+    public List<Constraint> getConstraints() {
+        return List.of(solver.getHead().problem.constraints);
+    }
 
-	@Override
-	public List<List<Constraint>> getGroup() {
-		int nbGroups = solver.getHead().problem.features.nGroups;
-		List<List<Constraint>> lists = new ArrayList<>(nbGroups);
-		for(int i=0;i<solver.getHead().problem.constraints.length;i++) {
-			Constraint c = solver.getHead().problem.constraints[i];
-			int group =c.group;
-			if(lists.get(group)==null) {
-				lists.set(group,new ArrayList<>());
-			}
-			lists.get(group).add(c);
-		}
-		return lists;
-	}
+    @Override
+    public List<GroupConstraint> getGroups() {
+        if (this.groupConstraints.isEmpty()) {
 
-	@Override
-	public void removeConstraints(List<Constraint> constraints) {
-		for(var c: constraints) {
-			solver.getHead().problem.constraints[c.num].ignored=true;
-		}
-	}
+            int nbGroups = solver.getHead().problem.features.nGroups;
+            this.groupConstraints = new ArrayList<>(nbGroups);
+            for (int i = 0; i < solver.getHead().problem.constraints.length; i++) {
+                Constraint c = solver.getHead().problem.constraints[i];
+                int group = c.group;
+                if (this.groupConstraints.get(group) == null) {
+                    this.groupConstraints.set(group, new GroupConstraint(group));
+                }
+                this.groupConstraints.get(group).add(c);
+            }
+        }
+        return this.groupConstraints;
+    }
 
-	@Override
-	public void restoreConstraints(List<Constraint> constraints) {
-		for(var c: constraints) {
-			solver.getHead().problem.constraints[c.num].ignored=false;
-		}
-	}
+    @Override
+    public void removeConstraints(List<Constraint> constraints) {
+        for (var c : constraints) {
+            solver.getHead().problem.constraints[c.num].ignored = true;
+        }
+    }
+
+    @Override
+    public void restoreConstraints(List<Constraint> constraints) {
+        for (var c : constraints) {
+            solver.getHead().problem.constraints[c.num].ignored = false;
+        }
+    }
+
+    @Override
+    public Constraint getConstraint(int index) {
+        return solver.getHead().problem.constraints[index];
+    }
+
+    @Override
+    public int nGroups() {
+        return this.getGroups().size();
+    }
+
+    @Override
+    public GroupConstraint getGroup(int index) {
+        return this.getGroups().get(index);
+    }
+
+    @Override
+    public Map<String, BigInteger> mapSolution(boolean excludeAux) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @return
+     * @see fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter#getHead()
+     */
+    public AceHead getHead() {
+        return solver.getHead();
+    }
+
+    /**
+     * @return
+     * @see fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter#getBuilder()
+     */
+    public AceBuilder getBuilder() {
+        return solver.getBuilder();
+    }
+    
 
 }
-
