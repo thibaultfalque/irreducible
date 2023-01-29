@@ -24,6 +24,8 @@ build:
     paths:
       - build
       - .gradle
+  tags:
+   - wallon
 
 test:
   stage: test
@@ -34,8 +36,11 @@ test:
     paths:
       - build
       - .gradle
-
+  tags:
+   - wallon
 deploy:
   stage: deploy
   script: echo "Define your deployment script!"
   environment: production
+  tags:
+   - wallon
