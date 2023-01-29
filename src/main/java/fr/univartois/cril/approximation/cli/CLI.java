@@ -50,12 +50,13 @@ public class CLI {
         .setDefault(System.in).help("The name of the instance to solve");
         
         var approximationGroup = parser.addArgumentGroup("Approximation");
+        approximationGroup.description("This parameters controls the approximation. ");
         approximationGroup.addArgument("-r","--n-runs").help("The number of runs to solve the approximate problem").type(Integer.class);
         approximationGroup.addArgument("-f","--factor-runs").help("The increasing factor for updating the number of runs.").type(Double.class);
         approximationGroup.addArgument("--measure").help("The name of the measure considered to remove constraints.").setDefault("WdegFiltering").type(String.class);
-        approximationGroup.addArgument("");
+        approximationGroup.addArgument("--constraint-remover").help("The type of strategy for removes constraints using the specify measure").type(String.class);
         
-        
+       
         return parser;
     }
 

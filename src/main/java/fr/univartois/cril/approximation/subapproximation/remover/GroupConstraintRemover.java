@@ -18,23 +18,48 @@
  * If not, see {@link http://www.gnu.org/licenses}.
  */
 
-package fr.univartois.cril.approximation.subapproximation;
+package fr.univartois.cril.approximation.subapproximation.remover;
 
 import java.util.List;
 import java.util.Set;
 
 import constraints.Constraint;
+import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 
 /**
- * The IConstraintsSelector
+ * The GroupConstraintRemover
  *
  * @author Thibault Falque
  * @author Romain Wallon
  *
  * @version 0.1.0
  */
-public interface IConstraintsRemover {
-    List<Constraint> computeNextConstraintsToRemove();
-    Set<Constraint> getIgnoredConstraints();
+public class GroupConstraintRemover extends AbstractConstraintRemover {
+	public GroupConstraintRemover(IConstraintGroupSolver groupSolver) {
+		super(groupSolver);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#computeNextConstraintsToRemove()
+	 */
+	@Override
+	public List<Constraint> computeNextConstraintsToRemove() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#getIgnoredConstraints()
+	 */
+	@Override
+	public Set<Constraint> getIgnoredConstraints() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 

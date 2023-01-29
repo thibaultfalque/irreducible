@@ -21,11 +21,16 @@
 package fr.univartois.cril.approximation.solver;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import constraints.Constraint;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
+import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import fr.univartois.cril.approximation.core.IRemovableConstraintSolver;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
+import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseAssumption;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
@@ -40,7 +45,7 @@ import fr.univartois.cril.juniverse.core.problem.IUniverseVariable;
  *
  * @version 0.1.0
  */
-public class ApproximationSolverDecorator implements IUniverseSolver {
+public class ApproximationSolverDecorator implements IUniverseSolver,IConstraintGroupSolver,IRemovableConstraintSolver {
     
     private JUniverseAceProblemAdapter solver;
     
@@ -51,6 +56,7 @@ public class ApproximationSolverDecorator implements IUniverseSolver {
      */
     public ApproximationSolverDecorator(JUniverseAceProblemAdapter solver) {
         this.solver=solver;
+        this.state = NormalStateSolver.getInstance();
     }
 
     @Override
@@ -86,7 +92,7 @@ public class ApproximationSolverDecorator implements IUniverseSolver {
 
     @Override
     public void setVerbosity(int level) {
-        // TODO Auto-generated method stub
+        solver.setVerbosity(level);
         
     }
 
@@ -127,6 +133,40 @@ public class ApproximationSolverDecorator implements IUniverseSolver {
     public Map<String, BigInteger> mapSolution() {
         return solver.mapSolution();
     }
+
+	@Override
+	public List<Constraint> getConstraints() {
+		return List.of(solver.getHead().problem.constraints);
+	}
+
+	@Override
+	public List<List<Constraint>> getGroup() {
+		int nbGroups = solver.getHead().problem.features.nGroups;
+		List<List<Constraint>> lists = new ArrayList<>(nbGroups);
+		for(int i=0;i<solver.getHead().problem.constraints.length;i++) {
+			Constraint c = solver.getHead().problem.constraints[i];
+			int group =c.group;
+			if(lists.get(group)==null) {
+				lists.set(group,new ArrayList<>());
+			}
+			lists.get(group).add(c);
+		}
+		return lists;
+	}
+
+	@Override
+	public void removeConstraints(List<Constraint> constraints) {
+		for(var c: constraints) {
+			solver.getHead().problem.constraints[c.num].ignored=true;
+		}
+	}
+
+	@Override
+	public void restoreConstraints(List<Constraint> constraints) {
+		for(var c: constraints) {
+			solver.getHead().problem.constraints[c.num].ignored=false;
+		}
+	}
 
 }
 

@@ -20,6 +20,7 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 
@@ -35,14 +36,19 @@ import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 public class SubApproximationStateSolver implements ISolverState {
 
     private IUniverseSolver solver;
+    private IConstraintsRemover remover;
     
-    private static SubApproximationStateSolver instance;
+    private int nbSubApproximation;
+    
+    
+    private static SubApproximationStateSolver INSTANCE;
 
     /**
      * Creates a new SubApproximationStateSolver.
      */
-    public SubApproximationStateSolver(IUniverseSolver solver) {
+    public SubApproximationStateSolver(IUniverseSolver solver,IConstraintsRemover remover) {
         this.solver=solver;
+        this.remover=remover;
     }
 
     /*
@@ -58,15 +64,14 @@ public class SubApproximationStateSolver implements ISolverState {
 
     @Override
     public ISolverState nextState() {
-        // TODO Auto-generated method stub
-        return null;
+        return NormalStateSolver.getInstance();
     }
     
-    public static void initInstance(IUniverseSolver solver) {
-        instance=new SubApproximationStateSolver(solver);
+    public static void initInstance(IUniverseSolver solver,IConstraintsRemover remover) {
+        INSTANCE=new SubApproximationStateSolver(solver,remover);
     }
     public static SubApproximationStateSolver getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
 }

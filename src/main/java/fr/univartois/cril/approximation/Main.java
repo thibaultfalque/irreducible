@@ -20,6 +20,9 @@
 
 package fr.univartois.cril.approximation;
 
+import fr.univartois.cril.approximation.cli.CLI;
+import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
 
 /**
  * The Main
@@ -31,20 +34,30 @@ package fr.univartois.cril.approximation;
  */
 public class Main {
 
-    /**
-     * Creates a new Main.
-     */
-    public Main() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Creates a new Main.
+	 */
+	public Main() {
+		// TODO Auto-generated constructor stub
+	}
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		var parser = CLI.createCLIParser();
+		try {
+			var arguments = parser.parseArgs(args);
 
-    }
+			var solver = new ApproximationSolverBuilder()
+					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
+					.withSpecificConstraintMeasure(arguments.getString("measure"));
+
+		} catch (ArgumentParserException e) {
+			parser.handleError(e);
+			System.exit(1);
+		}
+
+	}
 
 }
-

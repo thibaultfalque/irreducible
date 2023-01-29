@@ -18,37 +18,19 @@
  * If not, see {@link http://www.gnu.org/licenses}.
  */
 
-package fr.univartois.cril.approximation.subapproximation;
+package fr.univartois.cril.approximation.core.measure;
 
 import constraints.Constraint;
 
-
 /**
- * The NEffectiveFilteringConstraintMeasureSelector
+ * The IConstraintMeasureSelector
  *
  * @author Thibault Falque
  * @author Romain Wallon
  *
  * @version 0.1.0
  */
-public class NEffectiveFilteringConstraintMeasure implements IConstraintMeasure {
-
-    /**
-     * Creates a new NEffectiveFilteringConstraintMeasureSelector.
-     */
-    public NEffectiveFilteringConstraintMeasure() {
-        // TODO Auto-generated constructor stub
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.IConstraintMeasureSelector#computeScore(constraints.Constraint)
-     */
-    @Override
-    public double computeScore(Constraint c) {
-        return c.nEffectiveFilterings;
-    }
-
+public interface IConstraintMeasure {
+    double computeScore(Constraint c);
 }
 

@@ -18,41 +18,22 @@
  * If not, see {@link http://www.gnu.org/licenses}.
  */
 
-package fr.univartois.cril.approximation.subapproximation;
+package fr.univartois.cril.approximation.core;
+
+import java.util.List;
 
 import constraints.Constraint;
-import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
-import heuristics.HeuristicVariablesDynamic.WdegVariant;
-
 
 /**
- * The WdegFilteringConstraintMeasureSelector
+ * The IConstraintGroupSolver
  *
  * @author Thibault Falque
  * @author Romain Wallon
  *
  * @version 0.1.0
  */
-public class WdegFilteringConstraintMeasure implements IConstraintMeasure {
-
-    private JUniverseAceProblemAdapter solver;
-
-    /**
-     * Creates a new WdegFilteringConstraintMeasureSelector.
-     */
-    public WdegFilteringConstraintMeasure(JUniverseAceProblemAdapter solver) {
-        this.solver=solver;
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.IConstraintMeasureSelector#computeScore(constraints.Constraint)
-     */
-    @Override
-    public double computeScore(Constraint c) {
-        return ((WdegVariant)solver.getHead().solver.heuristic).cscores[c.num];
-    }
-
+public interface IConstraintGroupSolver {
+	List<Constraint> getConstraints();
+	List<List<Constraint>> getGroup();
 }
 
