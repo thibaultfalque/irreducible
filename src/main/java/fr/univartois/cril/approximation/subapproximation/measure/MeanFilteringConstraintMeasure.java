@@ -21,50 +21,64 @@
 package fr.univartois.cril.approximation.subapproximation.measure;
 
 import constraints.Constraint;
+import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
+
 /**
- * The NEffectiveFilteringConstraintMeasureSelector
+ * The MeanFilteringConstraintMeasure
  *
  * @author Thibault Falque
  * @author Romain Wallon
  *
  * @version 0.1.0
  */
-public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
+public class MeanFilteringConstraintMeasure extends AbstractMeasure {
 
+    private IConstraintMeasure decoree;
+    private int nb;
     /**
-     * Creates a new NEffectiveFilteringConstraintMeasureSelector.
+     * Creates a new MeanFilteringConstraintMeasure.
      */
-    public NEffectiveFilteringConstraintMeasure(IConstraintGroupSolver adapter) {
+    public MeanFilteringConstraintMeasure(IConstraintGroupSolver adapter,IConstraintMeasure decoree) {
         super(adapter);
+        this.decoree=decoree;
     }
 
     /*
      * (non-Javadoc)
      *
-     * @see fr.univartois.cril.approximation.IConstraintMeasureSelector#computeScore(
-     * constraints.Constraint)
+     * @see fr.univartois.cril.approximation.core.measure.IConstraintMeasure#computeScore(constraints.Constraint)
      */
     @Override
     public double computeScore(Constraint c) {
-        return c.nEffectiveFilterings;
+        return decoree.computeScore(c)/groupSolver.nGroups();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.measure.IConstraintMeasure#updateMeasureNEffectiveFiltering(fr.univartois.cril.approximation.util.collections.heaps.Heap, java.lang.Object, double, double)
+     */
     @Override
     public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue,
             double newValue) {
-        if (oldValue < newValue) {
-            heap.increase(c);
-        } else {
-            heap.decrease(c);
-        }
+        decoree.updateMeasureNEffectiveFiltering(heap, c, oldValue, newValue);
 
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.measure.IConstraintMeasure#updateMeasureWDEGWeight(fr.univartois.cril.approximation.util.collections.heaps.Heap, java.lang.Object, double, double)
+     */
     @Override
     public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
+        decoree.updateMeasureWDEGWeight(heap, c, oldValue, newValue);
+
     }
 
 }
+

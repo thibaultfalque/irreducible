@@ -20,51 +20,26 @@
 
 package fr.univartois.cril.approximation.subapproximation.measure;
 
-import constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.util.collections.heaps.Heap;
+import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
 
 /**
- * The NEffectiveFilteringConstraintMeasureSelector
+ * The AbstractMeasure
  *
  * @author Thibault Falque
  * @author Romain Wallon
  *
  * @version 0.1.0
  */
-public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
+public abstract class AbstractMeasure implements IConstraintMeasure{
 
+    protected IConstraintGroupSolver groupSolver;
     /**
-     * Creates a new NEffectiveFilteringConstraintMeasureSelector.
+     * Creates a new AbstractMeasure.
      */
-    public NEffectiveFilteringConstraintMeasure(IConstraintGroupSolver adapter) {
-        super(adapter);
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.IConstraintMeasureSelector#computeScore(
-     * constraints.Constraint)
-     */
-    @Override
-    public double computeScore(Constraint c) {
-        return c.nEffectiveFilterings;
-    }
-
-    @Override
-    public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue,
-            double newValue) {
-        if (oldValue < newValue) {
-            heap.increase(c);
-        } else {
-            heap.decrease(c);
-        }
-
-    }
-
-    @Override
-    public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
+    public AbstractMeasure(IConstraintGroupSolver groupSolver) {
+        this.groupSolver=groupSolver;
     }
 
 }
+

@@ -20,7 +20,12 @@
 
 package fr.univartois.cril.approximation.subapproximation.measure;
 
+import java.lang.reflect.InvocationTargetException;
+
+import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
+import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
+import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.util.AbstractFactory;
 
 /**
@@ -32,26 +37,34 @@ import fr.univartois.cril.approximation.util.AbstractFactory;
  * @version 0.1.0
  */
 public class ConstraintMeasureFactory extends AbstractFactory<IConstraintMeasure> {
-	private static final String PACKAGE = "fr.univartois.cril.approximation.subapproximation.measure.";
-	private static final String CLASS_NAME_SUFFIX = "ConstraintMeasure";
-	/**
+
+    private static final String PACKAGE = "fr.univartois.cril.approximation.subapproximation.measure.";
+
+    private static final String CLASS_NAME_SUFFIX = "ConstraintMeasure";
+
+    /**
      * The single instance of this class.
      */
     private static final ConstraintMeasureFactory INSTANCE = new ConstraintMeasureFactory();
-    
-    private ConstraintMeasureFactory() {
-    	
-    }
-    
-    public IConstraintMeasure createConstraintMeasurerByName(String name) {
-		if(name.contains(".")) {
-			return createByName(name);
-		}
-		return  createByName(PACKAGE+name+CLASS_NAME_SUFFIX);
-	}
-	
-	public static ConstraintMeasureFactory instance() {
-		return INSTANCE;
-	}
-}
 
+    private ConstraintMeasureFactory() {
+
+    }
+
+    public IConstraintMeasure createConstraintMeasurerByName(String name,IConstraintGroupSolver adapter) {
+        try {
+            if (name.contains(".")) {
+                return createByName(name).newInstance(adapter);
+            }
+            return createByName(PACKAGE + name + CLASS_NAME_SUFFIX).newInstance(adapter);
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ConstraintMeasureFactory instance() {
+        return INSTANCE;
+    }
+}

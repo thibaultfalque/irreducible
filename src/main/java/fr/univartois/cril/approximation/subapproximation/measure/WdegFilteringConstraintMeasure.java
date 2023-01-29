@@ -21,8 +21,9 @@
 package fr.univartois.cril.approximation.subapproximation.measure;
 
 import constraints.Constraint;
-import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
-import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
+import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
+import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 import heuristics.HeuristicVariablesDynamic.WdegVariant;
 
 
@@ -34,15 +35,14 @@ import heuristics.HeuristicVariablesDynamic.WdegVariant;
  *
  * @version 0.1.0
  */
-public class WdegFilteringConstraintMeasure implements IConstraintMeasure {
+public class WdegFilteringConstraintMeasure extends AbstractMeasure {
 
-    private JUniverseAceProblemAdapter solver;
 
     /**
      * Creates a new WdegFilteringConstraintMeasureSelector.
      */
-    public WdegFilteringConstraintMeasure(JUniverseAceProblemAdapter solver) {
-        this.solver=solver;
+    public WdegFilteringConstraintMeasure(IConstraintGroupSolver solver) {
+        super(solver);
     }
 
     /*
@@ -52,7 +52,23 @@ public class WdegFilteringConstraintMeasure implements IConstraintMeasure {
      */
     @Override
     public double computeScore(Constraint c) {
-        return ((WdegVariant)solver.getHead().solver.heuristic).cscores[c.num];
+        return ((WdegVariant)((ApproximationSolverDecorator)groupSolver).getHead().solver.heuristic).cscores[c.num];
+    }
+
+    @Override
+    public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue,
+            double newValue) {
+        
+    }
+
+    @Override
+    public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
+        if (oldValue < newValue) {
+            heap.increase(c);
+        } else {
+            heap.decrease(c);
+        }
+        
     }
 
 }
