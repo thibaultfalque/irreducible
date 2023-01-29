@@ -21,6 +21,8 @@
 package fr.univartois.cril.approximation.core.measure;
 
 import constraints.Constraint;
+import fr.univartois.cril.approximation.core.constraint.GroupConstraint;
+import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
  * The IConstraintMeasureSelector
@@ -31,6 +33,18 @@ import constraints.Constraint;
  * @version 0.1.0
  */
 public interface IConstraintMeasure {
-    double computeScore(Constraint c);
-}
 
+    double computeScore(Constraint c);
+
+    default double computeScore(GroupConstraint g) {
+        double result = 0.0;
+        for (Constraint c : g.getConstraints()) {
+            result += computeScore(c);
+        }
+        return result;
+
+    }
+    
+    <T> void  updateMeasureNEffectiveFiltering(Heap<T> heap, T c,double oldValue, double newValue);
+    <T> void  updateMeasureWDEGWeight(Heap<T> heap, T c,double oldValue, double newValue);
+}

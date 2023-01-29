@@ -18,27 +18,56 @@
  * If not, see {@link http://www.gnu.org/licenses}.
  */
 
-package fr.univartois.cril.approximation.core;
+package fr.univartois.cril.approximation.core.constraint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import constraints.Constraint;
-import fr.univartois.cril.approximation.core.constraint.GroupConstraint;
-import fr.univartois.cril.juniverse.core.IUniverseSolver;
+
 
 /**
- * The IConstraintGroupSolver
+ * The GroupConstraint
  *
  * @author Thibault Falque
  * @author Romain Wallon
  *
  * @version 0.1.0
  */
-public interface IConstraintGroupSolver extends IUniverseSolver{
-	List<Constraint> getConstraints();
-	Constraint getConstraint(int index);
-	GroupConstraint getGroup(int index);
-	List<GroupConstraint> getGroups();
-	int nGroups();
+public class GroupConstraint {
+
+    private List<Constraint> constraints;
+    private int nGroup;
+    /**
+     * Creates a new GroupConstraint.
+     */
+    public GroupConstraint(int nGroup) {
+        this.nGroup=nGroup;
+        this.constraints=new ArrayList<>();
+    }
+    
+    public void add(Constraint c) {
+        this.constraints.add(c);
+    }
+
+    
+    /**
+     * Gives the constraints of this GroupConstraint.
+     *
+     * @return This GroupConstraint's constraints.
+     */
+    public List<Constraint> getConstraints() {
+        return constraints;
+    }
+
+    
+    /**
+     * Gives the nGroup of this GroupConstraint.
+     *
+     * @return This GroupConstraint's nGroup.
+     */
+    public int getnGroup() {
+        return nGroup;
+    }
 }
 
