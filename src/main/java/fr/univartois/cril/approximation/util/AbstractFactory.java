@@ -20,7 +20,7 @@
 
 package fr.univartois.cril.approximation.util;
 
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Constructor;
 
 /**
  * The AbstractFactory
@@ -32,25 +32,20 @@ import java.lang.reflect.InvocationTargetException;
  */
 public abstract class AbstractFactory<T> {
 	@SuppressWarnings("unchecked")
-	protected T createByName(String className) {
+	protected Constructor<T> createByName(String className) {
 	        try {
 	        	var clz = Class.forName(className);
-	            return (T) clz.getDeclaredConstructor().newInstance();
+	            return (Constructor<T>) clz.getDeclaredConstructor();
 	        } catch (SecurityException e) {
 	            System.err.println(e.getLocalizedMessage());
 	        } catch (IllegalArgumentException e) {
 	            System.err.println(e.getLocalizedMessage());
 	        } catch (NoSuchMethodException e) {
 	            System.err.println(e.getLocalizedMessage());
-	        } catch (IllegalAccessException e) {
-	            System.err.println(e.getLocalizedMessage());
-	        } catch (InvocationTargetException e) {
-	            System.err.println(e.getLocalizedMessage());
 	        } catch (ClassNotFoundException e) {
-	        	System.err.println(e.getLocalizedMessage());
-			} catch (InstantiationException e) {
-				System.err.println(e.getLocalizedMessage());
-			}
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 	        return null;
 	    }
 }
