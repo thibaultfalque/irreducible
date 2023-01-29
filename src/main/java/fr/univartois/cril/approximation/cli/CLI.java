@@ -47,14 +47,23 @@ public class CLI {
         
         var generalGroup = parser.addArgumentGroup("General");
         generalGroup.addArgument("-i","--instance").type(FileInputStream.class)
-        .setDefault(System.in).help("The name of the instance to solve");
+        .setDefault(System.in).help("The inputStream of the instance to solve");
+        generalGroup.addArgument("--global-timeout").type(String.class);
+        generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(true);
+        generalGroup.addArgument("--ace-verbosity").type(Integer.class).setDefault(1);
+
+        var normalGroup = parser.addArgumentGroup("Normal resolution");
+        normalGroup.addArgument("--n-runs-normal").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
+        normalGroup.addArgument("--factor-runs-normal").help("The increasing factor for updating the number of runs.").type(Double.class);
         
-        var approximationGroup = parser.addArgumentGroup("Approximation");
+        var approximationGroup = parser.addArgumentGroup("Approximation resolution");
         approximationGroup.description("This parameters controls the approximation. ");
-        approximationGroup.addArgument("-r","--n-runs").help("The number of runs to solve the approximate problem").type(Integer.class);
-        approximationGroup.addArgument("-f","--factor-runs").help("The increasing factor for updating the number of runs.").type(Double.class);
+        approximationGroup.addArgument("--n-runs-approx").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
+        approximationGroup.addArgument("--n-sol-limit").help("The max number of solution for approximate problem.").setDefault(1).type(Integer.class);
+        approximationGroup.addArgument("--factor-runs-approx").help("The increasing factor for updating the number of runs.").type(Double.class);
         approximationGroup.addArgument("--measure").help("The name of the measure considered to remove constraints.").setDefault("WdegFiltering").type(String.class);
-        approximationGroup.addArgument("--constraint-remover").help("The type of strategy for removes constraints using the specify measure").type(String.class);
+        approximationGroup.addArgument("--mean").help("Use the mean of the measure for a group instead of the sum").setDefault(false).type(Boolean.class);
+        approximationGroup.addArgument("--constraint-remover").help("The type of strategy for removes constraints using the specify measure").setDefault("SingleConstraint").type(String.class);
         
        
         return parser;

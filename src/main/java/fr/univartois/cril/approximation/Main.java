@@ -51,7 +51,11 @@ public class Main {
 
 			var solver = new ApproximationSolverBuilder()
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
-					.withSpecificConstraintMeasure(arguments.getString("measure"));
+					.withSpecificConstraintMeasure(arguments.getString("measure"))
+					.setNoPrintColor(arguments.getBoolean("no_print_color"))
+					.setAceVerbosity(arguments.getInt("ace_verbosity"))
+					.setTimeout(arguments.getString("global_timeout"))
+					.initState(arguments).build();
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);
