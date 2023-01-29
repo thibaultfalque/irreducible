@@ -21,6 +21,7 @@
 package fr.univartois.cril.approximation.solver.state;
 
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
+import solver.Solver.WarmStarter;
 
 /**
  * The ISolverState
@@ -32,6 +33,7 @@ import fr.univartois.cril.juniverse.core.UniverseSolverResult;
  */
 public interface ISolverState {
     UniverseSolverResult solve();
+    UniverseSolverResult solve(WarmStarter starter);
     ISolverState nextState();
 }
 

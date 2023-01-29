@@ -20,8 +20,10 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
+import solver.Solver.WarmStarter;
 
 /**
  * The NormalStateSolver
@@ -31,46 +33,53 @@ import fr.univartois.cril.juniverse.core.UniverseSolverResult;
  *
  * @version 0.1.0
  */
-public class NormalStateSolver implements ISolverState {
-	
-	private static NormalStateSolver INSTANCE;
-	
-	private IUniverseSolver solver;
-	
-	
-	private NormalStateSolver(IUniverseSolver solver) {
-		this.solver = solver;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.univartois.cril.approximation.solver.state.ISolverState#solve()
-	 */
-	@Override
-	public UniverseSolverResult solve() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public class NormalStateSolver extends AbstractState {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.univartois.cril.approximation.solver.state.ISolverState#nextState()
-	 */
-	@Override
-	public ISolverState nextState() {
-		return SubApproximationStateSolver.getInstance();
-	}
-	
-	public static void initInstance(IUniverseSolver solver) {
-		INSTANCE = new NormalStateSolver(solver);
-	}
-	
-	public static NormalStateSolver getInstance() {
-		return INSTANCE;
-	}
-	
-	
+    private static NormalStateSolver INSTANCE;
+
+    private boolean first = true;
+
+    private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config) {
+        super(config, solver);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.solver.state.ISolverState#solve()
+     */
+    @Override
+    public UniverseSolverResult solve() {
+        resetLimitSolver();
+        if (!first) {
+            solver.reset();
+        }
+        first = false;
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.solver.state.ISolverState#nextState()
+     */
+    @Override
+    public ISolverState nextState() {
+        return SubApproximationStateSolver.getInstance();
+    }
+
+    public static void initInstance(IUniverseSolver solver, SolverConfiguration configuration) {
+        INSTANCE = new NormalStateSolver(solver, configuration);
+    }
+
+    public static NormalStateSolver getInstance() {
+        return INSTANCE;
+    }
+
+    @Override
+    public UniverseSolverResult solve(WarmStarter starter) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
-

@@ -21,9 +21,10 @@
 package fr.univartois.cril.approximation.solver.state;
 
 import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
+import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
-
+import solver.Solver.WarmStarter;
 
 /**
  * The SubApproximationStateSolver
@@ -33,22 +34,21 @@ import fr.univartois.cril.juniverse.core.UniverseSolverResult;
  *
  * @version 0.1.0
  */
-public class SubApproximationStateSolver implements ISolverState {
+public class SubApproximationStateSolver extends AbstractState {
 
-    private IUniverseSolver solver;
     private IConstraintsRemover remover;
-    
+
     private int nbSubApproximation;
-    
-    
-    private static SubApproximationStateSolver INSTANCE;
+
+    private static AbstractState INSTANCE;
 
     /**
      * Creates a new SubApproximationStateSolver.
      */
-    public SubApproximationStateSolver(IUniverseSolver solver,IConstraintsRemover remover) {
-        this.solver=solver;
-        this.remover=remover;
+    public SubApproximationStateSolver(IUniverseSolver solver, IConstraintsRemover remover,
+            SolverConfiguration config) {
+        super(config, solver);
+        this.remover = remover;
     }
 
     /*
@@ -66,13 +66,20 @@ public class SubApproximationStateSolver implements ISolverState {
     public ISolverState nextState() {
         return NormalStateSolver.getInstance();
     }
-    
-    public static void initInstance(IUniverseSolver solver,IConstraintsRemover remover) {
-        INSTANCE=new SubApproximationStateSolver(solver,remover);
+
+    public static void initInstance(IUniverseSolver solver, IConstraintsRemover remover,
+            SolverConfiguration config) {
+        INSTANCE = new SubApproximationStateSolver(solver, remover, config);
     }
-    public static SubApproximationStateSolver getInstance() {
+
+    public static AbstractState getInstance() {
         return INSTANCE;
     }
 
-}
+    @Override
+    public UniverseSolverResult solve(WarmStarter starter) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
+}
