@@ -32,10 +32,10 @@ import java.lang.reflect.Constructor;
  */
 public abstract class AbstractFactory<T> {
 	@SuppressWarnings("unchecked")
-	protected Constructor<T> createByName(String className) {
+	protected Constructor<T> createByName(String className,Class<?>...args) {
 	        try {
 	        	var clz = Class.forName(className);
-	            return (Constructor<T>) clz.getDeclaredConstructor();
+	            return (Constructor<T>) clz.getDeclaredConstructor(args);
 	        } catch (SecurityException e) {
 	            System.err.println(e.getLocalizedMessage());
 	        } catch (IllegalArgumentException e) {
