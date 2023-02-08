@@ -23,7 +23,7 @@ package fr.univartois.cril.approximation.subapproximation.remover;
 import java.lang.reflect.InvocationTargetException;
 
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
+import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.util.AbstractFactory;
 
 /**
@@ -36,7 +36,7 @@ import fr.univartois.cril.approximation.util.AbstractFactory;
  */
 public class ConstraintRemoverFactory extends AbstractFactory<IConstraintsRemover> {
 
-    private static final String CLASNAME_SUFFIX = "ConstraintsRemover";
+    private static final String CLASNAME_SUFFIX = "ConstraintRemover";
 
     private static final String PACKAGE = "fr.univartois.cril.approximation.subapproximation.remover.";
 
@@ -53,9 +53,9 @@ public class ConstraintRemoverFactory extends AbstractFactory<IConstraintsRemove
             IConstraintGroupSolver groupSolver) {
         try {
             if (name.contains(".")) {
-                return createByName(name).newInstance(groupSolver);
+                return createByName(name,IConstraintGroupSolver.class).newInstance(groupSolver);
             }
-            return createByName(PACKAGE + name + CLASNAME_SUFFIX).newInstance(groupSolver);
+            return createByName(PACKAGE + name + CLASNAME_SUFFIX,IConstraintGroupSolver.class).newInstance(groupSolver);
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {
             e.printStackTrace();

@@ -20,11 +20,12 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
+import java.util.Collection;
 import java.util.List;
 
 import constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
+import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.CollectionFactory;
 import fr.univartois.cril.approximation.util.collections.heaps.HeapFactory;
 
@@ -51,7 +52,8 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
      */
     @Override
     public List<Constraint> computeNextConstraintsToRemove() {
-        var c = heapConstraint.peek();
+        var c = heapConstraint.poll();
+        
         ignoredConstraint.add(c);
         return List.of(c);
     }
@@ -81,6 +83,15 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
     @Override
     public void whenWDEGWeightChange(Constraint c, double old, double newValue) {
         measure.updateMeasureWDEGWeight(heapConstraint, c, old, newValue);
+    }
+
+    @Override
+    public void restoreConstraints(Collection<Constraint> constraints) {
+        for(Constraint c:constraints) {
+            c.ignored=false;
+            heapConstraint.add(c);
+        }
+        
     }
 
 }

@@ -20,13 +20,14 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
-import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
+import fr.univartois.cril.approximation.core.IConstraintMeasure;
+import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 import interfaces.Observers.ObserverOnConstraintScore;
 
@@ -69,5 +70,7 @@ public abstract class AbstractConstraintRemover<T> implements IConstraintsRemove
     public Set<Constraint> getIgnoredConstraints() {
     	return ignoredConstraint;
     }
+    
+
 
 }
