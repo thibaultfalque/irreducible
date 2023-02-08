@@ -20,13 +20,15 @@
 
 package fr.univartois.cril.approximation.solver;
 
+import java.util.function.Supplier;
+
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
-import fr.univartois.cril.approximation.core.remover.IConstraintsRemover;
+import fr.univartois.cril.approximation.core.IConstraintMeasure;
+import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
 import fr.univartois.cril.approximation.subapproximation.remover.ConstraintRemoverFactory;
-import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import net.sourceforge.argparse4j.inf.Namespace;
 import solver.AceBuilder;
 
@@ -44,7 +46,9 @@ public class ApproximationSolverBuilder {
 
     private ApproximationSolverDecorator decorator;
 
-    private IConstraintsRemover remover;
+    private Supplier<IConstraintsRemover> remover;
+    
+    private IConstraintMeasure measure;
 
     private AceBuilder builder;
 
@@ -80,13 +84,16 @@ public class ApproximationSolverBuilder {
     }
 
     public ApproximationSolverBuilder withSpecificConstraintRemover(String rm) {
-        remover = ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm, decorator);
+        remover = ()->{
+            var r= ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm, decorator);
+            r.setConstraintMeasure(measure);
+            return r;
+        };
         return this;
     }
 
     public ApproximationSolverBuilder withSpecificConstraintMeasure(String m) {
-        remover.setConstraintMeasure(
-                ConstraintMeasureFactory.instance().createConstraintMeasurerByName(m, decorator));
+        measure = ConstraintMeasureFactory.instance().createConstraintMeasurerByName(m, decorator);
         return this;
     }
 
@@ -97,13 +104,13 @@ public class ApproximationSolverBuilder {
         SubApproximationStateSolver.initInstance(aceProblemAdapter, remover,
                 new SolverConfiguration(arguments.getInt("n_runs_approx"),
                         arguments.getDouble("factor_runs_approx"),
-                        arguments.getInt("n_sol_limit")));
+                        arguments.getInt("n_sol_limit")),arguments.get("path_strategy"));
         NormalStateSolver.initInstance(aceProblemAdapter, new SolverConfiguration(
                 arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),Long.MAX_VALUE));
         return this;
     }
 
-    public IUniverseSolver build() {
+    public ApproximationSolverDecorator build() {
         return decorator;
     }
 }

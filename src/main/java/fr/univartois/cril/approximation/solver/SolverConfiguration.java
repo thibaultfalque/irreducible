@@ -103,8 +103,9 @@ public class SolverConfiguration {
         this.limitSolution = limitSolution;
     }
     
-    public void update() {
-        this.nbRun=(int) (this.nbRun*this.factor);
+    public SolverConfiguration update() {
+        return new SolverConfiguration((int)(this.nbRun*this.factor), factor, limitSolution);
+       
     }
 }
 

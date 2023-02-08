@@ -24,23 +24,26 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import constraints.Constraint;
 import fr.univartois.cril.aceurancetourix.AceHead;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.aceurancetourix.reader.XCSP3Reader;
+import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.core.IRemovableConstraintSolver;
-import fr.univartois.cril.approximation.core.constraint.GroupConstraint;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.juniverse.core.UniverseAssumption;
 import fr.univartois.cril.juniverse.core.UniverseContradictionException;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 import fr.univartois.cril.juniverse.core.problem.IUniverseVariable;
+import problem.Problem;
 import solver.AceBuilder;
+import solver.Solver.WarmStarter;
 
 /**
  * The ApproximationSolverDecorator
@@ -51,7 +54,7 @@ import solver.AceBuilder;
  * @version 0.1.0
  */
 public class ApproximationSolverDecorator
-        implements IConstraintGroupSolver, IRemovableConstraintSolver {
+        implements IConstraintGroupSolver {
 
     private JUniverseAceProblemAdapter solver;
 
@@ -64,7 +67,6 @@ public class ApproximationSolverDecorator
      */
     public ApproximationSolverDecorator(JUniverseAceProblemAdapter solver) {
         this.solver = solver;
-        this.state = NormalStateSolver.getInstance();
         this.groupConstraints = new ArrayList<>();
     }
 
@@ -112,20 +114,39 @@ public class ApproximationSolverDecorator
 
     @Override
     public UniverseSolverResult solve() {
-        state.solve();
+        this.state = NormalStateSolver.getInstance();
+        var result = state.solve();
+        while (result == UniverseSolverResult.UNKNOWN) {
+            state = state.nextState();
+            result = state.solve();
+            while (result == UniverseSolverResult.SATISFIABLE
+                    && this.state != NormalStateSolver.getInstance()) {
+                var solution = solver.solution();
+                String stringSolution = solution.stream().map(i -> i.toString()).collect(
+                        Collectors.joining(" "));
+                WarmStarter starter = new WarmStarter(stringSolution, solver.getHead().solver);
+                state = state.previousState();
+                result = state.solve(starter);
+            }
+        }
+        return result;
     }
 
     @Override
     public UniverseSolverResult solve(String filename) {
         try {
             return solve(new FileInputStream(filename));
-        } catch (UniverseContradictionException | IOException e) {
+        } catch (UniverseContradictionException e) {
             e.printStackTrace();
+            return UniverseSolverResult.UNSATISFIABLE;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return UniverseSolverResult.UNKNOWN;
         }
-        return UniverseSolverResult.UNKNOWN;
     }
-    
-    public UniverseSolverResult solve(FileInputStream stream) throws UniverseContradictionException, IOException {
+
+    public UniverseSolverResult solve(FileInputStream stream)
+            throws UniverseContradictionException, IOException {
         XCSP3Reader reader = new XCSP3Reader(solver);
         reader.parseInstance(stream);
         return solve();
@@ -153,17 +174,22 @@ public class ApproximationSolverDecorator
 
     @Override
     public List<Constraint> getConstraints() {
-        return List.of(solver.getHead().problem.constraints);
+        return List.of(getProblem().constraints);
+    }
+
+    @Override
+    public Constraint getConstraint(int index) {
+        return getProblem().constraints[index];
     }
 
     @Override
     public List<GroupConstraint> getGroups() {
         if (this.groupConstraints.isEmpty()) {
 
-            int nbGroups = solver.getHead().problem.features.nGroups;
-            this.groupConstraints = new ArrayList<>(nbGroups);
-            for (int i = 0; i < solver.getHead().problem.constraints.length; i++) {
-                Constraint c = solver.getHead().problem.constraints[i];
+            int nbGroups = JUniverseAceProblemAdapter.currentGroup + 1;
+            this.groupConstraints = new ArrayList<>(Collections.nCopies(nbGroups, null));
+            for (int i = 0; i < getProblem().constraints.length; i++) {
+                Constraint c = getProblem().constraints[i];
                 int group = c.group;
                 if (this.groupConstraints.get(group) == null) {
                     this.groupConstraints.set(group, new GroupConstraint(group));
@@ -175,32 +201,13 @@ public class ApproximationSolverDecorator
     }
 
     @Override
-    public void removeConstraints(List<Constraint> constraints) {
-        for (var c : constraints) {
-            solver.getHead().problem.constraints[c.num].ignored = true;
-        }
-    }
-
-    @Override
-    public void restoreConstraints(List<Constraint> constraints) {
-        for (var c : constraints) {
-            solver.getHead().problem.constraints[c.num].ignored = false;
-        }
-    }
-
-    @Override
-    public Constraint getConstraint(int index) {
-        return solver.getHead().problem.constraints[index];
+    public GroupConstraint getGroup(int index) {
+        return this.getGroups().get(index);
     }
 
     @Override
     public int nGroups() {
         return this.getGroups().size();
-    }
-
-    @Override
-    public GroupConstraint getGroup(int index) {
-        return this.getGroups().get(index);
     }
 
     @Override
@@ -219,11 +226,9 @@ public class ApproximationSolverDecorator
 
     /**
      * @return
-     * @see fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter#getBuilder()
      */
-    public AceBuilder getBuilder() {
-        return solver.getBuilder();
+    private Problem getProblem() {
+        return solver.getHead().getSolver().problem;
     }
-    
 
 }
