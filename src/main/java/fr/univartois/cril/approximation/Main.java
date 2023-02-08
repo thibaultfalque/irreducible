@@ -20,6 +20,9 @@
 
 package fr.univartois.cril.approximation;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import fr.univartois.cril.approximation.cli.CLI;
 import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
@@ -56,11 +59,15 @@ public class Main {
 					.setAceVerbosity(arguments.getInt("ace_verbosity"))
 					.setTimeout(arguments.getString("global_timeout"))
 					.initState(arguments).build();
+			System.out.println(solver.solve(arguments.<FileInputStream>get("instance")));
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);
+			
 			System.exit(1);
-		}
+		}catch (IOException e) {
+            e.printStackTrace();
+        }
 
 	}
 
