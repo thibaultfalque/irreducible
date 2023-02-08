@@ -21,7 +21,7 @@ def jarDir = "${outDir}/home"
 group = "fr.cril"
 version = "0.1.0"
 
-ext.moduleName = "fr.univartois.cril.approximation"
+
 
 sourceCompatibility = "10"
 targetCompatibility = "10"
@@ -43,9 +43,8 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'fr.cril', name:'aceurancetourix', version: '0.1.2'
+    implementation group: 'fr.cril', name:'aceurancetourix', version: '0.1.4'
     implementation files("lib/ACE.jar")
-    implementation group: "org.xcsp", name: "xcsp3-tools", version: "2.1.0"
     implementation group: 'fr.cril', name:'juniverse', version: '0.1.6'
     implementation group: 'net.sourceforge.argparse4j', name:'argparse4j', version: '0.9.0'
     testImplementation group: "org.junit.jupiter", name: "junit-jupiter-engine", version: "5.6.0"
@@ -60,29 +59,12 @@ dependencies {
  * Eclipse Configuration *
  *************************/
 
-eclipse.classpath.file.whenMerged {
-    // Modularizing project dependencies.
-    entries.findAll{ isModule(it) }.each{ it.entryAttributes["module"] = "true" }
-}
 
 /****************************************
  * Compilation Configuration for Jigsaw *
  ****************************************/
 
-afterEvaluate {
-    compileJava {
-        // Setting the module name.
-        inputs.property("moduleName", moduleName)
 
-        // Adding the classpath to the module path.
-        doFirst {
-            options.compilerArgs = [
-                "--module-path", classpath.asPath
-            ]
-            classpath = files()
-        }
-    }
-}
 
 /**********************
  * Test Configuration *
@@ -117,18 +99,7 @@ jacocoTestReport {
  * Javadoc Configuration *
  *************************/
 
-tasks.withType(Javadoc) {
-    // Adding the classpath to the module path.
-    doFirst {
-        options.modulePath = [] + classpath.files
-        options.classpath = []
-    }
 
-    // Specifying how to deal with '@implSpec' tags.
-    configure(options) {
-        tags('implSpec:a:Implementation Requirements:')
-    }
-}
 
 /****************
  * Distribution *
@@ -208,22 +179,42 @@ publishing {
  * Packaging *
  *************/
 
+
 // Putting the generated jars in the output directory.
 tasks.withType(Jar) {
     destinationDirectory = file("${jarDir}")
 }
 
-// Removes the binary files of jnarcotics when cleaning.
+// Collects external dependencies of Sat4j-CSP into the output directory.
+task collectExternalDependencies(type: Copy) {
+    from configurations.runtimeClasspath.collect {
+        it
+    }
+    into "${jarDir}"
+}
+
+// Creating a gzipped-tarball with Sat4j-CSP and its dependencies.
+task approx(type: Tar) {
+    dependsOn jar
+    dependsOn collectExternalDependencies
+
+    from file("${jarDir}")
+    destinationDirectory = file("${outDir}")
+    archiveBaseName = "approximation"
+    archiveExtension = "tgz"
+
+    compression = Compression.GZIP
+}
+
+// Removes the binary files of Sat4j-CSP when cleaning.
 task removeBinaries(type: Delete) {
     delete "dist"
 }
 clean.dependsOn removeBinaries
 
+
 /*************
  * Functions *
  *************/
 
-// Checking whether an Eclipse classpath entry must be put in the module path.
-boolean isModule(entry) {
-    (entry.kind == "src") || ((entry.kind == "lib") && (entry.entryAttributes["gradle_used_by_scope"] != "test"))
-}
+
