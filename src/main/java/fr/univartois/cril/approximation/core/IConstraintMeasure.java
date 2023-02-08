@@ -18,10 +18,9 @@
  * If not, see {@link http://www.gnu.org/licenses}.
  */
 
-package fr.univartois.cril.approximation.core.measure;
+package fr.univartois.cril.approximation.core;
 
 import constraints.Constraint;
-import fr.univartois.cril.approximation.core.constraint.GroupConstraint;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
@@ -34,6 +33,8 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
  */
 public interface IConstraintMeasure {
 
+    default void setSolver(IConstraintGroupSolver solver) {}
+    
     double computeScore(Constraint c);
 
     default double computeScore(GroupConstraint g) {

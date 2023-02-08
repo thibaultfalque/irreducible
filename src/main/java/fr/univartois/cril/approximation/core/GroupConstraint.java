@@ -18,7 +18,7 @@
  * If not, see {@link http://www.gnu.org/licenses}.
  */
 
-package fr.univartois.cril.approximation.core.constraint;
+package fr.univartois.cril.approximation.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +62,11 @@ public class GroupConstraint {
 
     
     /**
-     * Gives the nGroup of this GroupConstraint.
+     * Gives the group number of this GroupConstraint.
      *
      * @return This GroupConstraint's nGroup.
      */
-    public int getnGroup() {
+    public int getGroupNumber() {
         return nGroup;
     }
 }

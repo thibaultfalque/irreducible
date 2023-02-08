@@ -18,13 +18,13 @@
  * If not, see {@link http://www.gnu.org/licenses}.
  */
 
-package fr.univartois.cril.approximation.core.remover;
+package fr.univartois.cril.approximation.core;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import constraints.Constraint;
-import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
 
 /**
  * The IConstraintsSelector
@@ -38,5 +38,6 @@ public interface IConstraintsRemover {
 	void setConstraintMeasure(IConstraintMeasure measure);
     List<Constraint> computeNextConstraintsToRemove();
     Set<Constraint> getIgnoredConstraints();
+    void restoreConstraints(Collection<Constraint> constraints);
 }
 

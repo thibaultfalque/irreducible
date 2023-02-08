@@ -23,7 +23,6 @@ package fr.univartois.cril.approximation.core;
 import java.util.List;
 
 import constraints.Constraint;
-import fr.univartois.cril.approximation.core.constraint.GroupConstraint;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 
 /**
@@ -35,10 +34,32 @@ import fr.univartois.cril.juniverse.core.IUniverseSolver;
  * @version 0.1.0
  */
 public interface IConstraintGroupSolver extends IUniverseSolver{
-	List<Constraint> getConstraints();
-	Constraint getConstraint(int index);
-	GroupConstraint getGroup(int index);
-	List<GroupConstraint> getGroups();
-	int nGroups();
+	/**
+	 * Gives the list of constraints in the solver. 
+	 * @return the list of constraints 
+	 */
+    List<Constraint> getConstraints();
+	/**
+	 * Gives the constraint with the specified index
+	 * @param index the index of the constraint
+	 * @return The constraint with the specified index
+	 */
+    Constraint getConstraint(int index);
+	/**
+     * 
+     * @return
+     */
+    List<GroupConstraint> getGroups();
+    /**
+	 * 
+	 * @param index
+	 * @return
+	 */
+    GroupConstraint getGroup(int index);
+	/**
+	 * 
+	 * @return
+	 */
+    int nGroups();
 }
 
