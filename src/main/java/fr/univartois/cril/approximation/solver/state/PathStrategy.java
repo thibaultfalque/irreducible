@@ -20,21 +20,29 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
-import fr.univartois.cril.juniverse.core.UniverseSolverResult;
-import solver.Solver.WarmStarter;
-
 /**
- * The ISolverState
+ * The PathStrategy
  *
  * @author Thibault Falque
  * @author Romain Wallon
  *
  * @version 0.1.0
  */
-public interface ISolverState {
-    UniverseSolverResult solve();
-    UniverseSolverResult solve(WarmStarter starter);
-    ISolverState nextState();
-    ISolverState previousState();
-}
+public enum PathStrategy  {
 
+    APPROX_NORMAL {
+        @Override
+        public ISolverState previous(ISolverState state) {
+            return state.previousState();
+        }
+    },
+    APPROX_APPROX
+    {
+        @Override
+        public ISolverState previous(ISolverState state) {
+            return state;
+        }
+    };
+
+    public abstract ISolverState previous(ISolverState state);
+}

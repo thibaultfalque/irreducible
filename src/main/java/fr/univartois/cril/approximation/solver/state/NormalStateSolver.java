@@ -20,6 +20,7 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
@@ -55,7 +56,7 @@ public class NormalStateSolver extends AbstractState {
             solver.reset();
         }
         first = false;
-        return null;
+        return solver.solve();
     }
 
     /*
@@ -65,7 +66,7 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public ISolverState nextState() {
-        return SubApproximationStateSolver.getInstance();
+        return new SubApproximationStateSolver(solver, this);
     }
 
     public static void initInstance(IUniverseSolver solver, SolverConfiguration configuration) {
@@ -78,8 +79,14 @@ public class NormalStateSolver extends AbstractState {
 
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
-        // TODO Auto-generated method stub
-        return null;
+        ((JUniverseAceProblemAdapter)solver).getHead().solver.warmStarter = starter;
+        resetLimitSolver();
+        return solver.solve();
+    }
+
+    @Override
+    public ISolverState previousState() {
+        return this;
     }
 
 }
