@@ -23,7 +23,7 @@ package fr.univartois.cril.approximation.subapproximation.measure;
 import constraints.Constraint;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
+import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 
@@ -42,8 +42,7 @@ public class MeanFilteringConstraintMeasure extends AbstractMeasure {
     /**
      * Creates a new MeanFilteringConstraintMeasure.
      */
-    public MeanFilteringConstraintMeasure(IConstraintGroupSolver adapter,IConstraintMeasure decoree) {
-        super(adapter);
+    public MeanFilteringConstraintMeasure(IConstraintMeasure decoree) {
         this.decoree=decoree;
     }
 
@@ -66,7 +65,6 @@ public class MeanFilteringConstraintMeasure extends AbstractMeasure {
     public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue,
             double newValue) {
         decoree.updateMeasureNEffectiveFiltering(heap, c, oldValue, newValue);
-
     }
 
     /*

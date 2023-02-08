@@ -22,6 +22,7 @@ package fr.univartois.cril.approximation.subapproximation.measure;
 
 import constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
@@ -32,14 +33,9 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
  *
  * @version 0.1.0
  */
-public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
+public class NEffectiveFilteringConstraintMeasure implements IConstraintMeasure {
 
-    /**
-     * Creates a new NEffectiveFilteringConstraintMeasureSelector.
-     */
-    public NEffectiveFilteringConstraintMeasure(IConstraintGroupSolver adapter) {
-        super(adapter);
-    }
+    
 
     /*
      * (non-Javadoc)
@@ -66,5 +62,6 @@ public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
     @Override
     public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
     }
+
 
 }

@@ -37,14 +37,6 @@ import heuristics.HeuristicVariablesDynamic.WdegVariant;
  */
 public class WdegFilteringConstraintMeasure extends AbstractMeasure {
 
-
-    /**
-     * Creates a new WdegFilteringConstraintMeasureSelector.
-     */
-    public WdegFilteringConstraintMeasure(IConstraintGroupSolver solver) {
-        super(solver);
-    }
-
     /*
      * (non-Javadoc)
      *

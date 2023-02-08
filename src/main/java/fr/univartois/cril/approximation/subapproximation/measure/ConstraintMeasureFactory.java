@@ -24,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.core.measure.IConstraintMeasure;
+import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.util.AbstractFactory;
 
@@ -51,12 +51,18 @@ public class ConstraintMeasureFactory extends AbstractFactory<IConstraintMeasure
 
     }
 
-    public IConstraintMeasure createConstraintMeasurerByName(String name,IConstraintGroupSolver adapter) {
+    public IConstraintMeasure createConstraintMeasurerByName(String name,
+            IConstraintGroupSolver adapter) {
         try {
+            IConstraintMeasure m;
             if (name.contains(".")) {
-                return createByName(name).newInstance(adapter);
+                m = createByName(name).newInstance();
+
+            } else {
+                m = createByName(PACKAGE + name + CLASS_NAME_SUFFIX).newInstance();
             }
-            return createByName(PACKAGE + name + CLASS_NAME_SUFFIX).newInstance(adapter);
+            m.setSolver(adapter);
+            return m;
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
                 | InvocationTargetException e) {
             e.printStackTrace();
