@@ -49,7 +49,7 @@ public class CLI {
         var generalGroup = parser.addArgumentGroup("General");
         generalGroup.addArgument("-i","--instance").type(FileInputStream.class)
         .setDefault(System.in).help("The inputStream of the instance to solve");
-        generalGroup.addArgument("--global-timeout").type(String.class).required(true);
+        generalGroup.addArgument("--global-timeout").type(String.class);
         generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(true);
         generalGroup.addArgument("--ace-verbosity").type(Integer.class).setDefault(1);
 

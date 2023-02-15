@@ -50,6 +50,10 @@ public abstract class AbstractState implements ISolverState {
     protected void resetLimitSolver() {
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().solutions.limit=config.getLimitSolution();
         ((JUniverseAceProblemAdapter)solver).getBuilder().getOptionsRestartsBuilder().setnRuns(config.getNbRun());
+        ((JUniverseAceProblemAdapter)solver).getHead().solver.restarter.reset();
+        
+        ((JUniverseAceProblemAdapter)solver).getHead().solver.nRecursiveRuns=0;
+        
         this.config=config.update();
     }
 

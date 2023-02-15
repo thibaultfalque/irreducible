@@ -55,11 +55,14 @@ public class Main {
 			var solver = new ApproximationSolverBuilder()
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
+					.withMeanComputation(arguments.getBoolean("mean"))
 					.setNoPrintColor(arguments.getBoolean("no_print_color"))
 					.setAceVerbosity(arguments.getInt("ace_verbosity"))
 					.setTimeout(arguments.getString("global_timeout"))
 					.initState(arguments).build();
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> solver.displaySolution()));
 			System.out.println(solver.solve(arguments.<FileInputStream>get("instance")));
+			solver.displaySolution();
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);

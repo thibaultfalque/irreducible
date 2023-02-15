@@ -78,5 +78,12 @@ public class MeanFilteringConstraintMeasure extends AbstractMeasure {
 
     }
 
+    @Override
+    public <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
+            double newValue) {
+        decoree.updateMeasureNEffectiveBacktracking(heap, c, oldValue, newValue);
+        
+    }
+
 }
 

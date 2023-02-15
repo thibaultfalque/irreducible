@@ -28,6 +28,7 @@ import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
+import fr.univartois.cril.approximation.subapproximation.measure.MeanFilteringConstraintMeasure;
 import fr.univartois.cril.approximation.subapproximation.remover.ConstraintRemoverFactory;
 import net.sourceforge.argparse4j.inf.Namespace;
 import solver.AceBuilder;
@@ -47,7 +48,7 @@ public class ApproximationSolverBuilder {
     private ApproximationSolverDecorator decorator;
 
     private Supplier<IConstraintsRemover> remover;
-    
+
     private IConstraintMeasure measure;
 
     private AceBuilder builder;
@@ -70,22 +71,25 @@ public class ApproximationSolverBuilder {
     }
 
     public ApproximationSolverBuilder setTimeout(String timeout) {
-        if (timeout.contains("ms")) {
-            builder.getOptionsGeneralBuilder().setTimeout(
-                    Long.parseLong(timeout.replace("ms", "")));
-        } else if (timeout.contains("s")) {
-            builder.getOptionsGeneralBuilder().setTimeout(
-                    Long.parseLong(timeout.replace("s", "")) * 1000);
-        } else {
-            throw new IllegalArgumentException(
-                    timeout + " is not a correct format for set the timeout");
+        if (timeout != null) {
+            if (timeout.contains("ms")) {
+                builder.getOptionsGeneralBuilder().setTimeout(
+                        Long.parseLong(timeout.replace("ms", "")));
+            } else if (timeout.contains("s")) {
+                builder.getOptionsGeneralBuilder().setTimeout(
+                        Long.parseLong(timeout.replace("s", "")) * 1000);
+            } else {
+                throw new IllegalArgumentException(
+                        timeout + " is not a correct format for set the timeout");
+            }
         }
         return this;
     }
 
     public ApproximationSolverBuilder withSpecificConstraintRemover(String rm) {
-        remover = ()->{
-            var r= ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm, decorator);
+        remover = () -> {
+            var r = ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm,
+                    decorator);
             r.setConstraintMeasure(measure);
             return r;
         };
@@ -97,6 +101,14 @@ public class ApproximationSolverBuilder {
         return this;
     }
 
+    public ApproximationSolverBuilder withMeanComputation(boolean mean) {
+        if (mean) {
+            measure = new MeanFilteringConstraintMeasure(measure);
+            measure.setSolver(decorator);
+        }
+        return this;
+    }
+
     public ApproximationSolverBuilder initState(Namespace arguments) {
         if (remover == null) {
             throw new IllegalStateException("Constraint remover must be initialized !");
@@ -104,9 +116,11 @@ public class ApproximationSolverBuilder {
         SubApproximationStateSolver.initInstance(aceProblemAdapter, remover,
                 new SolverConfiguration(arguments.getInt("n_runs_approx"),
                         arguments.getDouble("factor_runs_approx"),
-                        arguments.getInt("n_sol_limit")),arguments.get("path_strategy"));
+                        arguments.getInt("n_sol_limit")),
+                arguments.get("path_strategy"));
         NormalStateSolver.initInstance(aceProblemAdapter, new SolverConfiguration(
-                arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),Long.MAX_VALUE));
+                arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),
+                Long.MAX_VALUE));
         return this;
     }
 

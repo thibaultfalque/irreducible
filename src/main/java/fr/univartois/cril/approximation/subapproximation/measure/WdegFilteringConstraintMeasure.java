@@ -63,5 +63,12 @@ public class WdegFilteringConstraintMeasure extends AbstractMeasure {
         
     }
 
+    @Override
+    public <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
+            double newValue) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
 

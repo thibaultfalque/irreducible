@@ -25,13 +25,18 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.xcsp.common.Types.TypeFramework;
+
 import constraints.Constraint;
+import fr.univartois.cril.aceurancetourix.AceHead;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 import solver.Solver.WarmStarter;
+import utility.Kit;
+import utility.Kit.Color;
 
 /**
  * The SubApproximationStateSolver
@@ -44,25 +49,36 @@ import solver.Solver.WarmStarter;
 public class SubApproximationStateSolver extends AbstractState {
 
     private static Supplier<IConstraintsRemover> sRemover;
+
     private static IConstraintsRemover remover;
+
     private static SolverConfiguration solverConfiguration;
+
     private static PathStrategy pathStrategy;
+
+    private static int subApproximationCounter = 0;
+
+    private int nb;
+
     private ISolverState previous;
-    private UniverseSolverResult last=UniverseSolverResult.UNKNOWN;
+
+    private UniverseSolverResult last = UniverseSolverResult.UNKNOWN;
+
     private Set<Constraint> removedConstraints;
 
     /**
      * Creates a new SubApproximationStateSolver.
      */
-    public SubApproximationStateSolver(IUniverseSolver solver,ISolverState previous) {
+    public SubApproximationStateSolver(IUniverseSolver solver, ISolverState previous) {
         super(solverConfiguration, solver);
-        this.previous=previous;
-        this.removedConstraints=new HashSet<>();
-        if(remover==null) {
-            remover=Objects.requireNonNull(sRemover.get());
+        this.previous = previous;
+        this.removedConstraints = new HashSet<>();
+        this.nb = subApproximationCounter;
+        subApproximationCounter++;
+        if (remover == null) {
+            remover = Objects.requireNonNull(sRemover.get());
         }
     }
-
 
     /*
      * (non-Javadoc)
@@ -71,16 +87,22 @@ public class SubApproximationStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solve() {
-        var list = remover.computeNextConstraintsToRemove();       
-        
-        for(Constraint c:list) {
-            c.ignored=true;
-            removedConstraints.add(c);
+        System.out.println("we solve with "+this);
+        var list = remover.computeNextConstraintsToRemove();
+        System.out.println(this+" we removed "+list.size()+" constraints");
+        if (!list.isEmpty()) {
+            for (Constraint c : list) {
+                c.ignored = true;
+                removedConstraints.add(c);
+            }
+        }else {
+            solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=TypeFramework.CSP;
         resetLimitSolver();
         solver.reset();
         last = solver.solve();
-        System.out.println("last: "+last);
+        System.out.println(this +" answer: " + last);
         return last;
     }
 
@@ -90,25 +112,47 @@ public class SubApproximationStateSolver extends AbstractState {
     }
 
     public static void initInstance(IUniverseSolver solver, Supplier<IConstraintsRemover> r,
-            SolverConfiguration config,PathStrategy ps) {
+            SolverConfiguration config, PathStrategy ps) {
         sRemover = r;
-        solverConfiguration=config;
-        pathStrategy=ps;
+        solverConfiguration = config;
+        pathStrategy = ps;
     }
 
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
-        ((JUniverseAceProblemAdapter)solver).getHead().solver.warmStarter = starter;
+        System.out.println("we solve with starter "+this);
+        ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=TypeFramework.CSP;
         resetLimitSolver();
-        last= solver.solve();
+        solver.reset();
+        last = solver.solve();
         return last;
     }
 
     @Override
     public ISolverState previousState() {
         remover.restoreConstraints(removedConstraints);
+        System.out.println(this +" we restore " + removedConstraints.size());
         return pathStrategy.previous(previous);
     }
-    
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "SubApproximationStateSolver [nb=" + nb + "]";
+    }
+
+    @Override
+    public void displaySolution() {
+        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
+        System.out.println("s UNKNOWN");   
+        System.out.println("d INCOMPLETE EXPLORATION");
+        Kit.log.config("\nc real time : " + head.stopwatch.cpuTimeInSeconds());
+        System.out.flush();
+    }
 
 }

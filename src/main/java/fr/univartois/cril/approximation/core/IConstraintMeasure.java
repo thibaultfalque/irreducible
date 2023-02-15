@@ -48,4 +48,6 @@ public interface IConstraintMeasure {
     
     <T> void  updateMeasureNEffectiveFiltering(Heap<T> heap, T c,double oldValue, double newValue);
     <T> void  updateMeasureWDEGWeight(Heap<T> heap, T c,double oldValue, double newValue);
+    <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
+            double newValue);
 }

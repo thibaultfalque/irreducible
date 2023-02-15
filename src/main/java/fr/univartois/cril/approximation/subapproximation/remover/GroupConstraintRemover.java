@@ -52,6 +52,9 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
      */
     @Override
     public List<Constraint> computeNextConstraintsToRemove() {
+        if(heapConstraint.size()==1) {
+            return List.of();
+        }
         var g = heapConstraint.poll();
         ignoredConstraint.addAll(g.getConstraints());
         return g.getConstraints();
@@ -100,5 +103,12 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
 
         heapConstraint.add(groupSolver.getGroup(group));
 
+    }
+
+    @Override
+    public void whenBacktrackingChange(Constraint c, int oldValue, int newValue) {
+        GroupConstraint g = this.groupSolver.getGroup(c.group);
+        measure.updateMeasureNEffectiveBacktracking(heapConstraint, g, oldValue, newValue);
+        
     }
 }

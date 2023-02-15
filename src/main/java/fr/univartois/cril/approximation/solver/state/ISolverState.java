@@ -36,5 +36,6 @@ public interface ISolverState {
     UniverseSolverResult solve(WarmStarter starter);
     ISolverState nextState();
     ISolverState previousState();
+    void displaySolution();
 }
 

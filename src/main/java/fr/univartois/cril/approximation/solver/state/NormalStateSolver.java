@@ -20,6 +20,11 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import java.util.stream.Collectors;
+
+import org.xcsp.common.Types.TypeFramework;
+
+import fr.univartois.cril.aceurancetourix.AceHead;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
@@ -39,6 +44,8 @@ public class NormalStateSolver extends AbstractState {
     private static NormalStateSolver INSTANCE;
 
     private boolean first = true;
+    
+    private TypeFramework type = null;
 
     private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config) {
         super(config, solver);
@@ -51,12 +58,35 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solve() {
+        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
+        System.out.println("we solve with "+this);
         resetLimitSolver();
         if (!first) {
             solver.reset();
         }
         first = false;
-        return solver.solve();
+        if(type==null) {
+            type=((JUniverseAceProblemAdapter)solver).getHead().problem.framework;
+        }
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
+        var r= solver.solve();
+        System.out.println(this +" "+r);
+        if(r!=UniverseSolverResult.SATISFIABLE) {
+            return r;
+        }
+        if(head.problem.framework==TypeFramework.COP) {
+            System.out.println(this +" continue COP ");
+            var solution = solver.solution();
+            String stringSolution = solution.stream().map(i -> i.toString()).collect(
+                    Collectors.joining(" "));
+            var starter = new WarmStarter(stringSolution, head.solver);
+            config.setNbRun(Integer.MAX_VALUE);
+            resetLimitSolver();
+            solver.reset();
+            head.solver.warmStarter=starter;
+            return solver.solve();
+        }
+        return r;
     }
 
     /*
@@ -79,9 +109,30 @@ public class NormalStateSolver extends AbstractState {
 
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
-        ((JUniverseAceProblemAdapter)solver).getHead().solver.warmStarter = starter;
+        System.out.println("we solve with starter "+this);
+        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
+        head.solver.warmStarter = starter;
+        head.problem.framework=type;
         resetLimitSolver();
-        return solver.solve();
+        solver.reset();
+        var r = solver.solve();
+        System.out.println(this +" "+r);
+        if(r!=UniverseSolverResult.SATISFIABLE) {
+            return r;
+        }
+        if(head.problem.framework==TypeFramework.COP) {
+            System.out.println(this +" continue COP ");
+            var solution = solver.solution();
+            String stringSolution = solution.stream().map(i -> i.toString()).collect(
+                    Collectors.joining(" "));
+            starter = new WarmStarter(stringSolution, head.solver);
+            config.setNbRun(Integer.MAX_VALUE);
+            resetLimitSolver();
+            solver.reset();
+            head.solver.warmStarter=starter;
+            return solver.solve();
+        }
+        return r;
     }
 
     @Override
@@ -89,4 +140,20 @@ public class NormalStateSolver extends AbstractState {
         return this;
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "NormalStateSolver []";
+    }
+
+    @Override
+    public void displaySolution() {
+        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
+        head.solver.solutions.displayFinalResults();        
+    }
+    
 }

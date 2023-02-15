@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 import constraints.Constraint;
+import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.CollectionFactory;
@@ -37,8 +38,7 @@ import fr.univartois.cril.approximation.util.collections.heaps.HeapFactory;
  *
  * @version 0.1.0
  */
-public class SingleConstraintRemover extends AbstractConstraintRemover<Constraint>  {
-
+public class SingleConstraintRemover extends AbstractConstraintRemover<Constraint> {
 
     public SingleConstraintRemover(IConstraintGroupSolver groupSolver) {
         super(groupSolver);
@@ -52,8 +52,10 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
      */
     @Override
     public List<Constraint> computeNextConstraintsToRemove() {
+        if (heapConstraint.size() == 1) {
+            return List.of();
+        }
         var c = heapConstraint.poll();
-        
         ignoredConstraint.add(c);
         return List.of(c);
     }
@@ -73,8 +75,11 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
                 () -> CollectionFactory.newMapInt(Constraint.class, k -> k.num,
                         i -> this.groupSolver.getConstraint(i), this.groupSolver.nConstraints()),
                 (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
+        for (Constraint c : groupSolver.getConstraints()) {
+            heapConstraint.add(c);
+        }
     }
-    
+
     @Override
     public void whenEffectiveFilteringChange(Constraint c, int old, int newValue) {
         measure.updateMeasureNEffectiveFiltering(heapConstraint, c, old, newValue);
@@ -87,11 +92,17 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
 
     @Override
     public void restoreConstraints(Collection<Constraint> constraints) {
-        for(Constraint c:constraints) {
-            c.ignored=false;
+        for (Constraint c : constraints) {
+            c.ignored = false;
             heapConstraint.add(c);
         }
-        
+
+    }
+
+    @Override
+    public void whenBacktrackingChange(Constraint c, int old, int newValue) {
+        measure.updateMeasureNEffectiveBacktracking(heapConstraint, c, old, newValue);
+
     }
 
 }

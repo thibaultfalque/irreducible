@@ -63,5 +63,12 @@ public class NEffectiveFilteringConstraintMeasure implements IConstraintMeasure 
     public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
     }
 
+    @Override
+    public <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
+            double newValue) {
+        // TODO Auto-generated method stub
+        
+    }
+
 
 }

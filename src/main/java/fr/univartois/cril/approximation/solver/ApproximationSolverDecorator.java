@@ -88,7 +88,13 @@ public class ApproximationSolverDecorator
 
     @Override
     public int nConstraints() {
-        return solver.nConstraints();
+        int nb=0;
+        for(Constraint c:getConstraints()) {
+            if(!c.ignored) {
+                nb++;
+            }
+        }
+        return nb;
     }
 
     @Override
@@ -118,6 +124,7 @@ public class ApproximationSolverDecorator
         var result = state.solve();
         while (result == UniverseSolverResult.UNKNOWN) {
             state = state.nextState();
+            System.out.println("Start new state: "+this.state);
             result = state.solve();
             while (result == UniverseSolverResult.SATISFIABLE
                     && this.state != NormalStateSolver.getInstance()) {
@@ -126,6 +133,7 @@ public class ApproximationSolverDecorator
                         Collectors.joining(" "));
                 WarmStarter starter = new WarmStarter(stringSolution, solver.getHead().solver);
                 state = state.previousState();
+                System.out.println("change to previous state: "+this.state);
                 result = state.solve(starter);
             }
         }
@@ -215,6 +223,16 @@ public class ApproximationSolverDecorator
         // TODO Auto-generated method stub
         return null;
     }
+    
+    public void displaySolution() {
+        if(state!=null) {
+            state.displaySolution();
+        }else {
+            System.out.println("s UNKNOWN");
+        }
+        
+    }
+    
 
     /**
      * @return
@@ -229,6 +247,18 @@ public class ApproximationSolverDecorator
      */
     private Problem getProblem() {
         return solver.getHead().getSolver().problem;
+    }
+
+    @Override
+    public void loadInstance(String filename) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isOptimization() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }
