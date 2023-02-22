@@ -30,6 +30,7 @@ import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 import solver.Solver.WarmStarter;
+import interfaces.Observers.ObserverOnSolution;
 
 /**
  * The NormalStateSolver
@@ -46,6 +47,9 @@ public class NormalStateSolver extends AbstractState {
     private boolean first = true;
     
     private TypeFramework type = null;
+
+    private ObserverOnSolution observer = () -> 
+    ((JUniverseAceProblemAdapter)solver).getBuilder().getOptionsRestartsBuilder().setnRuns(Integer.MAX_VALUE);
 
     private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config) {
         super(config, solver);
@@ -69,23 +73,10 @@ public class NormalStateSolver extends AbstractState {
             type=((JUniverseAceProblemAdapter)solver).getHead().problem.framework;
         }
         ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
         var r= solver.solve();
         System.out.println(this +" "+r);
-        if(r!=UniverseSolverResult.SATISFIABLE) {
-            return r;
-        }
-        if(head.problem.framework==TypeFramework.COP) {
-            System.out.println(this +" continue COP ");
-            var solution = solver.solution();
-            String stringSolution = solution.stream().map(i -> i.toString()).collect(
-                    Collectors.joining(" "));
-            var starter = new WarmStarter(stringSolution, head.solver);
-            config.setNbRun(Integer.MAX_VALUE);
-            resetLimitSolver();
-            solver.reset();
-            head.solver.warmStarter=starter;
-            return solver.solve();
-        }
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().removeObserverOnSolution(observer);
         return r;
     }
 
@@ -115,23 +106,10 @@ public class NormalStateSolver extends AbstractState {
         head.problem.framework=type;
         resetLimitSolver();
         solver.reset();
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
         var r = solver.solve();
         System.out.println(this +" "+r);
-        if(r!=UniverseSolverResult.SATISFIABLE) {
-            return r;
-        }
-        if(head.problem.framework==TypeFramework.COP) {
-            System.out.println(this +" continue COP ");
-            var solution = solver.solution();
-            String stringSolution = solution.stream().map(i -> i.toString()).collect(
-                    Collectors.joining(" "));
-            starter = new WarmStarter(stringSolution, head.solver);
-            config.setNbRun(Integer.MAX_VALUE);
-            resetLimitSolver();
-            solver.reset();
-            head.solver.warmStarter=starter;
-            return solver.solve();
-        }
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().removeObserverOnSolution(observer);
         return r;
     }
 
