@@ -43,7 +43,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'fr.cril', name:'aceurancetourix', version: '0.1.10'
+    implementation group: 'fr.cril', name:'aceurancetourix', version: '0.1.11'
     implementation group: 'fr.cril', name:'juniverse', version: '0.1.11'
     implementation files("lib/ACE.jar")
     implementation group: 'net.sourceforge.argparse4j', name:'argparse4j', version: '0.9.0'
