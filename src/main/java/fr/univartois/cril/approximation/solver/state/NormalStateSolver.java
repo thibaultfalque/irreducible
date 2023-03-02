@@ -30,6 +30,7 @@ import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 import solver.Solver.WarmStarter;
+import optimization.Optimizer;
 import interfaces.Observers.ObserverOnSolution;
 
 /**
@@ -47,6 +48,8 @@ public class NormalStateSolver extends AbstractState {
     private boolean first = true;
     
     private TypeFramework type = null;
+
+    private Optimizer optimizer = null;
 
     private ObserverOnSolution observer = () -> 
     ((JUniverseAceProblemAdapter)solver).getBuilder().getOptionsRestartsBuilder().setnRuns(Integer.MAX_VALUE);
@@ -70,9 +73,11 @@ public class NormalStateSolver extends AbstractState {
         }
         first = false;
         if(type==null) {
+            optimizer = ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer;
             type=((JUniverseAceProblemAdapter)solver).getHead().problem.framework;
         }
         ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=optimizer;
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
         var r= solver.solve();
         System.out.println(this +" "+r);
@@ -103,7 +108,8 @@ public class NormalStateSolver extends AbstractState {
         System.out.println("we solve with starter "+this);
         AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
         head.solver.warmStarter = starter;
-        head.problem.framework=type;
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=optimizer;
         resetLimitSolver();
         solver.reset();
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);

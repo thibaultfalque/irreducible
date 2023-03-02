@@ -99,6 +99,7 @@ public class SubApproximationStateSolver extends AbstractState {
             solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
         ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=TypeFramework.CSP;
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=null;
         resetLimitSolver();
         solver.reset();
         last = solver.solve();
@@ -123,6 +124,7 @@ public class SubApproximationStateSolver extends AbstractState {
         System.out.println("we solve with starter "+this);
         ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
         ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=TypeFramework.CSP;
+        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=null;
         resetLimitSolver();
         solver.reset();
         last = solver.solve();
