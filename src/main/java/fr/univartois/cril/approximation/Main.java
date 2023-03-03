@@ -53,6 +53,7 @@ public class Main {
 			var arguments = parser.parseArgs(args);
 
 			var solver = new ApproximationSolverBuilder()
+					.withPercentage(arguments.getDouble("percentage"))
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
 					.withMeanComputation(arguments.getBoolean("mean"))

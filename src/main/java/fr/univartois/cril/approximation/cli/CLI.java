@@ -62,6 +62,7 @@ public class CLI {
         approximationGroup.addArgument("--n-runs-approx").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
         approximationGroup.addArgument("--n-sol-limit").help("The max number of solution for approximate problem.").setDefault(1).type(Integer.class);
         approximationGroup.addArgument("--factor-runs-approx").help("The increasing factor for updating the number of runs.").setDefault(1.1).type(Double.class);
+        approximationGroup.addArgument("--percentage").help("The percentage of constraints to remove per approximation.").setDefault(0).type(Double.class);
         approximationGroup.addArgument("--measure").help("The name of the measure considered to remove constraints.").setDefault("NEffectiveFiltering").type(String.class);
         approximationGroup.addArgument("--mean").help("Use the mean of the measure for a group instead of the sum").setDefault(false).type(Boolean.class);
         approximationGroup.addArgument("--constraint-remover").help("The type of strategy for removes constraints using the specify measure").setDefault("Group").type(String.class);
