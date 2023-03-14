@@ -87,23 +87,23 @@ public class SubApproximationStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solve() {
-        System.out.println("we solve with "+this);
+        System.out.println("we solve with " + this);
         var list = remover.computeNextConstraintsToRemove();
-        System.out.println(this+" we removed "+list.size()+" constraints");
+        System.out.println(this + " we removed " + list.size() + " constraints");
         if (!list.isEmpty()) {
             for (Constraint c : list) {
                 c.ignored = true;
                 removedConstraints.add(c);
             }
-        }else {
+        } else {
             solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=TypeFramework.CSP;
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=null;
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
         resetLimitSolver();
         solver.reset();
         last = solver.solve();
-        System.out.println(this +" answer: " + last);
+        System.out.println(this + " answer: " + last);
         return last;
     }
 
@@ -121,10 +121,10 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
-        System.out.println("we solve with starter "+this);
+        System.out.println("we solve with starter " + this);
         ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=TypeFramework.CSP;
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=null;
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
         resetLimitSolver();
         solver.reset();
         last = solver.solve();
@@ -133,8 +133,10 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public ISolverState previousState() {
-        remover.restoreConstraints(removedConstraints);
-        System.out.println(this +" we restore " + removedConstraints.size());
+        if (!removedConstraints.isEmpty()) {
+            remover.restoreConstraints(removedConstraints);
+        }
+        System.out.println(this + " we restore " + removedConstraints.size());
         return pathStrategy.previous(previous);
     }
 
@@ -150,8 +152,8 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public void displaySolution() {
-        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
-        System.out.println("s UNKNOWN");   
+        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
+        System.out.println("s UNKNOWN");
         System.out.println("d INCOMPLETE EXPLORATION");
         Kit.log.config("\nc real time : " + head.stopwatch.cpuTimeInSeconds());
         System.out.flush();
