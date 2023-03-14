@@ -30,6 +30,7 @@ import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
 import fr.univartois.cril.approximation.subapproximation.measure.MeanFilteringConstraintMeasure;
 import fr.univartois.cril.approximation.subapproximation.remover.ConstraintRemoverFactory;
+import fr.univartois.cril.approximation.subapproximation.remover.PercentageConstraintRemover;
 import net.sourceforge.argparse4j.inf.Namespace;
 import solver.AceBuilder;
 
@@ -52,6 +53,8 @@ public class ApproximationSolverBuilder {
     private IConstraintMeasure measure;
 
     private AceBuilder builder;
+
+    private double percentage;
 
     public ApproximationSolverBuilder() {
         aceProblemAdapter = new JUniverseAceProblemAdapter();
@@ -86,11 +89,19 @@ public class ApproximationSolverBuilder {
         return this;
     }
 
+    public ApproximationSolverBuilder withPercentage(double percentage) {
+        this.percentage = percentage;
+        return this;
+    }
+
     public ApproximationSolverBuilder withSpecificConstraintRemover(String rm) {
         remover = () -> {
             var r = ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm,
                     decorator);
             r.setConstraintMeasure(measure);
+            if (r instanceof PercentageConstraintRemover) {
+                ((PercentageConstraintRemover)r).setPercentage(percentage);
+            }
             return r;
         };
         return this;
