@@ -26,10 +26,15 @@ import org.xcsp.common.Types.TypeFramework;
 
 import fr.univartois.cril.aceurancetourix.AceHead;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
+import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
+import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
+import heuristics.HeuristicValuesDynamic.AbstractSolutionScore;
+import solver.Solver;
 import solver.Solver.WarmStarter;
+import variables.Variable;
 import optimization.Optimizer;
 import interfaces.Observers.ObserverOnSolution;
 
@@ -54,8 +59,8 @@ public class NormalStateSolver extends AbstractState {
     private ObserverOnSolution observer = () -> 
     ((JUniverseAceProblemAdapter)solver).getBuilder().getOptionsRestartsBuilder().setnRuns(Integer.MAX_VALUE);
 
-    private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config) {
-        super(config, solver);
+    private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config,ApproximationSolverDecorator decorator) {
+        super(config, solver,decorator);
     }
 
     /*
@@ -69,12 +74,15 @@ public class NormalStateSolver extends AbstractState {
         System.out.println("we solve with "+this);
         resetLimitSolver();
         if (!first) {
-            solver.reset();
+            decorator.reset();
         }
         first = false;
         if(type==null) {
             optimizer = ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer;
             type=((JUniverseAceProblemAdapter)solver).getHead().problem.framework;
+        }
+        for(Variable v:((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
+            ((AbstractSolutionScore)v.heuristic).setEnabled(false);
         }
         ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
         ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=optimizer;
@@ -92,11 +100,11 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public ISolverState nextState() {
-        return new SubApproximationStateSolver(solver, this);
+        return new SubApproximationStateSolver(solver, this,decorator);
     }
 
-    public static void initInstance(IUniverseSolver solver, SolverConfiguration configuration) {
-        INSTANCE = new NormalStateSolver(solver, configuration);
+    public static void initInstance(IUniverseSolver solver, SolverConfiguration configuration,ApproximationSolverDecorator decorator) {
+        INSTANCE = new NormalStateSolver(solver, configuration,decorator);
     }
 
     public static NormalStateSolver getInstance() {
@@ -106,12 +114,19 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
         System.out.println("we solve with starter "+this);
+        if(optimizer!=null) {
+            System.out.println(optimizer.stringBounds());
+        }
+        
         AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
-        head.solver.warmStarter = starter;
+        for(Variable v:head.solver.problem.variables) {
+            ((AbstractSolutionScore)v.heuristic).updateValue(starter.valueIndexOf(v));
+            ((AbstractSolutionScore)v.heuristic).setEnabled(true);
+        }
         ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
         ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=optimizer;
         resetLimitSolver();
-        solver.reset();
+        decorator.reset();
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
         var r = solver.solve();
         System.out.println(this +" "+r);
@@ -138,6 +153,11 @@ public class NormalStateSolver extends AbstractState {
     public void displaySolution() {
         AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
         head.solver.solutions.displayFinalResults();        
+    }
+
+    @Override
+    public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
+        ngStrategy.resetNoGoods(this, ace);
     }
     
 }

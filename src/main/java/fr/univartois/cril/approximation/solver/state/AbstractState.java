@@ -38,13 +38,15 @@ public abstract class AbstractState implements ISolverState {
 
     protected SolverConfiguration config;
     protected IUniverseSolver solver;
+    protected ApproximationSolverDecorator decorator;
 
     /**
      * Creates a new AbstractState.
      */
-    public AbstractState(SolverConfiguration config,IUniverseSolver solver) {
+    public AbstractState(SolverConfiguration config,IUniverseSolver solver,ApproximationSolverDecorator decorator) {
         this.config = config;
         this.solver=solver;
+        this.decorator=decorator;
     }
     
     protected void resetLimitSolver() {

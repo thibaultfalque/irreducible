@@ -31,12 +31,16 @@ import constraints.Constraint;
 import fr.univartois.cril.aceurancetourix.AceHead;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
+import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
+import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
+import heuristics.HeuristicValuesDynamic.AbstractSolutionScore;
+import solver.Solver;
 import solver.Solver.WarmStarter;
 import utility.Kit;
-import utility.Kit.Color;
+import variables.Variable;
 
 /**
  * The SubApproximationStateSolver
@@ -69,8 +73,8 @@ public class SubApproximationStateSolver extends AbstractState {
     /**
      * Creates a new SubApproximationStateSolver.
      */
-    public SubApproximationStateSolver(IUniverseSolver solver, ISolverState previous) {
-        super(solverConfiguration, solver);
+    public SubApproximationStateSolver(IUniverseSolver solver, ISolverState previous,ApproximationSolverDecorator decorator) {
+        super(solverConfiguration, solver,decorator);
         this.previous = previous;
         this.removedConstraints = new HashSet<>();
         this.nb = subApproximationCounter;
@@ -98,10 +102,13 @@ public class SubApproximationStateSolver extends AbstractState {
         } else {
             solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
+        for(Variable v:((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
+            ((AbstractSolutionScore)v.heuristic).setEnabled(true);
+        }
         ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
         ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
         resetLimitSolver();
-        solver.reset();
+        decorator.reset();
         last = solver.solve();
         System.out.println(this + " answer: " + last);
         return last;
@@ -109,7 +116,7 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public ISolverState nextState() {
-        return new SubApproximationStateSolver(solver, this);
+        return new SubApproximationStateSolver(solver, this,decorator);
     }
 
     public static void initInstance(IUniverseSolver solver, Supplier<IConstraintsRemover> r,
@@ -122,11 +129,15 @@ public class SubApproximationStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
         System.out.println("we solve with starter " + this);
-        ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
+//        ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
+        for(Variable v:((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
+            ((AbstractSolutionScore)v.heuristic).updateValue(starter.valueIndexOf(v));
+            ((AbstractSolutionScore)v.heuristic).setEnabled(true);
+        }
         ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
         ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
         resetLimitSolver();
-        solver.reset();
+        decorator.reset();
         last = solver.solve();
         return last;
     }
@@ -157,6 +168,11 @@ public class SubApproximationStateSolver extends AbstractState {
         System.out.println("d INCOMPLETE EXPLORATION");
         Kit.log.config("\nc real time : " + head.stopwatch.cpuTimeInSeconds());
         System.out.flush();
+    }
+
+    @Override
+    public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
+        ngStrategy.resetNoGoods(this, ace);
     }
 
 }

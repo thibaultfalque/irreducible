@@ -22,6 +22,7 @@ package fr.univartois.cril.approximation.cli;
 
 import java.io.FileInputStream;
 
+import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -52,6 +53,8 @@ public class CLI {
         generalGroup.addArgument("--global-timeout").type(String.class);
         generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(true);
         generalGroup.addArgument("--ace-verbosity").type(Integer.class).setDefault(1);
+        generalGroup.addArgument("--keep-nogood").type(KeepNoGoodStrategy.class).setDefault(KeepNoGoodStrategy.ALWAYS);
+        generalGroup.addArgument("--valh").type(String.class).setDefault("WarmStarterScore");
 
         var normalGroup = parser.addArgumentGroup("Normal resolution");
         normalGroup.addArgument("--n-runs-normal").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
@@ -62,7 +65,7 @@ public class CLI {
         approximationGroup.addArgument("--n-runs-approx").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
         approximationGroup.addArgument("--n-sol-limit").help("The max number of solution for approximate problem.").setDefault(1).type(Integer.class);
         approximationGroup.addArgument("--factor-runs-approx").help("The increasing factor for updating the number of runs.").setDefault(1.1).type(Double.class);
-        approximationGroup.addArgument("--percentage").help("The percentage of constraints to remove per approximation.").setDefault(0).type(Double.class);
+        approximationGroup.addArgument("--percentage").help("The percentage of constraints to remove per approximation.").setDefault(0.).type(Double.class);
         approximationGroup.addArgument("--measure").help("The name of the measure considered to remove constraints.").setDefault("NEffectiveFiltering").type(String.class);
         approximationGroup.addArgument("--mean").help("Use the mean of the measure for a group instead of the sum").setDefault(false).type(Boolean.class);
         approximationGroup.addArgument("--constraint-remover").help("The type of strategy for removes constraints using the specify measure").setDefault("Group").type(String.class);

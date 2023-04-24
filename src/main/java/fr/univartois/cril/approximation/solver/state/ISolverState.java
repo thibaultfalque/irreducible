@@ -20,7 +20,9 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
+import solver.Solver;
 import solver.Solver.WarmStarter;
 
 /**
@@ -36,6 +38,8 @@ public interface ISolverState {
     UniverseSolverResult solve(WarmStarter starter);
     ISolverState nextState();
     ISolverState previousState();
+    
+    void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace);
     void displaySolution();
 }
 

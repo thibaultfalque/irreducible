@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
+import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
@@ -62,7 +63,12 @@ public class ApproximationSolverBuilder {
         builder = aceProblemAdapter.getBuilder();
 
     }
-
+    
+    public ApproximationSolverBuilder setKeepNogood(KeepNoGoodStrategy value) {
+        decorator.setKeepNogood(value);
+        return this;
+    }
+    
     public ApproximationSolverBuilder setNoPrintColor(boolean value) {
         builder.getOptionsGeneralBuilder().setNoPrintColors(value);
         return this;
@@ -131,11 +137,16 @@ public class ApproximationSolverBuilder {
                 arguments.get("path_strategy"));
         NormalStateSolver.initInstance(aceProblemAdapter, new SolverConfiguration(
                 arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),
-                Long.MAX_VALUE));
+                Long.MAX_VALUE),decorator);
         return this;
     }
 
     public ApproximationSolverDecorator build() {
         return decorator;
+    }
+
+    public ApproximationSolverBuilder withValh(String string) {
+        builder.getOptionsValhBuilder().setClazz(string);
+        return this;
     }
 }

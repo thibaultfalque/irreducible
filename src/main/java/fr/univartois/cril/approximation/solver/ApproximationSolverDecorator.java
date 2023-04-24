@@ -35,6 +35,7 @@ import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.aceurancetourix.reader.XCSP3Reader;
 import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.juniverse.core.UniverseAssumption;
@@ -42,7 +43,7 @@ import fr.univartois.cril.juniverse.core.UniverseContradictionException;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 import fr.univartois.cril.juniverse.core.problem.IUniverseVariable;
 import problem.Problem;
-import solver.AceBuilder;
+import solver.Solver;
 import solver.Solver.WarmStarter;
 
 /**
@@ -62,6 +63,8 @@ public class ApproximationSolverDecorator
 
     private ISolverState state;
 
+    private KeepNoGoodStrategy keepNogood = KeepNoGoodStrategy.ALWAYS;
+
     /**
      * Creates a new ApproximationSolverDecorator.
      */
@@ -73,6 +76,14 @@ public class ApproximationSolverDecorator
     @Override
     public void reset() {
         solver.reset();
+        Solver ace = solver.getHead().getSolver();
+        ace.propagation.clear();
+        ace.propagation.nTuplesRemoved = 0;
+        ace.restarter.reset();
+        ace.resetNoSolutions();
+        keepNogood.resetNoGoods(state, ace);
+        ace.heuristic.setPriorityVars(ace.problem.priorityVars, 0);
+        ace.stats.reset();
     }
 
     @Override
@@ -88,9 +99,9 @@ public class ApproximationSolverDecorator
 
     @Override
     public int nConstraints() {
-        int nb=0;
-        for(Constraint c:getConstraints()) {
-            if(!c.ignored) {
+        int nb = 0;
+        for (Constraint c : getConstraints()) {
+            if (!c.ignored) {
                 nb++;
             }
         }
@@ -124,7 +135,7 @@ public class ApproximationSolverDecorator
         var result = state.solve();
         while (result == UniverseSolverResult.UNKNOWN) {
             state = state.nextState();
-            System.out.println("Start new state: "+this.state);
+            System.out.println("Start new state: " + this.state);
             result = state.solve();
             while (result == UniverseSolverResult.SATISFIABLE
                     && this.state != NormalStateSolver.getInstance()) {
@@ -133,7 +144,7 @@ public class ApproximationSolverDecorator
                         Collectors.joining(" "));
                 WarmStarter starter = new WarmStarter(stringSolution, solver.getHead().solver);
                 state = state.previousState();
-                System.out.println("change to previous state: "+this.state);
+                System.out.println("change to previous state: " + this.state);
                 result = state.solve(starter);
             }
         }
@@ -223,16 +234,15 @@ public class ApproximationSolverDecorator
         // TODO Auto-generated method stub
         return null;
     }
-    
+
     public void displaySolution() {
-        if(state!=null) {
+        if (state != null) {
             state.displaySolution();
-        }else {
+        } else {
             System.out.println("s UNKNOWN");
         }
-        
+
     }
-    
 
     /**
      * @return
@@ -252,7 +262,7 @@ public class ApproximationSolverDecorator
     @Override
     public void loadInstance(String filename) {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -261,4 +271,7 @@ public class ApproximationSolverDecorator
         return false;
     }
 
+    public void setKeepNogood(KeepNoGoodStrategy keepNogood) {
+        this.keepNogood = keepNogood;
+    }
 }

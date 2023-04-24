@@ -57,8 +57,10 @@ public class Main {
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
 					.withMeanComputation(arguments.getBoolean("mean"))
+					.setKeepNogood(arguments.get("keep_nogood"))
 					.setNoPrintColor(arguments.getBoolean("no_print_color"))
 					.setAceVerbosity(arguments.getInt("ace_verbosity"))
+					.withValh(arguments.getString("valh"))
 					.setTimeout(arguments.getString("global_timeout"))
 					.initState(arguments).build();
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> solver.displaySolution()));
