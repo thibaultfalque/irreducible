@@ -140,7 +140,7 @@ public class ApproximationSolverDecorator
             while (result == UniverseSolverResult.SATISFIABLE
                     && this.state != NormalStateSolver.getInstance()) {
                 var solution = solver.solution();
-                String stringSolution = solution.stream().map(i -> i.toString()).collect(
+                String stringSolution = solution.stream().map(BigInteger::toString).collect(
                         Collectors.joining(" "));
                 WarmStarter starter = new WarmStarter(stringSolution, solver.getHead().solver);
                 state = state.previousState();
@@ -273,5 +273,16 @@ public class ApproximationSolverDecorator
 
     public void setKeepNogood(KeepNoGoodStrategy keepNogood) {
         this.keepNogood = keepNogood;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.juniverse.core.IUniverseSolver#decisionVariables(java.util.List)
+     */
+    @Override
+    public void decisionVariables(List<String> variables) {
+        // TODO Auto-generated method stub.
+
     }
 }
