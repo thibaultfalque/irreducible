@@ -79,6 +79,7 @@ public class ApproximationSolverDecorator
     @Override
     public void reset() {
         solver.reset();
+        solver.getHead().solver.lastConflict.lastAssigned = null;
         Solver ace = solver.getHead().getSolver();
         ace.propagation.clear();
         ace.propagation.nTuplesRemoved = 0;
