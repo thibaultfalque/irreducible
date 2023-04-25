@@ -27,6 +27,7 @@ replay_pid*
 
 .gradle
 **/build/
+/dist/
 !src/**/build/
 
 # Ignore Gradle GUI config
@@ -44,5 +45,6 @@ gradle-app.setting
 # Eclipse Gradle plugin generated files
 # Eclipse Core
 .project
+.settings
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
