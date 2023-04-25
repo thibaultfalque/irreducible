@@ -35,6 +35,7 @@ import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.aceurancetourix.reader.XCSP3Reader;
 import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
@@ -64,6 +65,8 @@ public class ApproximationSolverDecorator
     private ISolverState state;
 
     private KeepNoGoodStrategy keepNogood = KeepNoGoodStrategy.ALWAYS;
+
+    private KeepFalsifiedConstraintStrategy keepFalsified = KeepFalsifiedConstraintStrategy.NEVER;
 
     /**
      * Creates a new ApproximationSolverDecorator.
@@ -143,6 +146,7 @@ public class ApproximationSolverDecorator
                 String stringSolution = solution.stream().map(BigInteger::toString).collect(
                         Collectors.joining(" "));
                 WarmStarter starter = new WarmStarter(stringSolution, solver.getHead().solver);
+                keepFalsified.checkConstraints(starter, solver.getHead().solver);
                 state = state.previousState();
                 System.out.println("change to previous state: " + this.state);
                 result = state.solve(starter);
@@ -275,6 +279,15 @@ public class ApproximationSolverDecorator
         this.keepNogood = keepNogood;
     }
 
+
+    /**
+     * Sets this ApproximationSolverDecorator's keepFalsified.
+     *
+     * @param keepFalsified The keepFalsified to set.
+     */
+    public void setKeepFalsified(KeepFalsifiedConstraintStrategy keepFalsified) {
+        this.keepFalsified = keepFalsified;
+    }
     /*
      * (non-Javadoc)
      *

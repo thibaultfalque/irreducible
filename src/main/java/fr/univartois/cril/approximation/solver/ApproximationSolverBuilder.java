@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
+import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
@@ -63,12 +64,21 @@ public class ApproximationSolverBuilder {
         builder = aceProblemAdapter.getBuilder();
 
     }
-    
+
     public ApproximationSolverBuilder setKeepNogood(KeepNoGoodStrategy value) {
         decorator.setKeepNogood(value);
         return this;
     }
-    
+
+    /**
+     * @param object
+     * @return
+     */
+    public ApproximationSolverBuilder setKeepFalsified(KeepFalsifiedConstraintStrategy keep) {
+        decorator.setKeepFalsified(keep);
+        return this;
+    }
+
     public ApproximationSolverBuilder setNoPrintColor(boolean value) {
         builder.getOptionsGeneralBuilder().setNoPrintColors(value);
         return this;

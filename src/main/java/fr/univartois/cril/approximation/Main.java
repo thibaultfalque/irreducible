@@ -57,7 +57,8 @@ public class Main {
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
 					.withMeanComputation(arguments.getBoolean("mean"))
-					.setKeepNogood(arguments.get("keep_nogood"))
+                    .setKeepNogood(arguments.get("keep_nogood"))
+                    .setKeepFalsified(arguments.get("keep_falsified"))
 					.setNoPrintColor(arguments.getBoolean("no_print_color"))
 					.setAceVerbosity(arguments.getInt("ace_verbosity"))
 					.withValh(arguments.getString("valh"))
@@ -69,7 +70,7 @@ public class Main {
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);
-			
+
 			System.exit(1);
 		}catch (IOException e) {
             e.printStackTrace();

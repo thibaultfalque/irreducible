@@ -20,8 +20,6 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
-import java.util.stream.Collectors;
-
 import org.xcsp.common.Types.TypeFramework;
 
 import fr.univartois.cril.aceurancetourix.AceHead;
@@ -32,11 +30,11 @@ import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 import heuristics.HeuristicValuesDynamic.AbstractSolutionScore;
+import interfaces.Observers.ObserverOnSolution;
+import optimization.Optimizer;
 import solver.Solver;
 import solver.Solver.WarmStarter;
 import variables.Variable;
-import optimization.Optimizer;
-import interfaces.Observers.ObserverOnSolution;
 
 /**
  * The NormalStateSolver
@@ -51,12 +49,12 @@ public class NormalStateSolver extends AbstractState {
     private static NormalStateSolver INSTANCE;
 
     private boolean first = true;
-    
+
     private TypeFramework type = null;
 
     private Optimizer optimizer = null;
 
-    private ObserverOnSolution observer = () -> 
+    private ObserverOnSolution observer = () ->
     ((JUniverseAceProblemAdapter)solver).getBuilder().getOptionsRestartsBuilder().setnRuns(Integer.MAX_VALUE);
 
     private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config,ApproximationSolverDecorator decorator) {
@@ -117,7 +115,7 @@ public class NormalStateSolver extends AbstractState {
         if(optimizer!=null) {
             System.out.println(optimizer.stringBounds());
         }
-        
+
         AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
         for(Variable v:head.solver.problem.variables) {
             ((AbstractSolutionScore)v.heuristic).updateValue(starter.valueIndexOf(v));
@@ -152,12 +150,12 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public void displaySolution() {
         AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
-        head.solver.solutions.displayFinalResults();        
+        head.solver.solutions.displayFinalResults();
     }
 
     @Override
     public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
         ngStrategy.resetNoGoods(this, ace);
     }
-    
+
 }

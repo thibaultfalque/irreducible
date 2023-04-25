@@ -22,6 +22,7 @@ package fr.univartois.cril.approximation.cli;
 
 import java.io.FileInputStream;
 
+import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 import net.sourceforge.argparse4j.ArgumentParsers;
@@ -45,8 +46,8 @@ public class CLI {
         ArgumentParser parser = ArgumentParsers.newFor(PROGRAM_NAME).build()
                 .defaultHelp(true)
                 .description(DESCRIPTION).version(VERSION);
-        
-        
+
+
         var generalGroup = parser.addArgumentGroup("General");
         generalGroup.addArgument("-i","--instance").type(FileInputStream.class)
         .setDefault(System.in).help("The inputStream of the instance to solve");
@@ -54,12 +55,13 @@ public class CLI {
         generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(true);
         generalGroup.addArgument("--ace-verbosity").type(Integer.class).setDefault(1);
         generalGroup.addArgument("--keep-nogood").type(KeepNoGoodStrategy.class).setDefault(KeepNoGoodStrategy.ALWAYS);
+        generalGroup.addArgument("--keep-falsified").type(KeepFalsifiedConstraintStrategy.class).setDefault(KeepFalsifiedConstraintStrategy.NEVER);
         generalGroup.addArgument("--valh").type(String.class).setDefault("WarmStarterScore");
 
         var normalGroup = parser.addArgumentGroup("Normal resolution");
         normalGroup.addArgument("--n-runs-normal").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
         normalGroup.addArgument("--factor-runs-normal").help("The increasing factor for updating the number of runs.").type(Double.class).setDefault(1.1);
-        
+
         var approximationGroup = parser.addArgumentGroup("Approximation resolution");
         approximationGroup.description("This parameters controls the approximation. ");
         approximationGroup.addArgument("--n-runs-approx").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
@@ -70,7 +72,7 @@ public class CLI {
         approximationGroup.addArgument("--mean").help("Use the mean of the measure for a group instead of the sum").setDefault(false).type(Boolean.class);
         approximationGroup.addArgument("--constraint-remover").help("The type of strategy for removes constraints using the specify measure").setDefault("Group").type(String.class);
         approximationGroup.addArgument("--path-strategy").type((p,a,v)->PathStrategy.valueOf(v)).setDefault(PathStrategy.APPROX_NORMAL);
-       
+
         return parser;
     }
 

@@ -73,8 +73,9 @@ public class SubApproximationStateSolver extends AbstractState {
     /**
      * Creates a new SubApproximationStateSolver.
      */
-    public SubApproximationStateSolver(IUniverseSolver solver, ISolverState previous,ApproximationSolverDecorator decorator) {
-        super(solverConfiguration, solver,decorator);
+    public SubApproximationStateSolver(IUniverseSolver solver, ISolverState previous,
+            ApproximationSolverDecorator decorator) {
+        super(solverConfiguration, solver, decorator);
         this.previous = previous;
         this.removedConstraints = new HashSet<>();
         this.nb = subApproximationCounter;
@@ -96,14 +97,17 @@ public class SubApproximationStateSolver extends AbstractState {
         System.out.println(this + " we removed " + list.size() + " constraints");
         if (!list.isEmpty()) {
             for (Constraint c : list) {
-                c.ignored = true;
-                removedConstraints.add(c);
+                if (c.ignorable) {
+                    c.ignored = true;
+                    removedConstraints.add(c);
+                }
             }
         } else {
             solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
-        for(Variable v:((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
-            ((AbstractSolutionScore)v.heuristic).setEnabled(true);
+        for (Variable v : ((JUniverseAceProblemAdapter) solver)
+                .getHead().solver.problem.variables) {
+            ((AbstractSolutionScore) v.heuristic).setEnabled(true);
         }
         ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
         ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
@@ -116,7 +120,7 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public ISolverState nextState() {
-        return new SubApproximationStateSolver(solver, this,decorator);
+        return new SubApproximationStateSolver(solver, this, decorator);
     }
 
     public static void initInstance(IUniverseSolver solver, Supplier<IConstraintsRemover> r,
@@ -129,10 +133,11 @@ public class SubApproximationStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
         System.out.println("we solve with starter " + this);
-//        ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
-        for(Variable v:((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
-            ((AbstractSolutionScore)v.heuristic).updateValue(starter.valueIndexOf(v));
-            ((AbstractSolutionScore)v.heuristic).setEnabled(true);
+        // ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
+        for (Variable v : ((JUniverseAceProblemAdapter) solver)
+                .getHead().solver.problem.variables) {
+            ((AbstractSolutionScore) v.heuristic).updateValue(starter.valueIndexOf(v));
+            ((AbstractSolutionScore) v.heuristic).setEnabled(true);
         }
         ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
         ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
