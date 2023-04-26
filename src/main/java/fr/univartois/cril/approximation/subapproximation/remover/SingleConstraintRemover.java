@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.List;
 
 import constraints.Constraint;
-import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.CollectionFactory;
@@ -56,6 +55,12 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
             return List.of();
         }
         var c = heapConstraint.poll();
+        while (!c.ignorable) {
+            if (heapConstraint.size() == 1) {
+                return List.of();
+            }
+            c = heapConstraint.poll();
+        }
         ignoredConstraint.add(c);
         return List.of(c);
     }

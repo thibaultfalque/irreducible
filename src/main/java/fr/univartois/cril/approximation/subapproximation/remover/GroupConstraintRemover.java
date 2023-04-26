@@ -20,6 +20,7 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -52,12 +53,23 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
      */
     @Override
     public List<Constraint> computeNextConstraintsToRemove() {
-        if(heapConstraint.size()==1) {
-            return List.of();
-        }
-        var g = heapConstraint.poll();
-        ignoredConstraint.addAll(g.getConstraints());
-        return g.getConstraints();
+        var list = new ArrayList<Constraint>();
+
+        do {
+            if (heapConstraint.size() <= 1) {
+                return List.of();
+            }
+
+            var g = heapConstraint.poll();
+            for (var c : g.getConstraints()) {
+                if (c.ignorable) {
+                    ignoredConstraint.add(c);
+                    list.add(c);
+                }
+            }
+        } while (list.isEmpty());
+
+        return list;
     }
 
     /*
@@ -72,7 +84,8 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
     public void setConstraintMeasure(IConstraintMeasure measure) {
         super.setConstraintMeasure(measure);
         this.heapConstraint = HeapFactory.newMaximumHeap(this.groupSolver.nGroups(),
-                () -> CollectionFactory.newMapInt(GroupConstraint.class, k -> k.getGroupNumber(),
+                () -> CollectionFactory.newMapInt(GroupConstraint.class,
+                        GroupConstraint::getGroupNumber,
                         i -> this.groupSolver.getGroup(i), this.groupSolver.nGroups()),
                 (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
         for (GroupConstraint c : groupSolver.getGroups()) {
@@ -90,7 +103,6 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
     public void whenWDEGWeightChange(Constraint c, double oldValue, double newValue) {
         GroupConstraint g = this.groupSolver.getGroup(c.group);
         measure.updateMeasureWDEGWeight(heapConstraint, g, oldValue, newValue);
-
     }
 
     @Override
@@ -102,13 +114,12 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
         }
 
         heapConstraint.add(groupSolver.getGroup(group));
-
     }
 
     @Override
     public void whenBacktrackingChange(Constraint c, int oldValue, int newValue) {
         GroupConstraint g = this.groupSolver.getGroup(c.group);
         measure.updateMeasureNEffectiveBacktracking(heapConstraint, g, oldValue, newValue);
-        
     }
+
 }
