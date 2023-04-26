@@ -113,7 +113,7 @@ public class SubApproximationStateSolver extends AbstractState {
         ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
         resetLimitSolver();
         decorator.reset();
-        last = solver.solve();
+        last = internalSolve();
         System.out.println(this + " answer: " + last);
         return last;
     }
@@ -143,7 +143,7 @@ public class SubApproximationStateSolver extends AbstractState {
         ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
         resetLimitSolver();
         decorator.reset();
-        last = solver.solve();
+        last = internalSolve();
         return last;
     }
 

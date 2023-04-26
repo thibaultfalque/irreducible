@@ -34,19 +34,21 @@ public class SolverConfiguration {
     private int initRun;
     private double factor;
     private long limitSolution;
+
+    private double ratio;
     /**
      * Creates a new SolverConfiguration.
      * @param nbRun
      * @param factor
      */
-    public SolverConfiguration(int nbRun, double factor,long limitSolution) {
-        super();
+    public SolverConfiguration(int nbRun, double factor,long limitSolution, double ratio) {
         this.nbRun = nbRun;
         this.initRun=nbRun;
         this.factor = factor;
         this.limitSolution=limitSolution;
+        this.ratio = ratio;
     }
-    
+
     /**
      * Gives the nbRun of this SolverConfiguration.
      *
@@ -55,7 +57,7 @@ public class SolverConfiguration {
     public int getNbRun() {
         return nbRun;
     }
-    
+
     /**
      * Sets this SolverConfiguration's nbRun.
      *
@@ -64,7 +66,7 @@ public class SolverConfiguration {
     public void setNbRun(int nbRun) {
         this.nbRun = nbRun;
     }
-    
+
     /**
      * Gives the factor of this SolverConfiguration.
      *
@@ -73,7 +75,7 @@ public class SolverConfiguration {
     public double getFactor() {
         return factor;
     }
-    
+
     /**
      * Sets this SolverConfiguration's factor.
      *
@@ -83,7 +85,7 @@ public class SolverConfiguration {
         this.factor = factor;
     }
 
-    
+
     /**
      * Gives the limitSolution of this SolverConfiguration.
      *
@@ -93,7 +95,7 @@ public class SolverConfiguration {
         return limitSolution;
     }
 
-    
+
     /**
      * Sets this SolverConfiguration's limitSolution.
      *
@@ -102,10 +104,20 @@ public class SolverConfiguration {
     public void setLimitSolution(long limitSolution) {
         this.limitSolution = limitSolution;
     }
-    
+
+
+    /**
+     * Gives the ratio of this SolverConfiguration.
+     *
+     * @return This SolverConfiguration's ratio.
+     */
+    public double getRatio() {
+        return ratio;
+    }
+
     public SolverConfiguration update() {
-        return new SolverConfiguration((int)(this.nbRun*this.factor), factor, limitSolution);
-       
+        return new SolverConfiguration((int)(this.nbRun*this.factor), factor, limitSolution, ratio);
+
     }
 }
 

@@ -143,11 +143,12 @@ public class ApproximationSolverBuilder {
         SubApproximationStateSolver.initInstance(aceProblemAdapter, remover,
                 new SolverConfiguration(arguments.getInt("n_runs_approx"),
                         arguments.getDouble("factor_runs_approx"),
-                        arguments.getInt("n_sol_limit")),
+                        arguments.getInt("n_sol_limit"),
+                        arguments.getDouble("ratio_assigned_approx")),
                 arguments.get("path_strategy"));
         NormalStateSolver.initInstance(aceProblemAdapter, new SolverConfiguration(
                 arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),
-                Long.MAX_VALUE),decorator);
+                Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal")),decorator);
         return this;
     }
 

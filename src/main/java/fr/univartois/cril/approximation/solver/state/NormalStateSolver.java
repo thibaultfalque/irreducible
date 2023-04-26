@@ -85,7 +85,7 @@ public class NormalStateSolver extends AbstractState {
         ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
         ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=optimizer;
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
-        var r= solver.solve();
+        var r= internalSolve();
         System.out.println(this +" "+r);
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().removeObserverOnSolution(observer);
         return r;
@@ -126,7 +126,7 @@ public class NormalStateSolver extends AbstractState {
         resetLimitSolver();
         decorator.reset();
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
-        var r = solver.solve();
+        var r = internalSolve();
         System.out.println(this +" "+r);
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().removeObserverOnSolution(observer);
         return r;

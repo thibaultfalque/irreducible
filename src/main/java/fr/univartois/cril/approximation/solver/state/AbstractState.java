@@ -21,10 +21,11 @@
 package fr.univartois.cril.approximation.solver.state;
 
 import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
-import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
+import fr.univartois.cril.approximation.core.RestartObserver;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
+import fr.univartois.cril.juniverse.core.UniverseSolverResult;
 
 /**
  * The AbstractState
@@ -48,15 +49,25 @@ public abstract class AbstractState implements ISolverState {
         this.solver=solver;
         this.decorator=decorator;
     }
-    
+
     protected void resetLimitSolver() {
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().solutions.limit=config.getLimitSolution();
         ((JUniverseAceProblemAdapter)solver).getBuilder().getOptionsRestartsBuilder().setnRuns(config.getNbRun());
         ((JUniverseAceProblemAdapter)solver).getHead().solver.restarter.reset();
-        
+
         ((JUniverseAceProblemAdapter)solver).getHead().solver.nRecursiveRuns=0;
-        
+
         this.config=config.update();
+    }
+
+    protected UniverseSolverResult internalSolve() {
+        var observer = new RestartObserver(((JUniverseAceProblemAdapter)solver).getHead().getSolver(), config.getRatio(), config.getNbRun(), config.getFactor());
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().observersOnRuns.add(observer);
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().observersOnAssignments.add(observer);
+        var r = solver.solve();
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().observersOnAssignments.remove(observer);
+        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().observersOnRuns.remove(observer);
+        return r;
     }
 
 }
