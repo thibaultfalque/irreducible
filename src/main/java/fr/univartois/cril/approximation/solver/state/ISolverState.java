@@ -41,5 +41,8 @@ public interface ISolverState {
     
     void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace);
     void displaySolution();
+    int getNbRemoved();
+    boolean isTimeout();
+    boolean isRestored();
 }
 

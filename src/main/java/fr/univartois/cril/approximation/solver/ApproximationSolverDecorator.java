@@ -22,6 +22,7 @@ package fr.univartois.cril.approximation.solver;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +43,7 @@ import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.juniverse.core.UniverseAssumption;
 import fr.univartois.cril.juniverse.core.UniverseContradictionException;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
+import fr.univartois.cril.juniverse.core.problem.IUniverseConstraint;
 import fr.univartois.cril.juniverse.core.problem.IUniverseVariable;
 import problem.Problem;
 import solver.Solver;
@@ -104,7 +106,7 @@ public class ApproximationSolverDecorator
     @Override
     public int nConstraints() {
         int nb = 0;
-        for (Constraint c : getConstraints()) {
+        for (Constraint c : getAceConstraints()) {
             if (!c.ignored) {
                 nb++;
             }
@@ -137,12 +139,12 @@ public class ApproximationSolverDecorator
     public UniverseSolverResult solve() {
         this.state = NormalStateSolver.getInstance();
         var result = state.solve();
-        while (result == UniverseSolverResult.UNKNOWN) {
+        while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout()) {
             state = state.nextState();
             System.out.println("Start new state: " + this.state);
             result = state.solve();
             while (result == UniverseSolverResult.SATISFIABLE
-                    && this.state != NormalStateSolver.getInstance()) {
+                    && this.state.getNbRemoved() != 0 && !this.state.isTimeout()) {
                 var solution = solver.solution();
                 String stringSolution = solution.stream().map(BigInteger::toString).collect(
                         Collectors.joining(" "));
@@ -151,7 +153,13 @@ public class ApproximationSolverDecorator
                 state = state.previousState();
                 System.out.println("change to previous state: " + this.state);
                 result = state.solve(starter);
+                System.out.println(result + " after state.solve()");
             }
+            System.out.println(result + " after while");
+        }
+        System.out.println(result + " before end");
+        if(this.state.isTimeout()) {
+            result=UniverseSolverResult.UNKNOWN;
         }
         return result;
     }
@@ -197,7 +205,7 @@ public class ApproximationSolverDecorator
     }
 
     @Override
-    public List<Constraint> getConstraints() {
+    public List<Constraint> getAceConstraints() {
         return List.of(getProblem().constraints);
     }
 
@@ -299,4 +307,41 @@ public class ApproximationSolverDecorator
         // TODO Auto-generated method stub.
 
     }
+
+    @Override
+    public List<String> getAuxiliaryVariables() {
+        // TODO Auto-generated method stub.
+        return null;
+    }
+
+    @Override
+    public void valueHeuristicStatic(List<String> variables, List<? extends Number> orderedValues) {
+        // TODO Auto-generated method stub.
+        
+    }
+
+    @Override
+    public void setLogStream(OutputStream stream) {
+        // TODO Auto-generated method stub.
+        
+    }
+
+    @Override
+    public boolean checkSolution() {
+        // TODO Auto-generated method stub.
+        return false;
+    }
+
+    @Override
+    public boolean checkSolution(Map<String, BigInteger> assignment) {
+        // TODO Auto-generated method stub.
+        return false;
+    }
+
+    @Override
+    public List<IUniverseConstraint> getConstraints() {
+        return solver.getConstraints();
+    }
+
+
 }

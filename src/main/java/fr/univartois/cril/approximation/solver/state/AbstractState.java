@@ -26,6 +26,7 @@ import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.juniverse.core.IUniverseSolver;
 import fr.univartois.cril.juniverse.core.UniverseSolverResult;
+import solver.Solver.Stopping;
 
 /**
  * The AbstractState
@@ -40,6 +41,7 @@ public abstract class AbstractState implements ISolverState {
     protected SolverConfiguration config;
     protected IUniverseSolver solver;
     protected ApproximationSolverDecorator decorator;
+    protected int nbRemoved;
 
     /**
      * Creates a new AbstractState.
@@ -69,5 +71,8 @@ public abstract class AbstractState implements ISolverState {
         ((JUniverseAceProblemAdapter)solver).getHead().getSolver().observersOnRuns.remove(observer);
         return r;
     }
-
+    @Override
+    public boolean isTimeout() {
+        return ((JUniverseAceProblemAdapter)solver).getHead().getSolver().stopping==Stopping.EXCEEDED_TIME;
+    }
 }

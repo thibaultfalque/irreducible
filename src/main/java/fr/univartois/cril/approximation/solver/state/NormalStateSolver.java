@@ -54,11 +54,17 @@ public class NormalStateSolver extends AbstractState {
 
     private Optimizer optimizer = null;
 
-    private ObserverOnSolution observer = () ->
-    ((JUniverseAceProblemAdapter)solver).getBuilder().getOptionsRestartsBuilder().setnRuns(Integer.MAX_VALUE);
+    private ObserverOnSolution observer = () -> ((JUniverseAceProblemAdapter) solver).getBuilder().getOptionsRestartsBuilder().setnRuns(
+            Integer.MAX_VALUE);
 
-    private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config,ApproximationSolverDecorator decorator) {
-        super(config, solver,decorator);
+    private ISolverState next;
+
+    private PathStrategy strat;
+
+    private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config,
+            ApproximationSolverDecorator decorator, PathStrategy strat) {
+        super(config, solver, decorator);
+        this.strat = strat;
     }
 
     /*
@@ -68,26 +74,27 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solve() {
-        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
-        System.out.println("we solve with "+this);
+        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
+        System.out.println("we solve with " + this);
         resetLimitSolver();
         if (!first) {
             decorator.reset();
         }
         first = false;
-        if(type==null) {
-            optimizer = ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer;
-            type=((JUniverseAceProblemAdapter)solver).getHead().problem.framework;
+        if (type == null) {
+            optimizer = ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer;
+            type = ((JUniverseAceProblemAdapter) solver).getHead().problem.framework;
         }
-        for(Variable v:((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
-            ((AbstractSolutionScore)v.heuristic).setEnabled(false);
+        for (Variable v : ((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
+            ((AbstractSolutionScore) v.heuristic).setEnabled(false);
         }
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=optimizer;
-        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
-        var r= internalSolve();
-        System.out.println(this +" "+r);
-        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().removeObserverOnSolution(observer);
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = type;
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = optimizer;
+        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().addObserverOnSolution(observer);
+        var r = internalSolve();
+        System.out.println(this + " " + r);
+        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().removeObserverOnSolution(
+                observer);
         return r;
     }
 
@@ -98,11 +105,15 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public ISolverState nextState() {
-        return new SubApproximationStateSolver(solver, this,decorator);
+        if (next == null || strat != PathStrategy.APPROX_ORDER) {
+            next = new SubApproximationStateSolver(solver, this, decorator);
+        }
+        return next;
     }
 
-    public static void initInstance(IUniverseSolver solver, SolverConfiguration configuration,ApproximationSolverDecorator decorator) {
-        INSTANCE = new NormalStateSolver(solver, configuration,decorator);
+    public static void initInstance(IUniverseSolver solver, SolverConfiguration configuration,
+            ApproximationSolverDecorator decorator, PathStrategy strat) {
+        INSTANCE = new NormalStateSolver(solver, configuration, decorator, strat);
     }
 
     public static NormalStateSolver getInstance() {
@@ -111,24 +122,25 @@ public class NormalStateSolver extends AbstractState {
 
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
-        System.out.println("we solve with starter "+this);
-        if(optimizer!=null) {
+        System.out.println("we solve with starter " + this);
+        if (optimizer != null) {
             System.out.println(optimizer.stringBounds());
         }
 
-        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
-        for(Variable v:head.solver.problem.variables) {
-            ((AbstractSolutionScore)v.heuristic).updateValue(starter.valueIndexOf(v));
-            ((AbstractSolutionScore)v.heuristic).setEnabled(true);
+        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
+        for (Variable v : head.solver.problem.variables) {
+            ((AbstractSolutionScore) v.heuristic).updateValue(starter.valueIndexOf(v));
+            ((AbstractSolutionScore) v.heuristic).setEnabled(true);
         }
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.framework=type;
-        ((JUniverseAceProblemAdapter)solver).getHead().problem.optimizer=optimizer;
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = type;
+        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = optimizer;
         resetLimitSolver();
         decorator.reset();
-        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().addObserverOnSolution(observer);
+        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().addObserverOnSolution(observer);
         var r = internalSolve();
-        System.out.println(this +" "+r);
-        ((JUniverseAceProblemAdapter)solver).getHead().getSolver().removeObserverOnSolution(observer);
+        System.out.println(this + " " + r);
+        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().removeObserverOnSolution(
+                observer);
         return r;
     }
 
@@ -149,13 +161,23 @@ public class NormalStateSolver extends AbstractState {
 
     @Override
     public void displaySolution() {
-        AceHead head = ((JUniverseAceProblemAdapter)solver).getHead();
+        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
         head.solver.solutions.displayFinalResults();
     }
 
     @Override
     public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
         ngStrategy.resetNoGoods(this, ace);
+    }
+
+    @Override
+    public int getNbRemoved() {
+        return 0;
+    }
+
+    @Override
+    public boolean isRestored() {
+        return true;
     }
 
 }

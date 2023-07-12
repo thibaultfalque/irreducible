@@ -60,6 +60,7 @@ public class ApproximationSolverBuilder {
 
     public ApproximationSolverBuilder() {
         aceProblemAdapter = new JUniverseAceProblemAdapter();
+        aceProblemAdapter.getBuilder().getOptionsLearningBuilder().setNogoodBaseLimit(1000000);
         decorator = new ApproximationSolverDecorator(aceProblemAdapter);
         builder = aceProblemAdapter.getBuilder();
 
@@ -148,7 +149,7 @@ public class ApproximationSolverBuilder {
                 arguments.get("path_strategy"));
         NormalStateSolver.initInstance(aceProblemAdapter, new SolverConfiguration(
                 arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),
-                Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal")),decorator);
+                Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal")),decorator, arguments.get("path_strategy"));
         return this;
     }
 

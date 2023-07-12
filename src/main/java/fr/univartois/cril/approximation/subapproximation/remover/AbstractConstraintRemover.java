@@ -51,7 +51,7 @@ public abstract class AbstractConstraintRemover<T> implements IConstraintsRemove
 
 	public AbstractConstraintRemover(IConstraintGroupSolver groupSolver) {
 		this.groupSolver = groupSolver;
-		this.ignoredConstraint=new HashSet<>(groupSolver.getConstraints().size());
+		this.ignoredConstraint=new HashSet<>(groupSolver.getAceConstraints().size());
 	}
 
 	/*

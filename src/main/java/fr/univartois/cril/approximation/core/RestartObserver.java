@@ -104,6 +104,7 @@ public class RestartObserver implements ObserverOnRuns, ObserverOnAssignments {
     @Override
     public void afterUnassignment(Variable arg0) {
         // Nothing to do.
+        nbAssigned--;
     }
 
 }

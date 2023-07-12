@@ -21,6 +21,7 @@
 package fr.univartois.cril.approximation.solver.state;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -66,9 +67,13 @@ public class SubApproximationStateSolver extends AbstractState {
 
     private ISolverState previous;
 
+    private SubApproximationStateSolver next;
+
     private UniverseSolverResult last = UniverseSolverResult.UNKNOWN;
 
     private Set<Constraint> removedConstraints;
+
+    private boolean restored;
 
     /**
      * Creates a new SubApproximationStateSolver.
@@ -77,7 +82,6 @@ public class SubApproximationStateSolver extends AbstractState {
             ApproximationSolverDecorator decorator) {
         super(solverConfiguration, solver, decorator);
         this.previous = previous;
-        this.removedConstraints = new HashSet<>();
         this.nb = subApproximationCounter;
         subApproximationCounter++;
         if (remover == null) {
@@ -93,20 +97,23 @@ public class SubApproximationStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solve() {
         System.out.println("we solve with " + this);
-        var list = remover.computeNextConstraintsToRemove();
-        System.out.println(this + " we removed " + list.size() + " constraints");
-        if (!list.isEmpty()) {
-            for (Constraint c : list) {
+        if (removedConstraints == null || pathStrategy != PathStrategy.APPROX_ORDER) {
+            removedConstraints = new HashSet<>(remover.computeNextConstraintsToRemove());
+            nbRemoved += removedConstraints.size();
+        } else {
+            restored = true;
+        }
+        System.out.println(this + " we removed " + removedConstraints.size() + " constraints");
+        if (!removedConstraints.isEmpty()) {
+            for (Constraint c : removedConstraints) {
                 if (c.ignorable) {
-                    c.ignored = true;
-                    removedConstraints.add(c);
+                    c.ignored = !c.ignored;
                 }
             }
         } else {
             solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
-        for (Variable v : ((JUniverseAceProblemAdapter) solver)
-                .getHead().solver.problem.variables) {
+        for (Variable v : ((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
             ((AbstractSolutionScore) v.heuristic).setEnabled(true);
         }
         ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
@@ -120,7 +127,17 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public ISolverState nextState() {
-        return new SubApproximationStateSolver(solver, this, decorator);
+        if (next == null || pathStrategy != PathStrategy.APPROX_ORDER) {
+            next = new SubApproximationStateSolver(solver, this, decorator);
+        }
+        if (last == UniverseSolverResult.UNKNOWN) {
+            SubApproximationStateSolver tmp;
+            for (tmp = next; tmp.next != null; tmp = next.next) {
+            }
+            tmp.next = new SubApproximationStateSolver(solver, tmp, decorator);
+            return tmp.next;
+        }
+        return next;
     }
 
     public static void initInstance(IUniverseSolver solver, Supplier<IConstraintsRemover> r,
@@ -132,12 +149,23 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public UniverseSolverResult solve(WarmStarter starter) {
+        if (pathStrategy == PathStrategy.APPROX_ORDER) {
+            for (Constraint c : removedConstraints) {
+                if (c.ignorable) {
+                    c.ignored = false;
+                }
+            }
+            restored = true;
+
+        }
         System.out.println("we solve with starter " + this);
         // ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
-        for (Variable v : ((JUniverseAceProblemAdapter) solver)
-                .getHead().solver.problem.variables) {
-            ((AbstractSolutionScore) v.heuristic).updateValue(starter.valueIndexOf(v));
-            ((AbstractSolutionScore) v.heuristic).setEnabled(true);
+        for (Variable v : ((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
+            int valueIndexOf = starter.valueIndexOf(v);
+            if (valueIndexOf >= 0) {
+                ((AbstractSolutionScore) v.heuristic).updateValue(valueIndexOf);
+                ((AbstractSolutionScore) v.heuristic).setEnabled(true);
+            }
         }
         ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
         ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
@@ -149,11 +177,8 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public ISolverState previousState() {
-        if (!removedConstraints.isEmpty()) {
-            remover.restoreConstraints(removedConstraints);
-        }
-        System.out.println(this + " we restore " + removedConstraints.size());
-        return pathStrategy.previous(previous);
+        pathStrategy.restore(remover, removedConstraints);
+        return pathStrategy.previous(previous, this);
     }
 
     /*
@@ -168,16 +193,27 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public void displaySolution() {
+
         AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
-        System.out.println("s UNKNOWN");
-        System.out.println("d INCOMPLETE EXPLORATION");
-        Kit.log.config("\nc real time : " + head.stopwatch.cpuTimeInSeconds());
-        System.out.flush();
+        head.solver.solutions.displayFinalResults();
     }
 
     @Override
     public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
         ngStrategy.resetNoGoods(this, ace);
+    }
+
+    @Override
+    public int getNbRemoved() {
+        return previous.getNbRemoved()
+                + (removedConstraints.stream().findAny().filter(
+                        c -> c.ignored).isPresent() ? nbRemoved : 0)
+                + (next != null ? next.getNbRemoved() : 0);
+    }
+
+    @Override
+    public boolean isRestored() {
+        return restored;
     }
 
 }

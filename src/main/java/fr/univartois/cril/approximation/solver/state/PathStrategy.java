@@ -20,6 +20,11 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import java.util.Set;
+
+import constraints.Constraint;
+import fr.univartois.cril.approximation.core.IConstraintsRemover;
+
 /**
  * The PathStrategy
  *
@@ -32,17 +37,55 @@ public enum PathStrategy  {
 
     APPROX_NORMAL {
         @Override
-        public ISolverState previous(ISolverState state) {
+        public ISolverState previous(ISolverState state, ISolverState current) {
             return state.previousState();
+        }
+
+        @Override
+        public void restore(IConstraintsRemover remover, Set<Constraint> constraints) {
+            if (!constraints.isEmpty()) {
+                remover.restoreConstraints(constraints);
+            }
+            System.out.println(this + " we restore " + constraints.size());
+            
         }
     },
     APPROX_APPROX
     {
         @Override
-        public ISolverState previous(ISolverState state) {
+        public ISolverState previous(ISolverState state, ISolverState current) {
             return state;
         }
+
+        @Override
+        public void restore(IConstraintsRemover remover, Set<Constraint> constraints) {
+            if (!constraints.isEmpty()) {
+                remover.restoreConstraints(constraints);
+            }
+            System.out.println(this + " we restore " + constraints.size());
+            
+        }
+    },
+    APPROX_ORDER{
+
+        @Override
+        public ISolverState previous(ISolverState state, ISolverState current) {
+            if(state==NormalStateSolver.getInstance() || state.isRestored()) {
+                return current;
+            }
+            if(current.isRestored()) {
+                return current.nextState();
+            }
+            return state.previousState();
+        }
+
+        @Override
+        public void restore(IConstraintsRemover remover, Set<Constraint> constraints) {
+        
+        }
+        
     };
 
-    public abstract ISolverState previous(ISolverState state);
+    public abstract ISolverState previous(ISolverState state, ISolverState current);
+    public abstract void restore(IConstraintsRemover remover,Set<Constraint> constraints);
 }

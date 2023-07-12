@@ -38,7 +38,7 @@ public interface IConstraintGroupSolver extends IUniverseSolver{
 	 * Gives the list of constraints in the solver. 
 	 * @return the list of constraints 
 	 */
-    List<Constraint> getConstraints();
+    List<Constraint> getAceConstraints();
 	/**
 	 * Gives the constraint with the specified index
 	 * @param index the index of the constraint

@@ -87,7 +87,7 @@ public class PercentageConstraintRemover extends AbstractConstraintRemover<Const
                 () -> CollectionFactory.newMapInt(Constraint.class, k -> k.num,
                         i -> this.groupSolver.getConstraint(i), this.groupSolver.nConstraints()),
                 (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
-        for (Constraint c : groupSolver.getConstraints()) {
+        for (Constraint c : groupSolver.getAceConstraints()) {
             heapConstraint.add(c);
         }
     }
