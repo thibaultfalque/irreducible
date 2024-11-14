@@ -22,8 +22,8 @@ package fr.univartois.cril.approximation.core;
 
 import java.util.List;
 
-import constraints.Constraint;
-import fr.univartois.cril.juniverse.core.IUniverseSolver;
+import org.chocosolver.solver.ISolver;
+import org.chocosolver.solver.constraints.Constraint;
 
 /**
  * The IConstraintGroupSolver
@@ -33,12 +33,12 @@ import fr.univartois.cril.juniverse.core.IUniverseSolver;
  *
  * @version 0.1.0
  */
-public interface IConstraintGroupSolver extends IUniverseSolver{
+public interface IConstraintGroupSolver extends ISolver{
 	/**
 	 * Gives the list of constraints in the solver. 
 	 * @return the list of constraints 
 	 */
-    List<Constraint> getAceConstraints();
+    List<Constraint> getConstraints();
 	/**
 	 * Gives the constraint with the specified index
 	 * @param index the index of the constraint
@@ -61,5 +61,6 @@ public interface IConstraintGroupSolver extends IUniverseSolver{
 	 * @return
 	 */
     int nGroups();
+	int nConstraints();
 }
 

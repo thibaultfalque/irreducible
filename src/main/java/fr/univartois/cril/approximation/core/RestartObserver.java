@@ -9,10 +9,15 @@
 
 package fr.univartois.cril.approximation.core;
 
-import interfaces.Observers.ObserverOnAssignments;
-import interfaces.Observers.ObserverOnRuns;
-import solver.Solver;
-import variables.Variable;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.chocosolver.solver.search.loop.monitors.IMonitorRestart;
+import org.chocosolver.solver.variables.IVariableMonitor;
+import org.chocosolver.solver.variables.Variable;
+import org.chocosolver.solver.variables.events.IEventType;
+
+import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 
 
 /**
@@ -22,11 +27,12 @@ import variables.Variable;
  *
  * @version 0.1.0
  */
-public class RestartObserver implements ObserverOnRuns, ObserverOnAssignments {
+public class RestartObserver implements IVariableMonitor, IMonitorRestart {
+	
+	private Set<String> assignedVars = new HashSet<>();
 
-    private final Solver solver;
+    private final ApproximationSolverDecorator solver;
 
-    private int nbAssigned;
 
     private int nbRuns;
 
@@ -42,7 +48,7 @@ public class RestartObserver implements ObserverOnRuns, ObserverOnAssignments {
      * @param ratioLimit
      * @param restartLimit
      */
-    public RestartObserver(Solver solver, double ratioLimit, int restartLimit, double restartFactor) {
+    public RestartObserver(ApproximationSolverDecorator solver, double ratioLimit, int restartLimit, double restartFactor) {
         this.solver = solver;
         this.ratioLimit = ratioLimit;
         this.restartLimit = (int) (restartLimit / restartFactor);
@@ -55,13 +61,13 @@ public class RestartObserver implements ObserverOnRuns, ObserverOnAssignments {
      * @see interfaces.Observers.ObserverOnRuns#afterRun()
      */
     @Override
-    public void afterRun() {
+    public void afterRestart() {
         nbRuns++;
         if (nbRuns >= restartLimit - 1) {
-            double ratio = (double) nbAssigned / (double) solver.problem.variables.length;
+            double ratio = (double) assignedVars.size() / (double) solver.nVariables();
             if (ratio >= ratioLimit) {
                 restartLimit *= restartFactor;
-                solver.head.getBuilder().getOptionsRestartsBuilder().setnRuns(restartLimit);
+                solver.limitRestart(restartLimit);
             }
         }
     }
@@ -72,40 +78,19 @@ public class RestartObserver implements ObserverOnRuns, ObserverOnAssignments {
      * @see interfaces.Observers.ObserverOnRuns#beforeRun()
      */
     @Override
-    public void beforeRun() {
-        nbAssigned = 0;
+    public void beforeRestart() {
+        assignedVars.clear();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see interfaces.Observers.ObserverOnAssignments#afterAssignment(variables.Variable, int)
-     */
-    @Override
-    public void afterAssignment(Variable arg0, int arg1) {
-        nbAssigned++;
-    }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see interfaces.Observers.ObserverOnAssignments#afterFailedAssignment(variables.Variable, int)
-     */
-    @Override
-    public void afterFailedAssignment(Variable arg0, int arg1) {
-        // Nothing to do.
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see interfaces.Observers.ObserverOnAssignments#afterUnassignment(variables.Variable)
-     */
-    @Override
-    public void afterUnassignment(Variable arg0) {
-        // Nothing to do.
-        nbAssigned--;
-    }
+	@Override
+	public void onUpdate(Variable arg0, IEventType arg1) {
+		if (arg0.getDomainSize() == 1 && !assignedVars.contains(arg0.getName())) {
+			assignedVars.add(arg0.getName());
+		} else if (arg0.getDomainSize() != 1 && assignedVars.contains(arg0.getName())) {
+			assignedVars.remove(arg0.getName());
+		} 
+	}
 
 }
 

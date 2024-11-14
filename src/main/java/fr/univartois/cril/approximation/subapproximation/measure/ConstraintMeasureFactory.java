@@ -22,10 +22,8 @@ package fr.univartois.cril.approximation.subapproximation.measure;
 
 import java.lang.reflect.InvocationTargetException;
 
-import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
-import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.util.AbstractFactory;
 
 /**

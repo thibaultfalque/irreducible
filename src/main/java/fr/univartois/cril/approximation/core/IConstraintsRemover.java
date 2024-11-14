@@ -24,7 +24,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import constraints.Constraint;
+import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.search.loop.monitors.IMonitorApprox;
 
 /**
  * The IConstraintsSelector
@@ -34,7 +35,7 @@ import constraints.Constraint;
  *
  * @version 0.1.0
  */
-public interface IConstraintsRemover {
+public interface IConstraintsRemover extends IMonitorApprox {
 	void setConstraintMeasure(IConstraintMeasure measure);
     List<Constraint> computeNextConstraintsToRemove();
     Set<Constraint> getIgnoredConstraints();

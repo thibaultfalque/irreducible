@@ -20,10 +20,11 @@
 
 package fr.univartois.cril.approximation.core;
 
+import org.chocosolver.solver.Solver;
+
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
-import solver.Solver;
 
 /**
  * The KeepNoGoodStrategy
@@ -49,21 +50,18 @@ public enum KeepNoGoodStrategy {
 
         @Override
         public void resetNoGoods(SubApproximationStateSolver state, Solver ace) {
-            if (ace.nogoodReasoner != null)
-                ace.nogoodReasoner.reset();
+            //todo
         }
 
         @Override
         public void resetNoGoods(NormalStateSolver state, Solver ace) {
-            if (ace.nogoodReasoner != null)
-                ace.nogoodReasoner.reset();
+        	//todo
         }
     },NORMAL_ONLY {
 
         @Override
         public void resetNoGoods(SubApproximationStateSolver state, Solver ace) {
-            if (ace.nogoodReasoner != null)
-                ace.nogoodReasoner.reset();
+           
         }
 
         @Override

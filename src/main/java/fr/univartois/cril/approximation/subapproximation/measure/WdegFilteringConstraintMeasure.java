@@ -20,12 +20,10 @@
 
 package fr.univartois.cril.approximation.subapproximation.measure;
 
-import constraints.Constraint;
-import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
-import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
-import fr.univartois.cril.approximation.util.collections.heaps.Heap;
-import heuristics.HeuristicVariablesDynamic.WdegVariant;
+import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.constraints.Propagator;
 
+import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
  * The WdegFilteringConstraintMeasureSelector
@@ -37,38 +35,42 @@ import heuristics.HeuristicVariablesDynamic.WdegVariant;
  */
 public class WdegFilteringConstraintMeasure extends AbstractMeasure {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.IConstraintMeasureSelector#computeScore(constraints.Constraint)
-     */
-    @Override
-    public double computeScore(Constraint c) {
-        return ((WdegVariant)((ApproximationSolverDecorator)groupSolver).getHead().solver.heuristic).cscores[c.num];
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * fr.univartois.cril.approximation.IConstraintMeasureSelector#computeScore(
+	 * constraints.Constraint)
+	 */
+	@Override
+	public double computeScore(Constraint c) {
+		Propagator[] ps = c.getPropagators();
+		double weight = 0;
+		for (var p : ps) {
+			weight += p.getWeight();
+		}
+		return weight / ps.length;
+	}
 
-    @Override
-    public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue,
-            double newValue) {
-        
-    }
+	@Override
+	public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue, double newValue) {
 
-    @Override
-    public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
-        if (oldValue < newValue) {
-            heap.increase(c);
-        } else {
-            heap.decrease(c);
-        }
-        
-    }
+	}
 
-    @Override
-    public <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
-            double newValue) {
-        // TODO Auto-generated method stub
-        
-    }
+	@Override
+	public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
+		if (oldValue < newValue) {
+			heap.increase(c);
+		} else {
+			heap.decrease(c);
+		}
+
+	}
+
+	@Override
+	public <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue, double newValue) {
+		// TODO Auto-generated method stub
+
+	}
 
 }
-

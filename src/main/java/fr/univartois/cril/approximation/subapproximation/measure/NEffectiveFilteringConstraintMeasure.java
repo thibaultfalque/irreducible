@@ -20,8 +20,8 @@
 
 package fr.univartois.cril.approximation.subapproximation.measure;
 
-import constraints.Constraint;
-import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
+import org.chocosolver.solver.constraints.Constraint;
+
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
@@ -45,7 +45,7 @@ public class NEffectiveFilteringConstraintMeasure implements IConstraintMeasure 
      */
     @Override
     public double computeScore(Constraint c) {
-        return c.nEffectiveFilterings;
+        return c.getnEffectiveFiltering();
     }
 
     @Override

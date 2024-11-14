@@ -23,7 +23,7 @@ package fr.univartois.cril.approximation.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import constraints.Constraint;
+import org.chocosolver.solver.constraints.Constraint;
 
 
 /**

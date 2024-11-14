@@ -20,17 +20,15 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import constraints.Constraint;
+import org.chocosolver.solver.constraints.Constraint;
+
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
-import interfaces.Observers.ObserverOnConstraintScore;
-
 /**
  * The AbstractConstraintRemover
  *
@@ -39,7 +37,7 @@ import interfaces.Observers.ObserverOnConstraintScore;
  *
  * @version 0.1.0
  */
-public abstract class AbstractConstraintRemover<T> implements IConstraintsRemover, ObserverOnConstraintScore {
+public abstract class AbstractConstraintRemover<T> implements IConstraintsRemover {
 
 	protected IConstraintMeasure measure;
 
@@ -51,7 +49,7 @@ public abstract class AbstractConstraintRemover<T> implements IConstraintsRemove
 
 	public AbstractConstraintRemover(IConstraintGroupSolver groupSolver) {
 		this.groupSolver = groupSolver;
-		this.ignoredConstraint=new HashSet<>(groupSolver.getAceConstraints().size());
+		this.ignoredConstraint=new HashSet<>(groupSolver.getConstraints().size());
 	}
 
 	/*

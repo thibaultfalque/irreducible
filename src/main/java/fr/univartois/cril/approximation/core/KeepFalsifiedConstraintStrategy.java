@@ -9,10 +9,12 @@
 
 package fr.univartois.cril.approximation.core;
 
-import constraints.Constraint;
-import solver.Solver;
-import solver.Solver.WarmStarter;
-import variables.Variable;
+import org.chocosolver.solver.Model;
+import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.search.strategy.strategy.WarmStart;
+import org.chocosolver.solver.variables.Variable;
+import org.chocosolver.util.ESat;
 
 /**
  * The KeepFalsifiedConstraintStrategy
@@ -26,7 +28,7 @@ public enum KeepFalsifiedConstraintStrategy {
     NEVER {
 
         @Override
-        public void checkConstraints(WarmStarter starter, Solver solver) {
+        public void checkConstraints(Model m) {
             // Do nothing here.
         }
 
@@ -35,24 +37,17 @@ public enum KeepFalsifiedConstraintStrategy {
     ALWAYS {
 
         @Override
-        public void checkConstraints(WarmStarter starter, Solver solver) {
-            int[] t = new int[solver.problem.variables.length];
-            for (Variable variable : solver.problem.variables) {
-                int valueIndex = starter.valueIndexOf(variable);
-                int value = variable.dom.toVal(valueIndex);
-                t[variable.num] = value;
-            }
-
-            for (Constraint constr : solver.problem.constraints) {
-                if (!constr.isSatisfiedBy(t)) {
-                    constr.ignorable = false;
+        public void checkConstraints( Model m) {
+            for (Constraint constr : m.getCstrs()) {
+                if (constr.isSatisfied()!=ESat.TRUE) {
+                    constr.setIgnorable(false);
                 }
             }
         }
 
     };
 
-    public abstract void checkConstraints(WarmStarter starter, Solver solver);
+    public abstract void checkConstraints( Model m);
 
 }
 

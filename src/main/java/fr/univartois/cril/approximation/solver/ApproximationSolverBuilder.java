@@ -22,7 +22,8 @@ package fr.univartois.cril.approximation.solver;
 
 import java.util.function.Supplier;
 
-import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
+import org.chocosolver.solver.Solver;
+
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
@@ -34,7 +35,6 @@ import fr.univartois.cril.approximation.subapproximation.measure.MeanFilteringCo
 import fr.univartois.cril.approximation.subapproximation.remover.ConstraintRemoverFactory;
 import fr.univartois.cril.approximation.subapproximation.remover.PercentageConstraintRemover;
 import net.sourceforge.argparse4j.inf.Namespace;
-import solver.AceBuilder;
 
 /**
  * The ApproximationSolverBuilder
@@ -46,7 +46,7 @@ import solver.AceBuilder;
  */
 public class ApproximationSolverBuilder {
 
-    private JUniverseAceProblemAdapter aceProblemAdapter;
+    private Solver solver;
 
     private ApproximationSolverDecorator decorator;
 
@@ -54,15 +54,12 @@ public class ApproximationSolverBuilder {
 
     private IConstraintMeasure measure;
 
-    private AceBuilder builder;
-
     private double percentage;
 
-    public ApproximationSolverBuilder() {
-        aceProblemAdapter = new JUniverseAceProblemAdapter();
-        aceProblemAdapter.getBuilder().getOptionsLearningBuilder().setNogoodBaseLimit(1000000);
-        decorator = new ApproximationSolverDecorator(aceProblemAdapter);
-        builder = aceProblemAdapter.getBuilder();
+    public ApproximationSolverBuilder(Solver solver) {
+    	this.solver = solver;
+        // solver.setNoLearning();
+        decorator = new ApproximationSolverDecorator(solver.getModel());
 
     }
 
@@ -80,24 +77,19 @@ public class ApproximationSolverBuilder {
         return this;
     }
 
-    public ApproximationSolverBuilder setNoPrintColor(boolean value) {
-        builder.getOptionsGeneralBuilder().setNoPrintColors(value);
-        return this;
-    }
-
-    public ApproximationSolverBuilder setAceVerbosity(int v) {
-        builder.getOptionsGeneralBuilder().setVerbose(v);
+    public ApproximationSolverBuilder setVerbosity(int v) {
+        decorator.setVerbosity(v);
         return this;
     }
 
     public ApproximationSolverBuilder setTimeout(String timeout) {
         if (timeout != null) {
             if (timeout.contains("ms")) {
-                builder.getOptionsGeneralBuilder().setTimeout(
+                decorator.setTimeoutMs(
                         Long.parseLong(timeout.replace("ms", "")));
             } else if (timeout.contains("s")) {
-                builder.getOptionsGeneralBuilder().setTimeout(
-                        Long.parseLong(timeout.replace("s", "")) * 1000);
+                decorator.setTimeout(
+                        Long.parseLong(timeout.replace("s", "")));
             } else {
                 throw new IllegalArgumentException(
                         timeout + " is not a correct format for set the timeout");
@@ -141,13 +133,13 @@ public class ApproximationSolverBuilder {
         if (remover == null) {
             throw new IllegalStateException("Constraint remover must be initialized !");
         }
-        SubApproximationStateSolver.initInstance(aceProblemAdapter, remover,
+        SubApproximationStateSolver.initInstance(solver, remover,
                 new SolverConfiguration(arguments.getInt("n_runs_approx"),
                         arguments.getDouble("factor_runs_approx"),
                         arguments.getInt("n_sol_limit"),
                         arguments.getDouble("ratio_assigned_approx")),
                 arguments.get("path_strategy"));
-        NormalStateSolver.initInstance(aceProblemAdapter, new SolverConfiguration(
+        NormalStateSolver.initInstance(solver, new SolverConfiguration(
                 arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),
                 Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal")),decorator, arguments.get("path_strategy"));
         return this;
@@ -157,8 +149,8 @@ public class ApproximationSolverBuilder {
         return decorator;
     }
 
-    public ApproximationSolverBuilder withValh(String string) {
-        builder.getOptionsValhBuilder().setClazz(string);
-        return this;
-    }
+//    public ApproximationSolverBuilder withValh(String string) {
+//        builder.getOptionsValhBuilder().setClazz(string);
+//        return this;
+//    }
 }

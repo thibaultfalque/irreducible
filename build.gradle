@@ -23,8 +23,8 @@ version = "0.1.0"
 
 
 
-sourceCompatibility = "10"
-targetCompatibility = "10"
+sourceCompatibility = "21"
+targetCompatibility = "21"
 
 
 /****************
@@ -33,20 +33,13 @@ targetCompatibility = "10"
 
 repositories {
     mavenCentral()
-    maven {
-            url = uri("https://maven.pkg.github.com/crillab/*")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
 }
 
 dependencies {
-    implementation group: 'fr.cril', name:'aceurancetourix', version: '0.1.18'
-    implementation group: 'fr.cril', name:'juniverse', version: '0.2.13'
-    implementation files("lib/ACE.jar")
     implementation group: 'net.sourceforge.argparse4j', name:'argparse4j', version: '0.9.0'
+    //implementation 'org.choco-solver:choco-solver:4.10.14'
+    implementation files('lib/choco.jar')
+    //implementation group: 'org.choco-solver', name: 'choco-parsers', version: '4.10.17'
     testImplementation group: "org.junit.jupiter", name: "junit-jupiter-engine", version: "5.6.0"
     testImplementation group: "org.junit.jupiter", name: "junit-jupiter-params", version: "5.6.0"
     testImplementation group: "org.junit.platform", name: "junit-platform-launcher", version: "1.6.0"

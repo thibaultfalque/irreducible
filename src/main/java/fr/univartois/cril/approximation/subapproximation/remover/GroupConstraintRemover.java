@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import constraints.Constraint;
+import org.chocosolver.solver.constraints.Constraint;
+
 import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
@@ -62,7 +63,7 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
 
             var g = heapConstraint.poll();
             for (var c : g.getConstraints()) {
-                if (c.ignorable) {
+                if (c.isIgnorable()) {
                     ignoredConstraint.add(c);
                     list.add(c);
                 }
@@ -95,13 +96,13 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
 
     @Override
     public void whenEffectiveFilteringChange(Constraint c, int oldValue, int newValue) {
-        GroupConstraint g = this.groupSolver.getGroup(c.group);
+        GroupConstraint g = this.groupSolver.getGroup(c.getGroupId());
         measure.updateMeasureNEffectiveFiltering(heapConstraint, g, oldValue, newValue);
     }
 
     @Override
     public void whenWDEGWeightChange(Constraint c, double oldValue, double newValue) {
-        GroupConstraint g = this.groupSolver.getGroup(c.group);
+        GroupConstraint g = this.groupSolver.getGroup(c.getGroupId());
         measure.updateMeasureWDEGWeight(heapConstraint, g, oldValue, newValue);
     }
 
@@ -109,8 +110,8 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
     public void restoreConstraints(Collection<Constraint> constraints) {
         int group = -1;
         for (Constraint c : constraints) {
-            c.ignored = false;
-            group = c.group;
+            c.setEnabled(true);
+            group = c.getGroupId();
         }
 
         heapConstraint.add(groupSolver.getGroup(group));
@@ -118,7 +119,7 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
 
     @Override
     public void whenBacktrackingChange(Constraint c, int oldValue, int newValue) {
-        GroupConstraint g = this.groupSolver.getGroup(c.group);
+        GroupConstraint g = this.groupSolver.getGroup(c.getGroupId());
         measure.updateMeasureNEffectiveBacktracking(heapConstraint, g, oldValue, newValue);
     }
 

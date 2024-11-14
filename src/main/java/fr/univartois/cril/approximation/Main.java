@@ -20,8 +20,9 @@
 
 package fr.univartois.cril.approximation;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import org.chocosolver.solver.Model;
+import org.chocosolver.solver.Settings;
+import org.chocosolver.solver.search.strategy.BlackBoxConfigurator;
 
 import fr.univartois.cril.approximation.cli.CLI;
 import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
@@ -51,30 +52,26 @@ public class Main {
 		var parser = CLI.createCLIParser();
 		try {
 			var arguments = parser.parseArgs(args);
-
-			var solver = new ApproximationSolverBuilder()
+			var model = new Model(Settings.dev());
+			var solver = new ApproximationSolverBuilder(model.getSolver())
 					.withPercentage(arguments.getDouble("percentage"))
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
 					.withMeanComputation(arguments.getBoolean("mean"))
                     .setKeepNogood(arguments.get("keep_nogood"))
                     .setKeepFalsified(arguments.get("keep_falsified"))
-					.setNoPrintColor(arguments.getBoolean("no_print_color"))
-					.setAceVerbosity(arguments.getInt("ace_verbosity"))
-					.withValh(arguments.getString("valh"))
+					.setVerbosity(arguments.getInt("ace_verbosity"))
 					.setTimeout(arguments.getString("global_timeout"))
 					.initState(arguments).build();
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> solver.displaySolution()));
-			System.out.println(solver.solve(arguments.<FileInputStream>get("instance")));
+			System.out.println(solver.solve(arguments.<String>get("instance")));
 			solver.displaySolution();
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);
 
 			System.exit(1);
-		}catch (IOException e) {
-            e.printStackTrace();
-        }
+		}
 
 	}
 

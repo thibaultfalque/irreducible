@@ -22,7 +22,8 @@ package fr.univartois.cril.approximation.solver.state;
 
 import java.util.Set;
 
-import constraints.Constraint;
+import org.chocosolver.solver.constraints.Constraint;
+
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 
 /**

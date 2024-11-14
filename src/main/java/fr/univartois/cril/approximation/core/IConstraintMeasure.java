@@ -20,7 +20,8 @@
 
 package fr.univartois.cril.approximation.core;
 
-import constraints.Constraint;
+import org.chocosolver.solver.constraints.Constraint;
+
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**

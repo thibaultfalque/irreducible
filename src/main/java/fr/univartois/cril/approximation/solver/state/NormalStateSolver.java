@@ -20,21 +20,17 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
-import org.xcsp.common.Types.TypeFramework;
+import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.objective.IObjectiveManager;
+import org.chocosolver.solver.search.loop.monitors.IMonitorSolution;
+import org.chocosolver.solver.search.strategy.strategy.WarmStart;
+import org.chocosolver.solver.variables.Variable;
 
-import fr.univartois.cril.aceurancetourix.AceHead;
-import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
-import fr.univartois.cril.juniverse.core.IUniverseSolver;
-import fr.univartois.cril.juniverse.core.UniverseSolverResult;
-import heuristics.HeuristicValuesDynamic.AbstractSolutionScore;
-import interfaces.Observers.ObserverOnSolution;
-import optimization.Optimizer;
-import solver.Solver;
-import solver.Solver.WarmStarter;
-import variables.Variable;
+import fr.univartois.cril.approximation.solver.UniverseSolverResult;
+
 
 /**
  * The NormalStateSolver
@@ -50,21 +46,19 @@ public class NormalStateSolver extends AbstractState {
 
     private boolean first = true;
 
-    private TypeFramework type = null;
-
-    private Optimizer optimizer = null;
-
-    private ObserverOnSolution observer = () -> ((JUniverseAceProblemAdapter) solver).getBuilder().getOptionsRestartsBuilder().setnRuns(
-            Integer.MAX_VALUE);
+    private IMonitorSolution observer = () -> solver.limitRestart(Integer.MAX_VALUE);
 
     private ISolverState next;
 
     private PathStrategy strat;
+    
+    private IObjectiveManager<Variable> om;
 
-    private NormalStateSolver(IUniverseSolver solver, SolverConfiguration config,
+    private NormalStateSolver(Solver solver, SolverConfiguration config,
             ApproximationSolverDecorator decorator, PathStrategy strat) {
         super(config, solver, decorator);
         this.strat = strat;
+        this.om = solver.getObjectiveManager();
     }
 
     /*
@@ -74,27 +68,17 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solve() {
-        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
         System.out.println("we solve with " + this);
         resetLimitSolver();
         if (!first) {
             decorator.reset();
         }
         first = false;
-        if (type == null) {
-            optimizer = ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer;
-            type = ((JUniverseAceProblemAdapter) solver).getHead().problem.framework;
-        }
-        for (Variable v : ((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
-            ((AbstractSolutionScore) v.heuristic).setEnabled(false);
-        }
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = type;
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = optimizer;
-        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().addObserverOnSolution(observer);
+        solver.setObjectiveManager(om);
+        solver.plugMonitor(observer);
         var r = internalSolve();
         System.out.println(this + " " + r);
-        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().removeObserverOnSolution(
-                observer);
+        solver.unplugMonitor(observer);
         return r;
     }
 
@@ -111,7 +95,7 @@ public class NormalStateSolver extends AbstractState {
         return next;
     }
 
-    public static void initInstance(IUniverseSolver solver, SolverConfiguration configuration,
+    public static void initInstance(Solver solver, SolverConfiguration configuration,
             ApproximationSolverDecorator decorator, PathStrategy strat) {
         INSTANCE = new NormalStateSolver(solver, configuration, decorator, strat);
     }
@@ -121,26 +105,15 @@ public class NormalStateSolver extends AbstractState {
     }
 
     @Override
-    public UniverseSolverResult solve(WarmStarter starter) {
+    public UniverseSolverResult solveStarter() {
         System.out.println("we solve with starter " + this);
-        if (optimizer != null) {
-            System.out.println(optimizer.stringBounds());
-        }
-
-        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
-        for (Variable v : head.solver.problem.variables) {
-            ((AbstractSolutionScore) v.heuristic).updateValue(starter.valueIndexOf(v));
-            ((AbstractSolutionScore) v.heuristic).setEnabled(true);
-        }
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = type;
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = optimizer;
         resetLimitSolver();
         decorator.reset();
-        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().addObserverOnSolution(observer);
+        
+        solver.plugMonitor(observer);        
         var r = internalSolve();
         System.out.println(this + " " + r);
-        ((JUniverseAceProblemAdapter) solver).getHead().getSolver().removeObserverOnSolution(
-                observer);
+        solver.unplugMonitor(observer);
         return r;
     }
 
@@ -161,8 +134,7 @@ public class NormalStateSolver extends AbstractState {
 
     @Override
     public void displaySolution() {
-        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
-        head.solver.solutions.displayFinalResults();
+        decorator.displaySolution();
     }
 
     @Override

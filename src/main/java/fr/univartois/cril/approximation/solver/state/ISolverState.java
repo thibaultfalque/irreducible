@@ -20,10 +20,11 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.search.strategy.strategy.WarmStart;
+
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
-import fr.univartois.cril.juniverse.core.UniverseSolverResult;
-import solver.Solver;
-import solver.Solver.WarmStarter;
+import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 
 /**
  * The ISolverState
@@ -35,7 +36,7 @@ import solver.Solver.WarmStarter;
  */
 public interface ISolverState {
     UniverseSolverResult solve();
-    UniverseSolverResult solve(WarmStarter starter);
+    UniverseSolverResult solveStarter();
     ISolverState nextState();
     ISolverState previousState();
     

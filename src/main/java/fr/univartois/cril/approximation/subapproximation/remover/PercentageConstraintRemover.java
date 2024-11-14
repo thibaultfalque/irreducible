@@ -20,12 +20,12 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
 
-import constraints.Constraint;
-import fr.univartois.cril.approximation.core.GroupConstraint;
+import org.chocosolver.solver.constraints.Constraint;
+
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.CollectionFactory;
@@ -84,10 +84,10 @@ public class PercentageConstraintRemover extends AbstractConstraintRemover<Const
     public void setConstraintMeasure(IConstraintMeasure measure) {
         super.setConstraintMeasure(measure);
         this.heapConstraint = HeapFactory.newMaximumHeap(this.groupSolver.nConstraints(),
-                () -> CollectionFactory.newMapInt(Constraint.class, k -> k.num,
+                () -> CollectionFactory.newMapInt(Constraint.class, k -> k.getCidxInModel(),
                         i -> this.groupSolver.getConstraint(i), this.groupSolver.nConstraints()),
                 (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
-        for (Constraint c : groupSolver.getAceConstraints()) {
+        for (Constraint c : groupSolver.getConstraints()) {
             heapConstraint.add(c);
         }
     }
@@ -105,7 +105,7 @@ public class PercentageConstraintRemover extends AbstractConstraintRemover<Const
     @Override
     public void restoreConstraints(Collection<Constraint> constraints) {
         for (Constraint c : constraints) {
-            c.ignored = false;
+            c.setEnabled(true);
             heapConstraint.add(c);
         }
 

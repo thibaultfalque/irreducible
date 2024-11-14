@@ -21,27 +21,23 @@
 package fr.univartois.cril.approximation.solver.state;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.constraints.Constraint;
+import org.chocosolver.solver.objective.ObjectiveFactory;
+import org.chocosolver.solver.search.strategy.strategy.WarmStart;
+import org.chocosolver.solver.variables.Variable;
 import org.xcsp.common.Types.TypeFramework;
 
-import constraints.Constraint;
-import fr.univartois.cril.aceurancetourix.AceHead;
-import fr.univartois.cril.aceurancetourix.JUniverseAceProblemAdapter;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
-import fr.univartois.cril.juniverse.core.IUniverseSolver;
-import fr.univartois.cril.juniverse.core.UniverseSolverResult;
-import heuristics.HeuristicValuesDynamic.AbstractSolutionScore;
-import solver.Solver;
-import solver.Solver.WarmStarter;
-import utility.Kit;
-import variables.Variable;
+import fr.univartois.cril.approximation.solver.UniverseSolverResult;
+
 
 /**
  * The SubApproximationStateSolver
@@ -78,7 +74,7 @@ public class SubApproximationStateSolver extends AbstractState {
     /**
      * Creates a new SubApproximationStateSolver.
      */
-    public SubApproximationStateSolver(IUniverseSolver solver, ISolverState previous,
+    public SubApproximationStateSolver(Solver solver, ISolverState previous,
             ApproximationSolverDecorator decorator) {
         super(solverConfiguration, solver, decorator);
         this.previous = previous;
@@ -104,22 +100,18 @@ public class SubApproximationStateSolver extends AbstractState {
             restored = true;
         }
         System.out.println(this + " we removed " + removedConstraints.size() + " constraints");
+        decorator.reset();
         if (!removedConstraints.isEmpty()) {
             for (Constraint c : removedConstraints) {
-                if (c.ignorable) {
-                    c.ignored = !c.ignored;
+                if (c.isIgnorable()) {
+                    c.setEnabled(!c.isEnabled());
                 }
             }
         } else {
             solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
-        for (Variable v : ((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
-            ((AbstractSolutionScore) v.heuristic).setEnabled(true);
-        }
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
+        solver.setObjectiveManager(ObjectiveFactory.SAT());
         resetLimitSolver();
-        decorator.reset();
         last = internalSolve();
         System.out.println(this + " answer: " + last);
         return last;
@@ -130,45 +122,39 @@ public class SubApproximationStateSolver extends AbstractState {
         if (next == null || pathStrategy != PathStrategy.APPROX_ORDER) {
             next = new SubApproximationStateSolver(solver, this, decorator);
         }
-        if (last == UniverseSolverResult.UNKNOWN) {
-            SubApproximationStateSolver tmp;
-            for (tmp = next; tmp.next != null; tmp = next.next) {
-            }
-            tmp.next = new SubApproximationStateSolver(solver, tmp, decorator);
-            return tmp.next;
-        }
+// TODO WTF?
+//        if (last == UniverseSolverResult.UNKNOWN) {
+//            SubApproximationStateSolver tmp;
+//            for (tmp = next; tmp.next != null; tmp = next.next) {
+//            }
+//            tmp.next = new SubApproximationStateSolver(solver, tmp, decorator);
+//            return tmp.next;
+//        }
         return next;
     }
 
-    public static void initInstance(IUniverseSolver solver, Supplier<IConstraintsRemover> r,
+    public static void initInstance(Solver solver, Supplier<IConstraintsRemover> r,
             SolverConfiguration config, PathStrategy ps) {
         sRemover = r;
         solverConfiguration = config;
         pathStrategy = ps;
+        solver.plugMonitor(remover);
     }
 
     @Override
-    public UniverseSolverResult solve(WarmStarter starter) {
+    public UniverseSolverResult solveStarter() {
         if (pathStrategy == PathStrategy.APPROX_ORDER) {
             for (Constraint c : removedConstraints) {
-                if (c.ignorable) {
-                    c.ignored = false;
+                if (c.isIgnorable()) {
+                    c.setEnabled(true);
                 }
             }
             restored = true;
 
         }
         System.out.println("we solve with starter " + this);
-        // ((JUniverseAceProblemAdapter) solver).getHead().solver.warmStarter = starter;
-        for (Variable v : ((JUniverseAceProblemAdapter) solver).getHead().solver.problem.variables) {
-            int valueIndexOf = starter.valueIndexOf(v);
-            if (valueIndexOf >= 0) {
-                ((AbstractSolutionScore) v.heuristic).updateValue(valueIndexOf);
-                ((AbstractSolutionScore) v.heuristic).setEnabled(true);
-            }
-        }
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.framework = TypeFramework.CSP;
-        ((JUniverseAceProblemAdapter) solver).getHead().problem.optimizer = null;
+        solver.setObjectiveManager(ObjectiveFactory.SAT());
+       
         resetLimitSolver();
         decorator.reset();
         last = internalSolve();
@@ -193,9 +179,7 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public void displaySolution() {
-
-        AceHead head = ((JUniverseAceProblemAdapter) solver).getHead();
-        head.solver.solutions.displayFinalResults();
+        decorator.displaySolution();
     }
 
     @Override
@@ -205,10 +189,8 @@ public class SubApproximationStateSolver extends AbstractState {
 
     @Override
     public int getNbRemoved() {
-        return previous.getNbRemoved()
-                + (removedConstraints.stream().findAny().filter(
-                        c -> c.ignored).isPresent() ? nbRemoved : 0)
-                + (next != null ? next.getNbRemoved() : 0);
+    	// TODO add all nbRemoved of the chain
+        return nbRemoved;
     }
 
     @Override
