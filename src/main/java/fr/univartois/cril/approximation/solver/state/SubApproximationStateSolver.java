@@ -100,7 +100,7 @@ public class SubApproximationStateSolver extends AbstractState {
             restored = true;
         }
         System.out.println(this + " we removed " + removedConstraints.size() + " constraints");
-        decorator.reset();
+        
         if (!removedConstraints.isEmpty()) {
             for (Constraint c : removedConstraints) {
                 if (c.isIgnorable()) {
@@ -111,7 +111,7 @@ public class SubApproximationStateSolver extends AbstractState {
             solverConfiguration.setNbRun(Integer.MAX_VALUE);
         }
         solver.setObjectiveManager(ObjectiveFactory.SAT());
-        resetLimitSolver();
+
         last = internalSolve();
         System.out.println(this + " answer: " + last);
         return last;
@@ -155,8 +155,9 @@ public class SubApproximationStateSolver extends AbstractState {
         System.out.println("we solve with starter " + this);
         solver.setObjectiveManager(ObjectiveFactory.SAT());
        
-        resetLimitSolver();
+        
         decorator.reset();
+        resetLimitSolver();
         last = internalSolve();
         return last;
     }

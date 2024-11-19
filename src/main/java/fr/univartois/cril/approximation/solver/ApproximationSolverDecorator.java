@@ -22,7 +22,9 @@ package fr.univartois.cril.approximation.solver;
 
 import java.io.Closeable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -34,9 +36,11 @@ import java.util.stream.Stream;
 
 import org.chocosolver.memory.IEnvironment;
 import org.chocosolver.parser.Level;
+import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.parser.xcsp.XCSPParser;
 import org.chocosolver.solver.ICause;
 import org.chocosolver.solver.Model;
+import org.chocosolver.solver.ParallelPortfolio;
 import org.chocosolver.solver.ResolutionPolicy;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -63,6 +67,8 @@ import org.chocosolver.solver.search.measure.MeasuresRecorder;
 import org.chocosolver.solver.search.restart.AbstractRestart;
 import org.chocosolver.solver.search.restart.ICutoff;
 import org.chocosolver.solver.search.strategy.BlackBoxConfigurator;
+import org.chocosolver.solver.search.strategy.Search;
+import org.chocosolver.solver.search.strategy.SearchParams;
 import org.chocosolver.solver.search.strategy.decision.Decision;
 import org.chocosolver.solver.search.strategy.decision.DecisionPath;
 import org.chocosolver.solver.search.strategy.strategy.AbstractStrategy;
@@ -75,6 +81,7 @@ import org.chocosolver.util.ESat;
 import org.chocosolver.util.criteria.Criterion;
 import org.chocosolver.util.criteria.LongCriterion;
 import org.chocosolver.util.logger.Logger;
+import org.chocosolver.util.tools.VariableUtils;
 
 import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
@@ -82,6 +89,7 @@ import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
+import gnu.trove.set.hash.THashSet;
 
 /**
  * The ApproximationSolverDecorator
@@ -91,23 +99,22 @@ import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
  *
  * @version 0.1.0
  */
-public class ApproximationSolverDecorator
-        implements IConstraintGroupSolver, IMonitorSolution {
+public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMonitorSolution {
 
-    private Solver solver;
-    
-    private Model model;
+	private Solver solver;
 
-    private List<GroupConstraint> groupConstraints;
-    
-    /**
-     * Needed to print the last solution found
-     */
-    private final StringBuilder output = new StringBuilder();
-    
-    protected Level level = Level.COMPET;
+	private Model model;
 
-    private ISolverState state;
+	private List<GroupConstraint> groupConstraints;
+
+	/**
+	 * Needed to print the last solution found
+	 */
+	private final StringBuilder output = new StringBuilder();
+
+	protected Level level = Level.COMPET;
+
+	private ISolverState state;
 
 	private KeepNoGoodStrategy keepNogood = KeepNoGoodStrategy.ALWAYS;
 
@@ -116,15 +123,15 @@ public class ApproximationSolverDecorator
 	private Solution solution;
 
 	/**
-     * Creates a new ApproximationSolverDecorator.
-     */
-    public ApproximationSolverDecorator(Model model) {
-        this.solver = model.getSolver();
-        this.model = model;
-        this.groupConstraints = new ArrayList<>();
-        solution = new Solution(model);
-        solver.plugMonitor((IMonitorSolution) solution::record);
-    }
+	 * Creates a new ApproximationSolverDecorator.
+	 */
+	public ApproximationSolverDecorator(Model model) {
+		this.solver = model.getSolver();
+		this.model = model;
+		this.groupConstraints = new ArrayList<>();
+		solution = new Solution(model);
+		solver.plugMonitor((IMonitorSolution) solution::record);
+	}
 
 	/**
 	 * Indicates that the resolution stops on user instruction
@@ -773,161 +780,150 @@ public class ApproximationSolverDecorator
 		solver.logWithANSI(ansi);
 	}
 
+	public void reset() {
+		solver.removeHints();
+		solver.reset();
+		userinterruption=true;
+	}
 
-    public void reset() {
-        solver.reset();
-    }
+	public int nVariables() {
+		return model.getNbVars();
+	}
 
-    public int nVariables() {
-        return model.getNbVars();
-    }
+	public int nConstraints() {
+		int nb = 0;
+		for (Constraint c : model.getCstrs()) {
+			if (c.isEnabled()) {
+				nb++;
+			}
+		}
+		return nb;
+	}
 
-    public int nConstraints() {
-        int nb = 0;
-        for (Constraint c : model.getCstrs()) {
-            if (c.isEnabled()) {
-                nb++;
-            }
-        }
-        return nb;
-    }
+	public void setTimeout(long seconds) {
+		solver.limitTime(seconds * 1000);
+	}
 
-    public void setTimeout(long seconds) {
-        solver.limitTime(seconds*1000);
-    }
+	public void setTimeoutMs(long mseconds) {
+		solver.limitTime(mseconds);
+	}
 
-    public void setTimeoutMs(long mseconds) {
-        solver.limitTime(mseconds);
-    }
+	public void setVerbosity(int level) {
+		if (level > 0) {
+			solver.plugMonitor(new VerboseSolving(solver, 1000 / level));
+		}
+	}
 
-    public void setVerbosity(int level) {
-    	if(level>0) {
-    		solver.plugMonitor(new VerboseSolving(solver, 1000/level));
-    	}
-    }
+	public UniverseSolverResult solve() {
+		this.state = NormalStateSolver.getInstance();
+		state.resetLimitSolver();
+		var result = state.solve();
+		while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout()) {
+			state = state.nextState();
+			System.out.println("Start new state: " + this.state);
+			reset();
+			state.resetLimitSolver();
+			result = state.solve();
+			while (result == UniverseSolverResult.SATISFIABLE && this.state.getNbRemoved() != 0
+					&& !this.state.isTimeout()) {
+				reset();
+				for (IntVar var : solution.retrieveIntVars(true)) {
+					solver.addHint(var, solution.getIntVal(var));
+				}
+				keepFalsified.checkConstraints(solver.getModel());
+				state = state.previousState();
+				state.resetLimitSolver();
+				System.out.println("change to previous state: " + this.state);
+				result = state.solveStarter();
+				System.out.println(result + " after state.solve()");
+			}
+			System.out.println(result + " after while");
+		}
+		System.out.println(result + " before end");
+		if (this.state.isTimeout()) {
+			result = UniverseSolverResult.UNKNOWN;
+		}
+		return result;
+	}
 
-    public UniverseSolverResult solve() {
-    	// TODO Fix timeouts
-        this.state = NormalStateSolver.getInstance();
-        var result = state.solve();
-        while (result == UniverseSolverResult.UNKNOWN /*&& !this.state.isTimeout()*/) {
-            state = state.nextState();
-            System.out.println("Start new state: " + this.state);
-            result = state.solve();
-            while (result == UniverseSolverResult.SATISFIABLE
-                    && this.state.getNbRemoved() != 0 /*&& !this.state.isTimeout()*/) {
-            	solver.removeHints();
-                for(IntVar var: solution.retrieveIntVars(true)) {
-                	solver.addHint(var, solution.getIntVal(var));
-                }
-                
-                keepFalsified.checkConstraints(solver.getModel());
-                
-                solver.reset();
-                state = state.previousState();
-                System.out.println("change to previous state: " + this.state);
-                result = state.solveStarter();
-                System.out.println(result + " after state.solve()");
-            }
-            System.out.println(result + " after while");
-        }
-        System.out.println(result + " before end");
-        if(this.state.isTimeout()) {
-            result=UniverseSolverResult.UNKNOWN;
-        }
-        return result;
-    }
+	public UniverseSolverResult solve(String filename) {
+		try {
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return UniverseSolverResult.UNKNOWN;
+		}
+	}
 
-    public UniverseSolverResult solve(String filename) {
-        try {
-        	XCSPParser parser = new XCSPParser();
-            parser.model(model, filename);
-            
-            var bb = BlackBoxConfigurator.forCOP();
-    		bb.make(model);
-            model.getSolver().solve();
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return UniverseSolverResult.UNKNOWN;
-        }
-    }
+	@Override
+	public Constraint getConstraint(int index) {
+		return model.getCstrs()[index];
+	}
 
-    @Override
-    public Constraint getConstraint(int index) {
-        return model.getCstrs()[index];
-    }
+	@Override
+	public List<GroupConstraint> getGroups() {
+		if (this.groupConstraints.isEmpty()) {
 
-    @Override
-    public List<GroupConstraint> getGroups() {
-        if (this.groupConstraints.isEmpty()) {
+			int nbGroups = Constraint.currentGroup + 1;
+			this.groupConstraints = new ArrayList<>(Collections.nCopies(nbGroups, null));
+			for (int i = 0; i < nConstraints(); i++) {
+				Constraint c = model.getCstrs()[i];
+				int group = c.getGroupId();
+				if (this.groupConstraints.get(group) == null) {
+					this.groupConstraints.set(group, new GroupConstraint(group));
+				}
+				this.groupConstraints.get(group).add(c);
+			}
+		}
+		return this.groupConstraints;
+	}
 
-            int nbGroups = Constraint.currentGroup + 1;
-            this.groupConstraints = new ArrayList<>(Collections.nCopies(nbGroups, null));
-            for (int i = 0; i < nConstraints(); i++) {
-                Constraint c = model.getCstrs()[i];
-                int group = c.getGroupId();
-                if (this.groupConstraints.get(group) == null) {
-                    this.groupConstraints.set(group, new GroupConstraint(group));
-                }
-                this.groupConstraints.get(group).add(c);
-            }
-        }
-        return this.groupConstraints;
-    }
-    
-    private void finalOutPut(Solver solver) {
-        Logger log = solver.log().bold();
-        if (solver.getSolutionCount() > 0) {
-            log = log.green();
-            if (solver.getObjectiveManager().isOptimization()) {
-                output.insert(0, "s OPTIMUM FOUND\n");
-            } else {
-                output.insert(0, "s SATISFIABLE\n");
-            }
-        } else if (!userinterruption) {
-            output.insert(0, "s UNSATISFIABLE\n");
-            log = log.red();
-        } else {
-            output.insert(0, "s UNKNOWN\n");
-            log = log.black();
-        }
-        if (level.isLoggable(Level.COMPET)) {
-            output.append("d FOUND SOLUTIONS ").append(solver.getSolutionCount()).append("\n");
-            log.println(output.toString());
-        }
-        log.reset();
-        if (level.is(Level.RESANA)) {
-            solver.log().printf(java.util.Locale.US, "s %s %.1f\n",
-                    !userinterruption ? "T" : "S",
-                    solver.getTimeCount());
-        }
-        if (level.is(Level.JSON)) {
-            solver.log().printf(Locale.US, "\n\t],\n\t\"exit\":{\"time\":%.1f, " +
-                            "\"bound\":%d, \"nodes\":%d, \"failures\":%d, \"restarts\":%d, \"status\":\"%s\"}\n}",
-                    solver.getTimeCount(),
-                    solver.getObjectiveManager().isOptimization() ?
-                            solver.getObjectiveManager().getBestSolutionValue().intValue() :
-                            solver.getSolutionCount(),
-                    solver.getNodeCount(),
-                    solver.getFailCount(),
-                    solver.getRestartCount(),
-                    solver.getSearchState()
-            );
-        }
-        if (level.is(Level.IRACE)) {
-            solver.log().printf(Locale.US, "%d %d",
-                    solver.getObjectiveManager().isOptimization() ?
-                            (solver.getObjectiveManager().getPolicy().equals(ResolutionPolicy.MAXIMIZE) ? -1 : 1)
-                                    * solver.getObjectiveManager().getBestSolutionValue().intValue() :
-                            -solver.getSolutionCount(),
-                    !userinterruption ?
-                            (int) Math.ceil(solver.getTimeCount()) :
-                            Integer.MAX_VALUE);
-        }
-        if (level.isLoggable(Level.INFO)) {
-            solver.log().bold().white().printf("%s \n", solver.getMeasures().toOneLineString());
-        }
+	private void finalOutPut(Solver solver) {
+		Logger log = solver.log().bold();
+		if (solver.getSolutionCount() > 0) {
+			log = log.green();
+			if (solver.getObjectiveManager().isOptimization()) {
+				output.insert(0, "s OPTIMUM FOUND\n");
+			} else {
+				output.insert(0, "s SATISFIABLE\n");
+			}
+		} else if (!userinterruption) {
+			output.insert(0, "s UNSATISFIABLE\n");
+			log = log.red();
+		} else {
+			output.insert(0, "s UNKNOWN\n");
+			log = log.black();
+		}
+		if (level.isLoggable(Level.COMPET)) {
+			output.append("d FOUND SOLUTIONS ").append(solver.getSolutionCount()).append("\n");
+			log.println(output.toString());
+		}
+		log.reset();
+		if (level.is(Level.RESANA)) {
+			solver.log().printf(java.util.Locale.US, "s %s %.1f\n", !userinterruption ? "T" : "S",
+					solver.getTimeCount());
+		}
+		if (level.is(Level.JSON)) {
+			solver.log().printf(Locale.US,
+					"\n\t],\n\t\"exit\":{\"time\":%.1f, "
+							+ "\"bound\":%d, \"nodes\":%d, \"failures\":%d, \"restarts\":%d, \"status\":\"%s\"}\n}",
+					solver.getTimeCount(),
+					solver.getObjectiveManager().isOptimization()
+							? solver.getObjectiveManager().getBestSolutionValue().intValue()
+							: solver.getSolutionCount(),
+					solver.getNodeCount(), solver.getFailCount(), solver.getRestartCount(), solver.getSearchState());
+		}
+		if (level.is(Level.IRACE)) {
+			solver.log().printf(Locale.US, "%d %d",
+					solver.getObjectiveManager().isOptimization()
+							? (solver.getObjectiveManager().getPolicy().equals(ResolutionPolicy.MAXIMIZE) ? -1 : 1)
+									* solver.getObjectiveManager().getBestSolutionValue().intValue()
+							: -solver.getSolutionCount(),
+					!userinterruption ? (int) Math.ceil(solver.getTimeCount()) : Integer.MAX_VALUE);
+		}
+		if (level.isLoggable(Level.INFO)) {
+			solver.log().bold().white().printf("%s \n", solver.getMeasures().toOneLineString());
+		}
 //        if (csv) {
 //            solver.printCSVStatistics();
 //        }
@@ -938,56 +934,57 @@ public class ApproximationSolverDecorator
 //                e.printStackTrace();
 //            }
 //        }
-    }
+	}
 
-    @Override
-    public GroupConstraint getGroup(int index) {
-        return this.getGroups().get(index);
-    }
+	@Override
+	public GroupConstraint getGroup(int index) {
+		return this.getGroups().get(index);
+	}
 
-    @Override
-    public int nGroups() {
-        return this.getGroups().size();
-    }
+	@Override
+	public int nGroups() {
+		return this.getGroups().size();
+	}
 
+	public void displaySolution() {
+		if (state != null) {
+			finalOutPut(solver);
+		} else {
+			System.out.println("s UNKNOWN");
+		}
 
-    public void displaySolution() {
-        if (state != null) {
-            finalOutPut(solver);
-        } else {
-            System.out.println("s UNKNOWN");
-        }
+	}
 
-    }
+	public void setKeepNogood(KeepNoGoodStrategy keepNogood) {
+		this.keepNogood = keepNogood;
+	}
 
-
-    public void setKeepNogood(KeepNoGoodStrategy keepNogood) {
-        this.keepNogood = keepNogood;
-    }
-
-
-    /**
-     * Sets this ApproximationSolverDecorator's keepFalsified.
-     *
-     * @param keepFalsified The keepFalsified to set.
-     */
-    public void setKeepFalsified(KeepFalsifiedConstraintStrategy keepFalsified) {
-        this.keepFalsified = keepFalsified;
-    }
+	/**
+	 * Sets this ApproximationSolverDecorator's keepFalsified.
+	 *
+	 * @param keepFalsified The keepFalsified to set.
+	 */
+	public void setKeepFalsified(KeepFalsifiedConstraintStrategy keepFalsified) {
+		this.keepFalsified = keepFalsified;
+	}
 
 	@Override
 	public void onSolution() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public List<Constraint> getConstraints() {
 		return List.of(model.getCstrs());
 	}
-	
+
 	public boolean isUserinterruption() {
 		return userinterruption;
+	}
+
+	public void setUserInterruption(boolean b) {
+		userinterruption = b;
 	}
 
 }

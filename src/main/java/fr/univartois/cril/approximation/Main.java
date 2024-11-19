@@ -20,6 +20,8 @@
 
 package fr.univartois.cril.approximation;
 
+import org.chocosolver.parser.SetUpException;
+import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Settings;
 import org.chocosolver.solver.search.strategy.BlackBoxConfigurator;
@@ -52,27 +54,32 @@ public class Main {
 		var parser = CLI.createCLIParser();
 		try {
 			var arguments = parser.parseArgs(args);
-			var model = new Model(Settings.dev());
+			XCSP xcsp = new XCSP();
+			if (xcsp.setUp(arguments.<String>get("instance"))) {
+				xcsp.createSolver();
+				xcsp.buildModel();
+				xcsp.configureSearch();
+			}
+			var model = xcsp.getModel();
+
 			var solver = new ApproximationSolverBuilder(model.getSolver())
 					.withPercentage(arguments.getDouble("percentage"))
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
-					.withMeanComputation(arguments.getBoolean("mean"))
-                    .setKeepNogood(arguments.get("keep_nogood"))
-                    .setKeepFalsified(arguments.get("keep_falsified"))
-					.setVerbosity(arguments.getInt("ace_verbosity"))
-					.setTimeout(arguments.getString("global_timeout"))
-					.initState(arguments).build();
+					.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
+					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("ace_verbosity"))
+					.setTimeout(arguments.getString("global_timeout")).initState(arguments).build();
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> solver.displaySolution()));
-			System.out.println(solver.solve(arguments.<String>get("instance")));
+			solver.solve();
 			solver.displaySolution();
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);
-
+			System.exit(1);
+		} catch (SetUpException e) {
+			e.printStackTrace();
 			System.exit(1);
 		}
-
 	}
 
 }

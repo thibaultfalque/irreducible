@@ -46,7 +46,10 @@ public class NormalStateSolver extends AbstractState {
 
     private boolean first = true;
 
-    private IMonitorSolution observer = () -> solver.limitRestart(Integer.MAX_VALUE);
+    private IMonitorSolution observer = () -> {
+    	solver.removeAllStopCriteria();
+    	solver.removeHints();
+    };
 
     private ISolverState next;
 
@@ -69,10 +72,10 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solve() {
         System.out.println("we solve with " + this);
-        resetLimitSolver();
-        if (!first) {
-            decorator.reset();
-        }
+//        if (!first) {
+//            decorator.reset();
+//        }
+//        resetLimitSolver();
         first = false;
         solver.setObjectiveManager(om);
         solver.plugMonitor(observer);
@@ -107,10 +110,9 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solveStarter() {
         System.out.println("we solve with starter " + this);
-        resetLimitSolver();
-        decorator.reset();
-        
-        solver.plugMonitor(observer);        
+        solver.setObjectiveManager(om);
+        solver.plugMonitor(observer);
+        solver.limitSolution(Integer.MAX_VALUE);
         var r = internalSolve();
         System.out.println(this + " " + r);
         solver.unplugMonitor(observer);

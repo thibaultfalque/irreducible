@@ -67,7 +67,7 @@ public class RestartObserver implements IVariableMonitor, IMonitorRestart {
             double ratio = (double) assignedVars.size() / (double) solver.nVariables();
             if (ratio >= ratioLimit) {
                 restartLimit *= restartFactor;
-                solver.limitRestart(restartLimit);
+                solver.limitFail(restartLimit);
             }
         }
     }

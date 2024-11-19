@@ -21,12 +21,12 @@
 package fr.univartois.cril.approximation.solver.state;
 
 import org.chocosolver.solver.Solver;
+import org.chocosolver.util.ESat;
 
 import fr.univartois.cril.approximation.core.RestartObserver;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
-
 
 /**
  * The AbstractState
@@ -38,42 +38,53 @@ import fr.univartois.cril.approximation.solver.UniverseSolverResult;
  */
 public abstract class AbstractState implements ISolverState {
 
-    protected SolverConfiguration config;
-    protected Solver solver;
-    protected ApproximationSolverDecorator decorator;
-    protected int nbRemoved;
+	protected SolverConfiguration config;
+	protected Solver solver;
+	protected ApproximationSolverDecorator decorator;
+	protected int nbRemoved;
 
-    /**
-     * Creates a new AbstractState.
-     */
-    public AbstractState(SolverConfiguration config,Solver solver,ApproximationSolverDecorator decorator) {
-        this.config = config;
-        this.solver=solver;
-        this.decorator=decorator;
-    }
+	/**
+	 * Creates a new AbstractState.
+	 */
+	public AbstractState(SolverConfiguration config, Solver solver, ApproximationSolverDecorator decorator) {
+		this.config = config;
+		this.solver = solver;
+		this.decorator = decorator;
+	}
 
-    protected void resetLimitSolver() {
-        //solver.limitSolution(config.getLimitSolution());
-        //solver.limitRestart(config.getNbRun());
-        //solver.limitFail(25);
+	@Override
+	public void resetLimitSolver() {
+        solver.limitSolution(config.getLimitSolution());
+        solver.limitFail(config.getNbRun());
+		this.config = config.update();
+	}
 
-        this.config=config.update();
-    }
+	protected UniverseSolverResult internalSolve() {
+		var observer = new RestartObserver(decorator, config.getRatio(), config.getNbRun(), config.getFactor());
+		solver.plugMonitor(observer);
+		var f = ESat.UNDEFINED;
+		if (solver.getObjectiveManager().isOptimization()) {
+			while (solver.solve()) {
+				f = ESat.TRUE;
+			}
+			if(f == ESat.UNDEFINED) {
+				f = solver.isFeasible();
+			}
+		} else {
+			solver.solve();
+			f = solver.isFeasible();
+		}
+		solver.unplugMonitor(observer);
+		decorator.setUserInterruption(false);
+		return switch (f) {
+		case TRUE -> UniverseSolverResult.SATISFIABLE;
+		case FALSE -> UniverseSolverResult.UNSATISFIABLE;
+		default -> UniverseSolverResult.UNKNOWN;
+		};
+	}
 
-    protected UniverseSolverResult internalSolve() {
-        var observer = new RestartObserver(decorator, config.getRatio(), config.getNbRun(), config.getFactor());
-        solver.plugMonitor(observer);
-        solver.solve();
-        var f = solver.isFeasible();
-        solver.unplugMonitor(observer);
-        return switch(f) {
-        case TRUE -> UniverseSolverResult.SATISFIABLE;
-        case FALSE -> UniverseSolverResult.UNSATISFIABLE;
-        default -> UniverseSolverResult.UNKNOWN;
-        };
-    }
-    @Override
-    public boolean isTimeout() {
-        return decorator.isUserinterruption();
-    }
+	@Override
+	public boolean isTimeout() {
+		return decorator.isUserinterruption();
+	}
 }

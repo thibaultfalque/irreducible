@@ -45,5 +45,6 @@ public interface ISolverState {
     int getNbRemoved();
     boolean isTimeout();
     boolean isRestored();
+	void resetLimitSolver();
 }
 

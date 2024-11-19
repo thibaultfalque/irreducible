@@ -58,7 +58,6 @@ public class ApproximationSolverBuilder {
 
     public ApproximationSolverBuilder(Solver solver) {
     	this.solver = solver;
-        // solver.setNoLearning();
         decorator = new ApproximationSolverDecorator(solver.getModel());
 
     }
@@ -148,9 +147,4 @@ public class ApproximationSolverBuilder {
     public ApproximationSolverDecorator build() {
         return decorator;
     }
-
-//    public ApproximationSolverBuilder withValh(String string) {
-//        builder.getOptionsValhBuilder().setClazz(string);
-//        return this;
-//    }
 }
