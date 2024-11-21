@@ -34,21 +34,23 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
  */
 public interface IConstraintMeasure {
 
-    default void setSolver(IConstraintGroupSolver solver) {}
-    
-    double computeScore(Constraint c);
+	default void setSolver(IConstraintGroupSolver solver) {
+	}
 
-    default double computeScore(GroupConstraint g) {
-        double result = 0.0;
-        for (Constraint c : g.getConstraints()) {
-            result += computeScore(c);
-        }
-        return result;
+	double computeScore(Constraint c);
 
-    }
-    
-    <T> void  updateMeasureNEffectiveFiltering(Heap<T> heap, T c,double oldValue, double newValue);
-    <T> void  updateMeasureWDEGWeight(Heap<T> heap, T c,double oldValue, double newValue);
-    <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
-            double newValue);
+	default double computeScore(GroupConstraint g, int count) {
+		double result = 0.0;
+		for (Constraint c : g.getConstraints()) {
+			result += computeScore(c);
+		}
+		return count > 0 ? result / count : result;
+
+	}
+
+	<T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue, double newValue);
+
+	<T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue);
+
+	<T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue, double newValue);
 }

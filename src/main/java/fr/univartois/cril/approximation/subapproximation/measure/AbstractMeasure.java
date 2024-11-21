@@ -20,6 +20,7 @@
 
 package fr.univartois.cril.approximation.subapproximation.measure;
 
+import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 
@@ -34,11 +35,13 @@ import fr.univartois.cril.approximation.core.IConstraintMeasure;
 public abstract class AbstractMeasure implements IConstraintMeasure{
 
     protected IConstraintGroupSolver groupSolver;
+    
 
     @Override
     public void setSolver(IConstraintGroupSolver solver) {
         this.groupSolver=solver;
     }
+    
     
 }
 

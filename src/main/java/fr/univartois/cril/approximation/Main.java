@@ -62,6 +62,7 @@ public class Main {
 			}
 			var model = xcsp.getModel();
 
+
 			var solver = new ApproximationSolverBuilder(model.getSolver())
 					.withPercentage(arguments.getDouble("percentage"))
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
@@ -69,6 +70,8 @@ public class Main {
 					.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
 					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("ace_verbosity"))
 					.setTimeout(arguments.getString("global_timeout")).initState(arguments).build();
+			
+			model.getSolver().logWithANSI(false);
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> solver.displaySolution()));
 			solver.solve();
 			solver.displaySolution();

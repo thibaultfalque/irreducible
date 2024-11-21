@@ -20,6 +20,7 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import org.chocosolver.parser.Level;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.util.ESat;
 
@@ -54,8 +55,8 @@ public abstract class AbstractState implements ISolverState {
 
 	@Override
 	public void resetLimitSolver() {
-        solver.limitSolution(config.getLimitSolution());
-        solver.limitFail(config.getNbRun());
+		solver.limitSolution(config.getLimitSolution());
+		solver.limitFail(config.getNbRun());
 		this.config = config.update();
 	}
 
@@ -66,14 +67,18 @@ public abstract class AbstractState implements ISolverState {
 		if (solver.getObjectiveManager().isOptimization()) {
 			while (solver.solve()) {
 				f = ESat.TRUE;
+				solver.log().printf(java.util.Locale.US, "o %d %.1f\n",
+						solver.getObjectiveManager().getBestSolutionValue().intValue(), solver.getTimeCount());
+
 			}
-			if(f == ESat.UNDEFINED) {
+			if (f == ESat.UNDEFINED) {
 				f = solver.isFeasible();
 			}
 		} else {
 			solver.solve();
 			f = solver.isFeasible();
 		}
+		solver.log().white().printf("%s %n", solver.getMeasures().toOneLineString());
 		solver.unplugMonitor(observer);
 		decorator.setUserInterruption(false);
 		return switch (f) {

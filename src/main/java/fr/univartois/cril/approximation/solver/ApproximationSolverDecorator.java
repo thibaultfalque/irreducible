@@ -864,7 +864,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	public List<GroupConstraint> getGroups() {
 		if (this.groupConstraints.isEmpty()) {
 
-			int nbGroups = Constraint.currentGroup + 1;
+			int nbGroups = Constraint.currentGroup;
 			this.groupConstraints = new ArrayList<>(Collections.nCopies(nbGroups, null));
 			for (int i = 0; i < nConstraints(); i++) {
 				Constraint c = model.getCstrs()[i];

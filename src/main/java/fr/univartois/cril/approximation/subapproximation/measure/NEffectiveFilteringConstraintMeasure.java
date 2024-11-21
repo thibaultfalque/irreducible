@@ -33,7 +33,7 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
  *
  * @version 0.1.0
  */
-public class NEffectiveFilteringConstraintMeasure implements IConstraintMeasure {
+public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
 
     
 

@@ -52,7 +52,7 @@ public class CLI {
         generalGroup.addArgument("-i","--instance").type(String.class);
         generalGroup.addArgument("--global-timeout").type(String.class);
         generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(true);
-        generalGroup.addArgument("--ace-verbosity").type(Integer.class).setDefault(1);
+        generalGroup.addArgument("--ace-verbosity").type(Integer.class).setDefault(0);
         generalGroup.addArgument("--keep-nogood").type(KeepNoGoodStrategy.class).setDefault(KeepNoGoodStrategy.ALWAYS);
         generalGroup.addArgument("--keep-falsified").type(KeepFalsifiedConstraintStrategy.class).setDefault(KeepFalsifiedConstraintStrategy.NEVER);
         generalGroup.addArgument("--valh").type(String.class).setDefault("WarmStarterScore");

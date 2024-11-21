@@ -41,9 +41,13 @@ import fr.univartois.cril.approximation.util.collections.heaps.HeapFactory;
  * @version 0.1.0
  */
 public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConstraint> {
-
+	
+	public int[] counters;
+	
+	
     public GroupConstraintRemover(IConstraintGroupSolver groupSolver) {
         super(groupSolver);
+        counters = new int[groupSolver.nGroups()];
     }
 
     /*
@@ -62,6 +66,7 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
             }
 
             var g = heapConstraint.poll();
+            counters[g.getGroupNumber()]++;
             for (var c : g.getConstraints()) {
                 if (c.isIgnorable()) {
                     ignoredConstraint.add(c);
@@ -88,7 +93,7 @@ public class GroupConstraintRemover extends AbstractConstraintRemover<GroupConst
                 () -> CollectionFactory.newMapInt(GroupConstraint.class,
                         GroupConstraint::getGroupNumber,
                         i -> this.groupSolver.getGroup(i), this.groupSolver.nGroups()),
-                (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
+                (a, b) -> Double.compare(measure.computeScore(a, counters[a.getGroupNumber()]), measure.computeScore(b,counters[b.getGroupNumber()])));
         for (GroupConstraint c : groupSolver.getGroups()) {
             heapConstraint.add(c);
         }
