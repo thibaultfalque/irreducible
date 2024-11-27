@@ -73,6 +73,11 @@ public class CLI {
         approximationGroup.addArgument("--mean").help("Use the mean of the measure for a group instead of the sum").setDefault(false).type(Boolean.class);
         approximationGroup.addArgument("--constraint-remover").help("The type of strategy for removes constraints using the specify measure").setDefault("Group").type(String.class);
         approximationGroup.addArgument("--path-strategy").type((p,a,v)->PathStrategy.valueOf(v)).setDefault(PathStrategy.APPROX_NORMAL);
+        
+        parser.addArgument("--")
+        .dest("remaining")
+        .nargs("*")  // Capture zéro ou plusieurs arguments restants
+        .help("Arguments to pass to the subcommand");
 
         return parser;
     }

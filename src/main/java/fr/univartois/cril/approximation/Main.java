@@ -20,11 +20,11 @@
 
 package fr.univartois.cril.approximation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.chocosolver.parser.SetUpException;
 import org.chocosolver.parser.xcsp.XCSP;
-import org.chocosolver.solver.Model;
-import org.chocosolver.solver.Settings;
-import org.chocosolver.solver.search.strategy.BlackBoxConfigurator;
 
 import fr.univartois.cril.approximation.cli.CLI;
 import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
@@ -54,8 +54,13 @@ public class Main {
 		var parser = CLI.createCLIParser();
 		try {
 			var arguments = parser.parseArgs(args);
+			
+			List<String> chocoArgs = new ArrayList<>();
+			chocoArgs.add(arguments.<String>get("instance"));
+			chocoArgs.addAll(arguments.getList("remaining"));
+			
 			XCSP xcsp = new XCSP();
-			if (xcsp.setUp(arguments.<String>get("instance"))) {
+			if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
 				xcsp.createSolver();
 				xcsp.buildModel();
 				xcsp.configureSearch();
