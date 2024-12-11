@@ -28,6 +28,7 @@ import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
+import fr.univartois.cril.approximation.solver.sequence.ISequence;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
@@ -46,105 +47,125 @@ import net.sourceforge.argparse4j.inf.Namespace;
  */
 public class ApproximationSolverBuilder {
 
-    private Solver solver;
+	private Solver solver;
 
-    private ApproximationSolverDecorator decorator;
+	private IApproximationSolver approxSolver;
 
-    private Supplier<IConstraintsRemover> remover;
+	private ApproximationSolverDecorator decorator;
 
-    private IConstraintMeasure measure;
+	private Supplier<IConstraintsRemover> remover;
 
-    private double percentage;
+	private IConstraintMeasure measure;
 
-    public ApproximationSolverBuilder(Solver solver) {
-    	this.solver = solver;
-        decorator = new ApproximationSolverDecorator(solver.getModel());
+	private double percentage;
 
-    }
+	private ISequence sequence;
+	
+	private long nbSteps;
 
-    public ApproximationSolverBuilder setKeepNogood(KeepNoGoodStrategy value) {
-        decorator.setKeepNogood(value);
-        return this;
-    }
+	public ApproximationSolverBuilder(Solver solver) {
+		this.solver = solver;
+		decorator = new ApproximationSolverDecorator(solver.getModel());
+		approxSolver = decorator;
+	}
 
-    /**
-     * @param object
-     * @return
-     */
-    public ApproximationSolverBuilder setKeepFalsified(KeepFalsifiedConstraintStrategy keep) {
-        decorator.setKeepFalsified(keep);
-        return this;
-    }
+	public ApproximationSolverBuilder setKeepNogood(KeepNoGoodStrategy value) {
+		decorator.setKeepNogood(value);
+		return this;
+	}
 
-    public ApproximationSolverBuilder setVerbosity(int v) {
-        decorator.setVerbosity(v);
-        return this;
-    }
+	/**
+	 * @param object
+	 * @return
+	 */
+	public ApproximationSolverBuilder setKeepFalsified(KeepFalsifiedConstraintStrategy keep) {
+		decorator.setKeepFalsified(keep);
+		return this;
+	}
 
-    public ApproximationSolverBuilder setTimeout(String timeout) {
-        if (timeout != null) {
-            if (timeout.contains("ms")) {
-                decorator.setTimeoutMs(
-                        Long.parseLong(timeout.replace("ms", "")));
-            } else if (timeout.contains("s")) {
-                decorator.setTimeout(
-                        Long.parseLong(timeout.replace("s", "")));
-            } else {
-                throw new IllegalArgumentException(
-                        timeout + " is not a correct format for set the timeout");
-            }
-        }
-        return this;
-    }
+	public ApproximationSolverBuilder setVerbosity(int v) {
+		decorator.setVerbosity(v);
+		return this;
+	}
 
-    public ApproximationSolverBuilder withPercentage(double percentage) {
-        this.percentage = percentage;
-        return this;
-    }
+	public ApproximationSolverBuilder setTimeout(String timeout) {
+		if (timeout != null) {
+			if (timeout.contains("ms")) {
+				decorator.setTimeoutMs(Long.parseLong(timeout.replace("ms", "")));
+			} else if (timeout.contains("s")) {
+				decorator.setTimeout(Long.parseLong(timeout.replace("s", "")));
+			} else {
+				throw new IllegalArgumentException(timeout + " is not a correct format for set the timeout");
+			}
+		}
+		return this;
+	}
 
-    public ApproximationSolverBuilder withSpecificConstraintRemover(String rm) {
-        remover = () -> {
-            var r = ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm,
-                    decorator);
-            r.setConstraintMeasure(measure);
-            if (r instanceof PercentageConstraintRemover) {
-                ((PercentageConstraintRemover)r).setPercentage(percentage);
-            }
-            return r;
-        };
-        return this;
-    }
+	public ApproximationSolverBuilder withPercentage(double percentage) {
+		this.percentage = percentage;
+		return this;
+	}
 
-    public ApproximationSolverBuilder withSpecificConstraintMeasure(String m) {
-        measure = ConstraintMeasureFactory.instance().createConstraintMeasurerByName(m, decorator);
-        return this;
-    }
+	public ApproximationSolverBuilder withSpecificConstraintRemover(String rm) {
+		remover = () -> {
+			var r = ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm, decorator);
+			r.setConstraintMeasure(measure);
+			if (r instanceof PercentageConstraintRemover) {
+				((PercentageConstraintRemover) r).setPercentage(percentage);
+			}
+			return r;
+		};
+		return this;
+	}
 
-    public ApproximationSolverBuilder withMeanComputation(boolean mean) {
-        if (mean) {
-            measure = new MeanFilteringConstraintMeasure(measure);
-            measure.setSolver(decorator);
-        }
-        return this;
-    }
+	public ApproximationSolverBuilder withSequenceApproximation(ISequence sequence) {
+		this.sequence = sequence;
+		return this;
+	}
+	
+	public ApproximationSolverBuilder withNbStep(long nbSteps) {
+		this.nbSteps = nbSteps;
+		return this;
+	}
 
-    public ApproximationSolverBuilder initState(Namespace arguments) {
-        if (remover == null) {
-            throw new IllegalStateException("Constraint remover must be initialized !");
-        }
-        SubApproximationStateSolver.initInstance(solver, remover,
-                new SolverConfiguration(arguments.getInt("n_runs_approx"),
-                        arguments.getDouble("factor_runs_approx"),
-                        arguments.getInt("n_sol_limit"),
-                        arguments.getDouble("ratio_assigned_approx")),
-                arguments.get("path_strategy"));
-        NormalStateSolver.initInstance(solver, new SolverConfiguration(
-                arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),
-                Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal")),decorator, arguments.get("path_strategy"));
-        return this;
-    }
+	public ApproximationSolverBuilder withSpecificConstraintMeasure(String m) {
+		measure = ConstraintMeasureFactory.instance().createConstraintMeasurerByName(m, decorator);
+		return this;
+	}
 
-    public ApproximationSolverDecorator build() {
-        return decorator;
-    }
+	public ApproximationSolverBuilder withMeanComputation(boolean mean) {
+		if (mean) {
+			measure = new MeanFilteringConstraintMeasure(measure);
+			measure.setSolver(decorator);
+		}
+		return this;
+	}
+
+	public ApproximationSolverBuilder initState(Namespace arguments) {
+		if (remover == null) {
+			throw new IllegalStateException("Constraint remover must be initialized !");
+		}
+		SubApproximationStateSolver.initInstance(solver, remover,
+				new SolverConfiguration(arguments.getInt("n_runs_approx"), arguments.getDouble("factor_runs_approx"),
+						arguments.getInt("n_sol_limit"), arguments.getDouble("ratio_assigned_approx"),
+						arguments.getBoolean("dichotomic_bound")),
+				arguments.get("path_strategy"));
+		NormalStateSolver.initInstance(solver,
+				new SolverConfiguration(arguments.getInt("n_runs_normal"), arguments.getDouble("factor_runs_normal"),
+						Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal"),
+						arguments.getBoolean("dichotomic_bound")),
+				decorator, arguments.get("path_strategy"));
+		return this;
+	}
+
+	public ApproximationSolverBuilder setDichotomic(boolean dichotomic) {
+		if (dichotomic) {
+			approxSolver = new DichotomicOptimizationSolver(decorator, sequence, nbSteps);
+		}
+		return this;
+	}
+
+	public IApproximationSolver build() {
+		return approxSolver;
+	}
 }
