@@ -20,7 +20,6 @@
 
 package fr.univartois.cril.approximation.solver;
 
-
 /**
  * The SolverConfiguration
  *
@@ -30,94 +29,107 @@ package fr.univartois.cril.approximation.solver;
  * @version 0.1.0
  */
 public class SolverConfiguration {
-    private int nbRun;
-    private int initRun;
-    private double factor;
-    private long limitSolution;
+	private int nbRun;
+	private int initRun;
+	private double factor;
+	private long limitSolution;
+	private boolean dichotomicBound;
 
-    private double ratio;
-    /**
-     * Creates a new SolverConfiguration.
-     * @param nbRun
-     * @param factor
-     */
-    public SolverConfiguration(int nbRun, double factor,long limitSolution, double ratio) {
-        this.nbRun = nbRun;
-        this.initRun=nbRun;
-        this.factor = factor;
-        this.limitSolution=limitSolution;
-        this.ratio = ratio;
-    }
+	private double ratio;
 
-    /**
-     * Gives the nbRun of this SolverConfiguration.
-     *
-     * @return This SolverConfiguration's nbRun.
-     */
-    public int getNbRun() {
-        return nbRun;
-    }
+	/**
+	 * Creates a new SolverConfiguration.
+	 * 
+	 * @param nbRun
+	 * @param factor
+	 */
+	public SolverConfiguration(int nbRun, double factor, long limitSolution, double ratio, boolean dichotomic) {
+		this.nbRun = nbRun;
+		this.initRun = nbRun;
+		this.factor = factor;
+		this.limitSolution = limitSolution;
+		this.ratio = ratio;
+		this.dichotomicBound = dichotomic;
+	}
 
-    /**
-     * Sets this SolverConfiguration's nbRun.
-     *
-     * @param nbRun The new nbRun for this SolverConfiguration.
-     */
-    public void setNbRun(int nbRun) {
-        this.nbRun = nbRun;
-    }
+	/**
+	 * Gives the nbRun of this SolverConfiguration.
+	 *
+	 * @return This SolverConfiguration's nbRun.
+	 */
+	public int getNbRun() {
+		return nbRun;
+	}
 
-    /**
-     * Gives the factor of this SolverConfiguration.
-     *
-     * @return This SolverConfiguration's factor.
-     */
-    public double getFactor() {
-        return factor;
-    }
+	/**
+	 * Sets this SolverConfiguration's nbRun.
+	 *
+	 * @param nbRun The new nbRun for this SolverConfiguration.
+	 */
+	public void setNbRun(int nbRun) {
+		this.nbRun = nbRun;
+	}
 
-    /**
-     * Sets this SolverConfiguration's factor.
-     *
-     * @param factor The new factor for this SolverConfiguration.
-     */
-    public void setFactor(double factor) {
-        this.factor = factor;
-    }
+	/**
+	 * Gives the factor of this SolverConfiguration.
+	 *
+	 * @return This SolverConfiguration's factor.
+	 */
+	public double getFactor() {
+		return factor;
+	}
 
+	/**
+	 * Sets this SolverConfiguration's factor.
+	 *
+	 * @param factor The new factor for this SolverConfiguration.
+	 */
+	public void setFactor(double factor) {
+		this.factor = factor;
+	}
 
-    /**
-     * Gives the limitSolution of this SolverConfiguration.
-     *
-     * @return This SolverConfiguration's limitSolution.
-     */
-    public long getLimitSolution() {
-        return limitSolution;
-    }
+	/**
+	 * Gives the limitSolution of this SolverConfiguration.
+	 *
+	 * @return This SolverConfiguration's limitSolution.
+	 */
+	public long getLimitSolution() {
+		return limitSolution;
+	}
 
+	/**
+	 * Sets this SolverConfiguration's limitSolution.
+	 *
+	 * @param limitSolution The new limitSolution for this SolverConfiguration.
+	 */
+	public void setLimitSolution(long limitSolution) {
+		this.limitSolution = limitSolution;
+	}
 
-    /**
-     * Sets this SolverConfiguration's limitSolution.
-     *
-     * @param limitSolution The new limitSolution for this SolverConfiguration.
-     */
-    public void setLimitSolution(long limitSolution) {
-        this.limitSolution = limitSolution;
-    }
+	/**
+	 * Gives the ratio of this SolverConfiguration.
+	 *
+	 * @return This SolverConfiguration's ratio.
+	 */
+	public double getRatio() {
+		return ratio;
+	}
 
+	/**
+	 * @return the dichotomicBound
+	 */
+	public boolean isDichotomicBound() {
+		return dichotomicBound;
+	}
 
-    /**
-     * Gives the ratio of this SolverConfiguration.
-     *
-     * @return This SolverConfiguration's ratio.
-     */
-    public double getRatio() {
-        return ratio;
-    }
+	/**
+	 * @param dichotomicBound the dichotomicBound to set
+	 */
+	public void setDichotomicBound(boolean dichotomicBound) {
+		this.dichotomicBound = dichotomicBound;
+	}
 
-    public SolverConfiguration update() {
-        return new SolverConfiguration((int)(this.nbRun*this.factor), factor, limitSolution, ratio);
-
-    }
+	public SolverConfiguration update() {
+		return new SolverConfiguration((int) (this.nbRun * this.factor), factor, limitSolution, ratio, dichotomicBound);
+	}
 }
-
