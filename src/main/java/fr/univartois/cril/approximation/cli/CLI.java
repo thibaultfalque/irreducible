@@ -52,10 +52,12 @@ public class CLI {
         generalGroup.addArgument("-i","--instance").type(String.class);
         generalGroup.addArgument("--global-timeout").type(String.class);
         generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(true);
-        generalGroup.addArgument("--ace-verbosity").type(Integer.class).setDefault(0);
+        generalGroup.addArgument("--verbosity").type(Integer.class).setDefault(0);
         generalGroup.addArgument("--keep-nogood").type(KeepNoGoodStrategy.class).setDefault(KeepNoGoodStrategy.ALWAYS);
         generalGroup.addArgument("--keep-falsified").type(KeepFalsifiedConstraintStrategy.class).setDefault(KeepFalsifiedConstraintStrategy.NEVER);
-        generalGroup.addArgument("--valh").type(String.class).setDefault("WarmStarterScore");
+//        generalGroup.addArgument("--valh").type(String.class).setDefault("WarmStarterScore");
+        generalGroup.addArgument("--dichotomic-bound").type(Boolean.class).setDefault(false);
+        generalGroup.addArgument("--n-steps").help("The number of steps allower to the approximation solver.").setDefault(Long.MAX_VALUE).type(Long.class);
 
         var normalGroup = parser.addArgumentGroup("Normal resolution");
         normalGroup.addArgument("--n-runs-normal").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
@@ -66,6 +68,7 @@ public class CLI {
         var approximationGroup = parser.addArgumentGroup("Approximation resolution");
         approximationGroup.description("This parameters controls the approximation. ");
         approximationGroup.addArgument("--n-runs-approx").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
+        
         approximationGroup.addArgument("--n-sol-limit").help("The max number of solution for approximate problem.").setDefault(1).type(Integer.class);
         approximationGroup.addArgument("--factor-runs-approx").help("The increasing factor for updating the number of runs.").setDefault(1.1).type(Double.class);
         approximationGroup.addArgument("--percentage").help("The percentage of constraints to remove per approximation.").setDefault(0.).type(Double.class);
@@ -76,7 +79,7 @@ public class CLI {
         
         parser.addArgument("--")
         .dest("remaining")
-        .nargs("*")  // Capture zéro ou plusieurs arguments restants
+        .nargs("*") 
         .help("Arguments to pass to the subcommand");
 
         return parser;
