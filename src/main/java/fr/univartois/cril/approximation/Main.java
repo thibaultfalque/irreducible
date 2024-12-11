@@ -54,11 +54,11 @@ public class Main {
 		var parser = CLI.createCLIParser();
 		try {
 			var arguments = parser.parseArgs(args);
-			
+
 			List<String> chocoArgs = new ArrayList<>();
 			chocoArgs.add(arguments.<String>get("instance"));
 			chocoArgs.addAll(arguments.getList("remaining"));
-			
+
 			XCSP xcsp = new XCSP();
 			if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
 				xcsp.createSolver();
@@ -67,19 +67,23 @@ public class Main {
 			}
 			var model = xcsp.getModel();
 
-
 			var solver = new ApproximationSolverBuilder(model.getSolver())
 					.withPercentage(arguments.getDouble("percentage"))
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
 					.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
-					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("ace_verbosity"))
-					.setTimeout(arguments.getString("global_timeout")).initState(arguments).build();
-			
-			model.getSolver().logWithANSI(false);
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> solver.displaySolution()));
+					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("verbosity"))
+					.setTimeout(arguments.getString("global_timeout"))
+					.setDichotomic(arguments.getBoolean("dichotomic_bound")).initState(arguments).build();
+
+			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
+			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+				solver.displaySolution();
+				xcsp.parsers[0].printSolution(false);
+			}));
 			solver.solve();
 			solver.displaySolution();
+			xcsp.parsers[0].printSolution(false);
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);
