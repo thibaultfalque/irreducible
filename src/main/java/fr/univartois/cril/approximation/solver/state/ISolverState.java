@@ -24,6 +24,7 @@ import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.search.strategy.strategy.WarmStart;
 
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
+import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 
 /**
@@ -46,5 +47,6 @@ public interface ISolverState {
     boolean isTimeout();
     boolean isRestored();
 	void resetLimitSolver();
+	SolverConfiguration getConfig();
 }
 

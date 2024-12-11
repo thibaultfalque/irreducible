@@ -72,10 +72,7 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solve() {
         System.out.println("we solve with " + this);
-//        if (!first) {
-//            decorator.reset();
-//        }
-//        resetLimitSolver();
+
         first = false;
         solver.setObjectiveManager(om);
         solver.plugMonitor(observer);
