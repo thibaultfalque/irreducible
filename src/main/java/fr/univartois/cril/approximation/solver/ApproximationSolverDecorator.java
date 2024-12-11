@@ -22,9 +22,7 @@ package fr.univartois.cril.approximation.solver;
 
 import java.io.Closeable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -36,11 +34,8 @@ import java.util.stream.Stream;
 
 import org.chocosolver.memory.IEnvironment;
 import org.chocosolver.parser.Level;
-import org.chocosolver.parser.xcsp.XCSP;
-import org.chocosolver.parser.xcsp.XCSPParser;
 import org.chocosolver.solver.ICause;
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.ParallelPortfolio;
 import org.chocosolver.solver.ResolutionPolicy;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
@@ -66,22 +61,17 @@ import org.chocosolver.solver.search.measure.IMeasures;
 import org.chocosolver.solver.search.measure.MeasuresRecorder;
 import org.chocosolver.solver.search.restart.AbstractRestart;
 import org.chocosolver.solver.search.restart.ICutoff;
-import org.chocosolver.solver.search.strategy.BlackBoxConfigurator;
-import org.chocosolver.solver.search.strategy.Search;
-import org.chocosolver.solver.search.strategy.SearchParams;
 import org.chocosolver.solver.search.strategy.decision.Decision;
 import org.chocosolver.solver.search.strategy.decision.DecisionPath;
 import org.chocosolver.solver.search.strategy.strategy.AbstractStrategy;
 import org.chocosolver.solver.trace.IMessage;
 import org.chocosolver.solver.trace.VerboseSolving;
 import org.chocosolver.solver.variables.IntVar;
-import org.chocosolver.solver.variables.RealVar;
 import org.chocosolver.solver.variables.Variable;
 import org.chocosolver.util.ESat;
 import org.chocosolver.util.criteria.Criterion;
 import org.chocosolver.util.criteria.LongCriterion;
 import org.chocosolver.util.logger.Logger;
-import org.chocosolver.util.tools.VariableUtils;
 
 import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
@@ -89,7 +79,6 @@ import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
-import gnu.trove.set.hash.THashSet;
 
 /**
  * The ApproximationSolverDecorator
@@ -99,7 +88,7 @@ import gnu.trove.set.hash.THashSet;
  *
  * @version 0.1.0
  */
-public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMonitorSolution {
+public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
 
 	private Solver solver;
 
@@ -121,6 +110,10 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	private KeepFalsifiedConstraintStrategy keepFalsified = KeepFalsifiedConstraintStrategy.NEVER;
 
 	private Solution solution;
+
+	private int cntSteps;
+	
+	private long limitSteps;
 
 	/**
 	 * Creates a new ApproximationSolverDecorator.
@@ -783,7 +776,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	public void reset() {
 		solver.removeHints();
 		solver.reset();
-		userinterruption=true;
+		userinterruption = true;
 	}
 
 	public int nVariables() {
@@ -814,11 +807,14 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		}
 	}
 
+	@Override
 	public UniverseSolverResult solve() {
+		cntSteps = 0;
 		this.state = NormalStateSolver.getInstance();
 		state.resetLimitSolver();
 		var result = state.solve();
-		while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout()) {
+		while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout() && cntSteps < limitSteps) {
+			cntSteps++;
 			state = state.nextState();
 			System.out.println("Start new state: " + this.state);
 			reset();
@@ -840,7 +836,15 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 			System.out.println(result + " after while");
 		}
 		System.out.println(result + " before end");
-		if (this.state.isTimeout()) {
+		if (this.state.isTimeout() || cntSteps >= limitSteps) {
+			System.out.println("We reset the solver and restore all constraints.");
+			reset();
+			var old = this.state;
+			this.state = this.state.previousState();
+			while (old != this.state) {
+				old = this.state;
+				this.state = this.state.previousState();
+			}
 			result = UniverseSolverResult.UNKNOWN;
 		}
 		return result;
@@ -882,7 +886,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		Logger log = solver.log().bold();
 		if (solver.getSolutionCount() > 0) {
 			log = log.green();
-			if (solver.getObjectiveManager().isOptimization()) {
+			if (solver.getObjectiveManager().isOptimization() && !userinterruption) {
 				output.insert(0, "s OPTIMUM FOUND\n");
 			} else {
 				output.insert(0, "s SATISFIABLE\n");
@@ -946,6 +950,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return this.getGroups().size();
 	}
 
+	@Override
 	public void displaySolution() {
 		if (state != null) {
 			finalOutPut(solver);
@@ -985,6 +990,28 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 
 	public void setUserInterruption(boolean b) {
 		userinterruption = b;
+	}
+
+	public Solution getSolution() {
+		return solution;
+	}
+
+	/**
+	 * @return the limitSteps
+	 */
+	public long getLimitSteps() {
+		return limitSteps;
+	}
+
+	/**
+	 * @param limitSteps the limitSteps to set
+	 */
+	public void limitSteps(long limitSteps) {
+		this.limitSteps = limitSteps;
+	}
+	
+	public int getCurrentStep() {
+		return cntSteps;
 	}
 
 }
