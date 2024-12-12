@@ -1011,7 +1011,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	}
 	
 	public int getCurrentStep() {
-		return cntSteps;
+		return Math.max(cntSteps, 1);
 	}
 
 }

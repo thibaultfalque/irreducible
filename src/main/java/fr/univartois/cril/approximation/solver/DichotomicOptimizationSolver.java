@@ -98,6 +98,7 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 			solver.limitSteps(solver.getCurrentStep()*sequence.nextGap());
 
 			System.out.println("New bound " + lb + " " + middle + " " + ub);
+			System.out.println("New approximation phase with new bounds and "+ (solver.getCurrentStep()*sequence.nextGap())+" steps");
 			solver.reset();
 			if (om.getPolicy() == ResolutionPolicy.MINIMIZE) {
 				om.updateBestLB(lb);
