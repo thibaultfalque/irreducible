@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
+import fr.univartois.cril.approximation.solver.sequence.ESequence;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -56,9 +57,16 @@ public class CLI {
         generalGroup.addArgument("--keep-nogood").type(KeepNoGoodStrategy.class).setDefault(KeepNoGoodStrategy.ALWAYS);
         generalGroup.addArgument("--keep-falsified").type(KeepFalsifiedConstraintStrategy.class).setDefault(KeepFalsifiedConstraintStrategy.NEVER);
 //        generalGroup.addArgument("--valh").type(String.class).setDefault("WarmStarterScore");
-        generalGroup.addArgument("--dichotomic-bound").type(Boolean.class).setDefault(false);
-        generalGroup.addArgument("--n-steps").help("The number of steps allower to the approximation solver.").setDefault(Long.MAX_VALUE).type(Long.class);
-
+        
+        
+        
+        var dichotomicGroup = parser.addArgumentGroup("Dichotomic options");
+        dichotomicGroup.addArgument("--dichotomic-bound").type(Boolean.class).setDefault(false);
+        dichotomicGroup.addArgument("--n-steps").help("The number of steps allower to the approximation solver.").setDefault(Long.MAX_VALUE).type(Long.class);
+        dichotomicGroup.addArgument("--sequence").help("The sequence for the evolution of the number of approximation steps.").type(ESequence.class);
+        dichotomicGroup.addArgument("--factor").help("The factor used with the exponential sequence and geometrical sequence").type(Double.class);
+        dichotomicGroup.addArgument("--lin-geo-factor").help("The scale factor used with the linear, luby and geometrical sequences.").type(Long.class);
+        
         var normalGroup = parser.addArgumentGroup("Normal resolution");
         normalGroup.addArgument("--n-runs-normal").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
         normalGroup.addArgument("--factor-runs-normal").help("The increasing factor for updating the number of runs.").type(Double.class).setDefault(1.1);

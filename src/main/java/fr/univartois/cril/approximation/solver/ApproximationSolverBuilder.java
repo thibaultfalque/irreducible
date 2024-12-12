@@ -23,12 +23,18 @@ package fr.univartois.cril.approximation.solver;
 import java.util.function.Supplier;
 
 import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.search.restart.GeometricalCutoff;
+import org.chocosolver.solver.search.restart.LinearCutoff;
+import org.chocosolver.solver.search.restart.LubyCutoff;
 
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
+import fr.univartois.cril.approximation.solver.sequence.ESequence;
+import fr.univartois.cril.approximation.solver.sequence.ExponentialSequence;
 import fr.univartois.cril.approximation.solver.sequence.ISequence;
+import fr.univartois.cril.approximation.solver.sequence.SequenceChocoCutOffDecorator;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
@@ -118,8 +124,25 @@ public class ApproximationSolverBuilder {
 		return this;
 	}
 
-	public ApproximationSolverBuilder withSequenceApproximation(ISequence sequence) {
-		this.sequence = sequence;
+	public ApproximationSolverBuilder withSequenceApproximation(ESequence s, Namespace arguments) {
+		
+		switch(s) {
+		case CHOCO_GEOMETRICAL:
+			sequence = new SequenceChocoCutOffDecorator(new GeometricalCutoff(arguments.getLong("lin_geo_factor"),arguments.getDouble("factor")));
+			break;
+		case CHOCO_LINEAR:
+			sequence = new SequenceChocoCutOffDecorator(new LinearCutoff(arguments.getLong("lin_geo_factor")));
+			break;
+		case CHOCO_LUBY:
+			sequence = new SequenceChocoCutOffDecorator(new LubyCutoff(arguments.getLong("lin_geo_factor")));
+			break;
+		case EXPONENTIAL:
+			sequence = new ExponentialSequence(arguments.getDouble("factor"));
+			break;
+		default:
+			break;
+		}
+		
 		return this;
 	}
 	

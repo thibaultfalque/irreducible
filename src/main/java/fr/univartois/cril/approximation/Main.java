@@ -74,6 +74,7 @@ public class Main {
 					.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
 					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("verbosity"))
 					.setTimeout(arguments.getString("global_timeout"))
+					.withSequenceApproximation(arguments.get("sequence"), arguments)
 					.setDichotomic(arguments.getBoolean("dichotomic_bound")).initState(arguments).build();
 
 			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
