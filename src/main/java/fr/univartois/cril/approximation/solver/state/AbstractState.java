@@ -84,11 +84,13 @@ public abstract class AbstractState implements ISolverState {
 		solver.log().white().printf("%s %n", solver.getMeasures().toOneLineString());
 		solver.unplugMonitor(observer);
 		decorator.setUserInterruption(false);
-		return switch (f) {
-		case TRUE -> UniverseSolverResult.SATISFIABLE;
-		case FALSE -> UniverseSolverResult.UNSATISFIABLE;
-		default -> UniverseSolverResult.UNKNOWN;
-		};
+		if (f == ESat.TRUE) {
+			return UniverseSolverResult.SATISFIABLE;
+		} else if (f == ESat.FALSE) {
+			return UniverseSolverResult.UNSATISFIABLE;
+		} else {
+			return UniverseSolverResult.UNKNOWN;
+		}
 	}
 
 	@Override

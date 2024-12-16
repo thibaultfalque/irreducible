@@ -73,6 +73,7 @@ public class ApproximationSolverBuilder {
 		this.solver = solver;
 		decorator = new ApproximationSolverDecorator(solver.getModel());
 		approxSolver = decorator;
+		sequence = new SequenceChocoCutOffDecorator(new LinearCutoff(Long.MAX_VALUE));
 	}
 
 	public ApproximationSolverBuilder setKeepNogood(KeepNoGoodStrategy value) {
@@ -125,7 +126,9 @@ public class ApproximationSolverBuilder {
 	}
 
 	public ApproximationSolverBuilder withSequenceApproximation(ESequence s, Namespace arguments) {
-		
+		if (s == null) {
+			throw new IllegalArgumentException("Sequence cannot be null");
+		}
 		switch(s) {
 		case CHOCO_GEOMETRICAL:
 			sequence = new SequenceChocoCutOffDecorator(new GeometricalCutoff(arguments.getLong("lin_geo_factor"),arguments.getDouble("factor")));

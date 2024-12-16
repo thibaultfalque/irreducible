@@ -67,15 +67,19 @@ public class Main {
 			}
 			var model = xcsp.getModel();
 
-			var solver = new ApproximationSolverBuilder(model.getSolver())
+			var builder = new ApproximationSolverBuilder(model.getSolver())
 					.withPercentage(arguments.getDouble("percentage"))
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
 					.withSpecificConstraintMeasure(arguments.getString("measure"))
 					.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
 					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("verbosity"))
-					.setTimeout(arguments.getString("global_timeout"))
-					.withSequenceApproximation(arguments.get("sequence"), arguments)
-					.setDichotomic(arguments.getBoolean("dichotomic_bound")).initState(arguments).build();
+					.setTimeout(arguments.getString("global_timeout"));
+			
+			if(arguments.getBoolean("dichotomic_bound").booleanValue()) {
+				builder.setDichotomic(true).withSequenceApproximation(arguments.get("sequence"), arguments);
+			}
+			
+			var solver = builder.initState(arguments).build()		;
 
 			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
