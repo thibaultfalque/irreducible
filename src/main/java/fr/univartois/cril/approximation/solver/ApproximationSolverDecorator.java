@@ -113,7 +113,14 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 
 	private int cntSteps;
 	
-	private long limitSteps;
+	private long limitSteps = Long.MAX_VALUE;
+	
+    private static final String S_INST_IN = "v <instantiation id='sol%s' type='solution' ";
+    private static final String S_INST_OUT = "</instantiation>\n";
+    private static final String S_LIST_IN = "<list>";
+    private static final String S_LIST_OUT = "</list>";
+    private static final String S_VALU_IN = "<values>";
+    private static final String S_VALU_OUT = "</values>";
 
 	/**
 	 * Creates a new ApproximationSolverDecorator.
@@ -1012,6 +1019,43 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	
 	public int getCurrentStep() {
 		return Math.max(cntSteps, 1);
+	}
+	
+//	public String printSolution(boolean format) {
+//		try {
+//			solution.restore();
+//			StringBuilder buffer = new StringBuilder();
+//	        var ovars = solution.retrieveIntVars(format);
+//	        ovars.sort(IntVar::compareTo);
+//	        
+//	        buffer.append(String.format(S_INST_IN, model.getSolver().getSolutionCount()));
+//	        if (model.getSolver().hasObjective()) {
+//	            buffer.append("cost='").append(solver.getObjectiveManager().getBestSolutionValue().intValue()).append("' ");
+//	        }
+//	        buffer.append(">");
+//	        buffer.append(format ? "\nv \t" : "").append(S_LIST_IN);
+//	        // list variables
+//	        ovars.forEach(ovar -> buffer.append(ovar.getName()).append(' '));
+//	        buffer.append(S_LIST_OUT).append(format ? "\nv \t" : "").append(S_VALU_IN);
+//	        ovars.forEach(ovar -> {
+//	                buffer.append(ovar.getValue()).append(' ');
+//	            
+//	        });
+//	        buffer.append(S_VALU_OUT).append(format ? "\nv " : "").append(S_INST_OUT);
+//	        return buffer.toString();
+//		} catch (ContradictionException e) {
+//			e.printStackTrace();
+//		}
+//		
+//        return null;
+//    }
+//	
+	public void restoreSolution() {
+		try {
+			solution.restore();
+		} catch (ContradictionException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -83,12 +83,15 @@ public class Main {
 
 			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+				System.out.println("shutdown hook here...");
 				solver.displaySolution();
-				xcsp.parsers[0].printSolution(false);
+				solver.restoreSolution();
+				System.out.println(xcsp.parsers[0].printSolution(false));
 			}));
 			solver.solve();
 			solver.displaySolution();
-			xcsp.parsers[0].printSolution(false);
+			solver.restoreSolution();
+			System.out.println(xcsp.parsers[0].printSolution(false));
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);

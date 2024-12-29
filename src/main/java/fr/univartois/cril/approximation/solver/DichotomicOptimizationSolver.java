@@ -118,4 +118,9 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 		System.out.println(solution);
 	}
 
+	@Override
+	public void restoreSolution() {
+		solver.restoreSolution();
+	}
+
 }

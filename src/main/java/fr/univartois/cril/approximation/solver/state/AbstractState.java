@@ -62,31 +62,30 @@ public abstract class AbstractState implements ISolverState {
 	protected UniverseSolverResult internalSolve() {
 		var observer = new RestartObserver(decorator, config.getRatio(), config.getNbRun(), config.getFactor());
 		solver.plugMonitor(observer);
-		var f = ESat.UNDEFINED;
+		var f = false;
 		if (solver.getObjectiveManager().isOptimization()) {
-			solver.solve();
-			f = solver.isFeasible();
-			while (f == ESat.TRUE && !config.isDichotomicBound()) {
-				solver.solve();
-				f = solver.isFeasible();
-				if (f == ESat.TRUE) {
+			f = solver.solve();
+			if (f) {
+				solver.log().printf(java.util.Locale.US, "o %d %.1f\n",
+						solver.getObjectiveManager().getBestSolutionValue().intValue(), solver.getTimeCount());
+			}
+			while (f && !config.isDichotomicBound()) {
+				f = solver.solve();
+				if (f) {
 					solver.log().printf(java.util.Locale.US, "o %d %.1f\n",
 							solver.getObjectiveManager().getBestSolutionValue().intValue(), solver.getTimeCount());
 				}
 			}
-			if (f == ESat.UNDEFINED) {
-				f = solver.isFeasible();
-			}
 		} else {
-			solver.solve();
-			f = solver.isFeasible();
+			f = solver.solve();
 		}
 		solver.log().white().printf("%s %n", solver.getMeasures().toOneLineString());
 		solver.unplugMonitor(observer);
 		decorator.setUserInterruption(false);
-		if (f == ESat.TRUE) {
+		var feasible = solver.isFeasible();
+		if (feasible == ESat.TRUE) {
 			return UniverseSolverResult.SATISFIABLE;
-		} else if (f == ESat.FALSE) {
+		} else if (feasible == ESat.FALSE) {
 			return UniverseSolverResult.UNSATISFIABLE;
 		} else {
 			return UniverseSolverResult.UNKNOWN;
