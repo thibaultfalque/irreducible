@@ -20,10 +20,10 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.objective.IObjectiveManager;
 import org.chocosolver.solver.search.loop.monitors.IMonitorSolution;
-import org.chocosolver.solver.search.strategy.strategy.WarmStart;
 import org.chocosolver.solver.variables.Variable;
 
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
@@ -132,8 +132,8 @@ public class NormalStateSolver extends AbstractState {
     }
 
     @Override
-    public void displaySolution() {
-        decorator.displaySolution();
+    public void displaySolution(XCSP xcsp) {
+        decorator.displaySolution(xcsp);
     }
 
     @Override

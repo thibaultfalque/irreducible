@@ -3,6 +3,7 @@
  */
 package fr.univartois.cril.approximation.solver;
 
+import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.ResolutionPolicy;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.objective.AbstractIntObjManager;
@@ -113,9 +114,8 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 	}
 
 	@Override
-	public void displaySolution() {
-		solver.displaySolution();
-		System.out.println(solution);
+	public void displaySolution(XCSP xcsp) {
+		solver.displaySolution(xcsp);
 	}
 
 	@Override

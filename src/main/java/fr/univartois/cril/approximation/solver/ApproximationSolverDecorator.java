@@ -23,6 +23,7 @@ package fr.univartois.cril.approximation.solver;
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -34,6 +35,7 @@ import java.util.stream.Stream;
 
 import org.chocosolver.memory.IEnvironment;
 import org.chocosolver.parser.Level;
+import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.ICause;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.ResolutionPolicy;
@@ -72,7 +74,9 @@ import org.chocosolver.util.ESat;
 import org.chocosolver.util.criteria.Criterion;
 import org.chocosolver.util.criteria.LongCriterion;
 import org.chocosolver.util.logger.Logger;
+import org.xcsp.parser.entries.XVariables.XVar;
 
+import fr.univartois.cril.approximation.XCSPParserExtension;
 import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
@@ -112,15 +116,15 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	private Solution solution;
 
 	private int cntSteps;
-	
+
 	private long limitSteps = Long.MAX_VALUE;
-	
-    private static final String S_INST_IN = "v <instantiation id='sol%s' type='solution' ";
-    private static final String S_INST_OUT = "</instantiation>\n";
-    private static final String S_LIST_IN = "<list>";
-    private static final String S_LIST_OUT = "</list>";
-    private static final String S_VALU_IN = "<values>";
-    private static final String S_VALU_OUT = "</values>";
+
+	private static final String S_INST_IN = "v <instantiation id='sol%s' type='solution' ";
+	private static final String S_INST_OUT = "</instantiation>\n";
+	private static final String S_LIST_IN = "<list>";
+	private static final String S_LIST_OUT = "</list>";
+	private static final String S_VALU_IN = "<values>";
+	private static final String S_VALU_OUT = "</values>";
 
 	/**
 	 * Creates a new ApproximationSolverDecorator.
@@ -958,9 +962,13 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	}
 
 	@Override
-	public void displaySolution() {
+	public void displaySolution(XCSP xcsp) {
 		if (state != null) {
 			finalOutPut(solver);
+			if (solution.exists()) {
+				var map = (new XCSPParserExtension(xcsp.parsers[0])).getVarsOfProblem();
+				System.out.println(printSolution(false, map));
+			}
 		} else {
 			System.out.println("s UNKNOWN");
 		}
@@ -1016,46 +1024,40 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	public void limitSteps(long limitSteps) {
 		this.limitSteps = limitSteps;
 	}
-	
+
 	public int getCurrentStep() {
 		return Math.max(cntSteps, 1);
 	}
-	
-//	public String printSolution(boolean format) {
-//		try {
-//			solution.restore();
-//			StringBuilder buffer = new StringBuilder();
-//	        var ovars = solution.retrieveIntVars(format);
-//	        ovars.sort(IntVar::compareTo);
-//	        
-//	        buffer.append(String.format(S_INST_IN, model.getSolver().getSolutionCount()));
-//	        if (model.getSolver().hasObjective()) {
-//	            buffer.append("cost='").append(solver.getObjectiveManager().getBestSolutionValue().intValue()).append("' ");
-//	        }
-//	        buffer.append(">");
-//	        buffer.append(format ? "\nv \t" : "").append(S_LIST_IN);
-//	        // list variables
-//	        ovars.forEach(ovar -> buffer.append(ovar.getName()).append(' '));
-//	        buffer.append(S_LIST_OUT).append(format ? "\nv \t" : "").append(S_VALU_IN);
-//	        ovars.forEach(ovar -> {
-//	                buffer.append(ovar.getValue()).append(' ');
-//	            
-//	        });
-//	        buffer.append(S_VALU_OUT).append(format ? "\nv " : "").append(S_INST_OUT);
-//	        return buffer.toString();
-//		} catch (ContradictionException e) {
-//			e.printStackTrace();
-//		}
-//		
-//        return null;
-//    }
-//	
+
 	public void restoreSolution() {
 		try {
-			solution.restore();
+			if (solution.exists()) {
+				solution.restore();
+			}
 		} catch (ContradictionException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String printSolution(boolean format, HashMap<XVar, IntVar> map) {
+		StringBuilder buffer = new StringBuilder();
+		var ovars = new ArrayList<>(map.values());
+		ovars.sort(IntVar::compareTo);
+
+		buffer.append(String.format(S_INST_IN, model.getSolver().getSolutionCount()));
+		if (model.getSolver().hasObjective()) {
+			buffer.append("cost='").append(solver.getObjectiveManager().getBestSolutionValue()).append("' ");
+		}
+		buffer.append(">");
+		buffer.append(format ? "\nv \t" : "").append(S_LIST_IN);
+		// list variables
+		ovars.forEach(ovar -> buffer.append(ovar.getName()).append(' '));
+		buffer.append(S_LIST_OUT).append(format ? "\nv \t" : "").append(S_VALU_IN);
+		ovars.forEach(ovar -> {
+				buffer.append(solution.getIntVal(ovar)).append(' ');
+		});
+		buffer.append(S_VALU_OUT).append(format ? "\nv " : "").append(S_INST_OUT);
+		return buffer.toString();
 	}
 
 }

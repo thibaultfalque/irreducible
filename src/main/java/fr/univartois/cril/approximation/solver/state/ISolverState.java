@@ -20,8 +20,8 @@
 
 package fr.univartois.cril.approximation.solver.state;
 
+import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.Solver;
-import org.chocosolver.solver.search.strategy.strategy.WarmStart;
 
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
@@ -42,7 +42,7 @@ public interface ISolverState {
     ISolverState previousState();
     
     void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace);
-    void displaySolution();
+    void displaySolution(XCSP xcsp);
     int getNbRemoved();
     boolean isTimeout();
     boolean isRestored();

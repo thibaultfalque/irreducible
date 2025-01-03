@@ -59,12 +59,13 @@ public class Main {
 			chocoArgs.add(arguments.<String>get("instance"));
 			chocoArgs.addAll(arguments.getList("remaining"));
 
-			XCSP xcsp = new XCSP();
+			var xcsp = new XCSPExtension();
 			if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
 				xcsp.createSolver();
 				xcsp.buildModel();
 				xcsp.configureSearch();
 			}
+			xcsp.removeShutdownHook();
 			var model = xcsp.getModel();
 
 			var builder = new ApproximationSolverBuilder(model.getSolver())
@@ -83,15 +84,11 @@ public class Main {
 
 			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				System.out.println("shutdown hook here...");
-				solver.displaySolution();
-				solver.restoreSolution();
-				System.out.println(xcsp.parsers[0].printSolution(false));
+				//solver.restoreSolution();
+				solver.displaySolution(xcsp);
 			}));
 			solver.solve();
-			solver.displaySolution();
-			solver.restoreSolution();
-			System.out.println(xcsp.parsers[0].printSolution(false));
+
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);

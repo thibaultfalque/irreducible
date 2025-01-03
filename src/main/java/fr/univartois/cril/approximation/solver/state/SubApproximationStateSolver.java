@@ -25,13 +25,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import org.chocosolver.solver.ResolutionPolicy;
+import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
-import org.chocosolver.solver.objective.AbstractIntObjManager;
-import org.chocosolver.solver.objective.IObjectiveManager;
 import org.chocosolver.solver.objective.ObjectiveFactory;
-import org.chocosolver.solver.variables.IntVar;
 
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
@@ -180,8 +177,8 @@ public class SubApproximationStateSolver extends AbstractState {
     }
 
     @Override
-    public void displaySolution() {
-        decorator.displaySolution();
+    public void displaySolution(XCSP xcsp) {
+        decorator.displaySolution(xcsp);
     }
 
     @Override
