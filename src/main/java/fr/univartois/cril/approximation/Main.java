@@ -77,7 +77,7 @@ public class Main {
 					.setTimeout(arguments.getString("global_timeout"));
 			
 			if(arguments.getBoolean("dichotomic_bound").booleanValue()) {
-				builder.setDichotomic(true).withSequenceApproximation(arguments.get("sequence"), arguments);
+				builder.withNbStep(arguments.get("n_steps")).withSequenceApproximation(arguments.get("sequence"), arguments).setDichotomic(true);
 			}
 			
 			var solver = builder.initState(arguments).build()		;

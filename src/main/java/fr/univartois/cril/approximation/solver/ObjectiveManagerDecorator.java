@@ -94,7 +94,7 @@ public class ObjectiveManagerDecorator<V extends Variable> implements IObjective
 	 * @see org.chocosolver.solver.objective.IObjectiveManager#postDynamicCut()
 	 */
 	public void postDynamicCut() throws ContradictionException {
-		decoree.postDynamicCut();
+		//decoree.postDynamicCut();
 	}
 
 	/**
@@ -136,6 +136,11 @@ public class ObjectiveManagerDecorator<V extends Variable> implements IObjective
 	 */
 	public boolean updateBestSolution(Number arg0) {
 		return decoree.updateBestSolution(arg0);
+	}
+
+	@Override
+	public void resetBestBounds() {
+		decoree.resetBestBounds();
 	}
 	
 }

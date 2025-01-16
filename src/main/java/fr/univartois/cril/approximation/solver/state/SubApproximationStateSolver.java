@@ -29,13 +29,14 @@ import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.objective.ObjectiveFactory;
+import org.chocosolver.solver.search.strategy.strategy.StrategiesSequencer;
 
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
+import fr.univartois.cril.approximation.solver.DichotomicOptimizationSolver;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
-
 
 /**
  * The SubApproximationStateSolver
@@ -47,79 +48,94 @@ import fr.univartois.cril.approximation.solver.UniverseSolverResult;
  */
 public class SubApproximationStateSolver extends AbstractState {
 
-    private static Supplier<IConstraintsRemover> sRemover;
+	private static Supplier<IConstraintsRemover> sRemover;
 
-    private static IConstraintsRemover remover;
+	private static IConstraintsRemover remover;
 
-    private static SolverConfiguration solverConfiguration;
+	private static SolverConfiguration solverConfiguration;
 
-    private static PathStrategy pathStrategy;
+	private static PathStrategy pathStrategy;
 
-    private static int subApproximationCounter = 0;
+	private static int subApproximationCounter = 0;
 
-    private int nb;
+	private int nb;
 
-    private ISolverState previous;
+	private ISolverState previous;
 
-    private SubApproximationStateSolver next;
+	private SubApproximationStateSolver next;
 
-    private UniverseSolverResult last = UniverseSolverResult.UNKNOWN;
+	private UniverseSolverResult last = UniverseSolverResult.UNKNOWN;
 
-    private Set<Constraint> removedConstraints;
+	private Set<Constraint> removedConstraints;
 
-    private boolean restored;
+	private boolean restored;
 
-    /**
-     * Creates a new SubApproximationStateSolver.
-     */
-    public SubApproximationStateSolver(Solver solver, ISolverState previous,
-            ApproximationSolverDecorator decorator) {
-        super(solverConfiguration, solver, decorator);
-        this.previous = previous;
-        this.nb = subApproximationCounter;
-        subApproximationCounter++;
-        if (remover == null) {
-            remover = Objects.requireNonNull(sRemover.get());
-        }
-    }
+	/**
+	 * Creates a new SubApproximationStateSolver.
+	 */
+	public SubApproximationStateSolver(Solver solver, ISolverState previous, ApproximationSolverDecorator decorator) {
+		super(solverConfiguration, solver, decorator);
+		this.previous = previous;
+		this.nb = subApproximationCounter;
+		subApproximationCounter++;
+		if (remover == null) {
+			remover = Objects.requireNonNull(sRemover.get());
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.state.ISolverState#solve()
-     */
-    @Override
-    public UniverseSolverResult solve() {
-        System.out.println("we solve with " + this);
-        if (removedConstraints == null || pathStrategy != PathStrategy.APPROX_ORDER) {
-            removedConstraints = new HashSet<>(remover.computeNextConstraintsToRemove());
-            nbRemoved += removedConstraints.size();
-        } else {
-            restored = true;
-        }
-        System.out.println(this + " we removed " + removedConstraints.size() + " constraints");
-        
-        if (!removedConstraints.isEmpty()) {
-            for (Constraint c : removedConstraints) {
-                if (c.isIgnorable()) {
-                    c.setEnabled(!c.isEnabled());
-                }
-            }
-        } else {
-            solverConfiguration.setNbRun(Integer.MAX_VALUE);
-        }
-        
-        solver.setObjectiveManager(ObjectiveFactory.SAT());
-        last = internalSolve();
-        System.out.println(this + " answer: " + last);
-        return last;
-    }
+	public SubApproximationStateSolver(SolverConfiguration config, Solver solver, ISolverState previous,
+			ApproximationSolverDecorator decorator) {
+		super(config, solver, decorator);
+		this.previous = previous;
+		this.nb = subApproximationCounter;
+		subApproximationCounter++;
+		if (remover == null) {
+			remover = Objects.requireNonNull(sRemover.get());
+		}
+	}
 
-    @Override
-    public ISolverState nextState() {
-        if (next == null || pathStrategy != PathStrategy.APPROX_ORDER) {
-            next = new SubApproximationStateSolver(solver, this, decorator);
-        }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.univartois.cril.approximation.state.ISolverState#solve()
+	 */
+	@Override
+	public UniverseSolverResult solve() {
+		System.out.println("we solve with " + this);
+		if (removedConstraints == null || pathStrategy != PathStrategy.APPROX_ORDER) {
+			removedConstraints = new HashSet<>(remover.computeNextConstraintsToRemove());
+			nbRemoved += removedConstraints.size();
+		} else {
+			restored = true;
+		}
+		System.out.println(this + " we removed " + removedConstraints.size() + " constraints");
+
+		if (!removedConstraints.isEmpty()) {
+			for (Constraint c : removedConstraints) {
+				if (c.isIgnorable()) {
+					c.setEnabled(!c.isEnabled());
+				}
+			}
+		} else {
+			config.setNbRun(Integer.MAX_VALUE);
+		}
+
+		solver.setObjectiveManager(ObjectiveFactory.SAT());
+		var strat = (StrategiesSequencer) solver.getSearch();
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+				.setEnabled(false);
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+				.setEnabled(false);
+		last = internalSolve();
+		System.out.println(this + " answer: " + last);
+		return last;
+	}
+
+	@Override
+	public ISolverState nextState() {
+		if (next == null || pathStrategy != PathStrategy.APPROX_ORDER) {
+			next = new SubApproximationStateSolver(config, solver, this, decorator);
+		}
 // TODO WTF?
 //        if (last == UniverseSolverResult.UNKNOWN) {
 //            SubApproximationStateSolver tmp;
@@ -128,73 +144,79 @@ public class SubApproximationStateSolver extends AbstractState {
 //            tmp.next = new SubApproximationStateSolver(solver, tmp, decorator);
 //            return tmp.next;
 //        }
-        return next;
-    }
+		return next;
+	}
 
-    public static void initInstance(Solver solver, Supplier<IConstraintsRemover> r,
-            SolverConfiguration config, PathStrategy ps) {
-        sRemover = r;
-        solverConfiguration = config;
-        pathStrategy = ps;
-        solver.plugMonitor(remover);
-    }
+	public static void initInstance(Solver solver, Supplier<IConstraintsRemover> r, SolverConfiguration config,
+			PathStrategy ps) {
+		sRemover = r;
+		solverConfiguration = config;
+		pathStrategy = ps;
+		solver.plugMonitor(remover);
+	}
 
-    @Override
-    public UniverseSolverResult solveStarter() {
-        if (pathStrategy == PathStrategy.APPROX_ORDER) {
-            for (Constraint c : removedConstraints) {
-                if (c.isIgnorable()) {
-                    c.setEnabled(true);
-                }
-            }
-            restored = true;
+	@Override
+	public UniverseSolverResult solveStarter() {
+		if (pathStrategy == PathStrategy.APPROX_ORDER) {
+			for (Constraint c : removedConstraints) {
+				if (c.isIgnorable()) {
+					c.setEnabled(true);
+				}
+			}
+			restored = true;
 
-        }
-        System.out.println("we solve with starter " + this);
-        solver.setObjectiveManager(ObjectiveFactory.SAT());
-       
-        
-        decorator.reset();
-        resetLimitSolver();
-        last = internalSolve();
-        return last;
-    }
+		}
+		System.out.println("we solve with starter " + this);
+		solver.setObjectiveManager(ObjectiveFactory.SAT());
 
-    @Override
-    public ISolverState previousState() {
-        pathStrategy.restore(remover, removedConstraints);
-        return pathStrategy.previous(previous, this);
-    }
+		decorator.reset();
+		resetLimitSolver();
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "SubApproximationStateSolver [nb=" + nb + "]";
-    }
+		var strat = (StrategiesSequencer) solver.getSearch();
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+				.setEnabled(false);
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+				.setEnabled(false);
 
-    @Override
-    public void displaySolution(XCSP xcsp) {
-        decorator.displaySolution(xcsp);
-    }
+		last = internalSolve();
+		return last;
+	}
 
-    @Override
-    public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
-        ngStrategy.resetNoGoods(this, ace);
-    }
+	@Override
+	public ISolverState previousState() {
+		pathStrategy.restore(remover, removedConstraints);
+		return pathStrategy.previous(previous, this);
+	}
 
-    @Override
-    public int getNbRemoved() {
-    	// TODO add all nbRemoved of the chain
-        return nbRemoved;
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "SubApproximationStateSolver [nb=" + nb + "]";
+	}
 
-    @Override
-    public boolean isRestored() {
-        return restored;
-    }
+	@Override
+	public void displaySolution(XCSP xcsp) {
+		decorator.displaySolution(xcsp);
+	}
+
+	@Override
+	public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
+		ngStrategy.resetNoGoods(this, ace);
+	}
+
+	@Override
+	public int getNbRemoved() {
+		// TODO add all nbRemoved of the chain
+		return nbRemoved;
+	}
+
+	@Override
+	public boolean isRestored() {
+		return restored;
+	}
 
 }

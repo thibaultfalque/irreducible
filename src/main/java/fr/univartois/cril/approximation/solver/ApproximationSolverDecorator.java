@@ -118,6 +118,10 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	private int cntSteps;
 
 	private long limitSteps = Long.MAX_VALUE;
+	
+//	private int nbPreviousClauses;
+//	
+//	private NogoodFromRestarts ngRestart;
 
 	private static final String S_INST_IN = "v <instantiation id='sol%s' type='solution' ";
 	private static final String S_INST_OUT = "</instantiation>\n";
@@ -131,10 +135,29 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	 */
 	public ApproximationSolverDecorator(Model model) {
 		this.solver = model.getSolver();
+		//solver.setNoLearning();
 		this.model = model;
 		this.groupConstraints = new ArrayList<>();
 		solution = new Solution(model);
 		solver.plugMonitor((IMonitorSolution) solution::record);
+//		var sml = this.solver.getSearchMonitors();
+//		Field f;
+//		try {
+//			f = SearchMonitorList.class.getDeclaredField("mrest");
+//			f.setAccessible(true);
+//			List<IMonitorRestart> list = (List<IMonitorRestart>)f.get(sml);
+//			ngRestart = (NogoodFromRestarts) list.stream().filter(m-> m instanceof NogoodFromRestarts).findFirst().get();
+//			
+//		} catch (NoSuchFieldException e) {
+//			e.printStackTrace();
+//		} catch (SecurityException e) {
+//			e.printStackTrace();
+//		} catch (IllegalArgumentException e) {
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			e.printStackTrace();
+//		}
+
 	}
 
 	/**
@@ -788,6 +811,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.removeHints();
 		solver.reset();
 		userinterruption = true;
+		DichotomicOptimizationSolver.reset();
 	}
 
 	public int nVariables() {
@@ -835,6 +859,11 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 					&& !this.state.isTimeout()) {
 				reset();
 				for (IntVar var : solution.retrieveIntVars(true)) {
+					if(var==NormalStateSolver.getInstance().om.getObjective()) {
+						continue;
+					}
+					
+					
 					solver.addHint(var, solution.getIntVal(var));
 				}
 				keepFalsified.checkConstraints(solver.getModel());
@@ -855,8 +884,8 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 			while (old != this.state) {
 				old = this.state;
 				this.state = this.state.previousState();
+				result = UniverseSolverResult.UNKNOWN;
 			}
-			result = UniverseSolverResult.UNKNOWN;
 		}
 		return result;
 	}

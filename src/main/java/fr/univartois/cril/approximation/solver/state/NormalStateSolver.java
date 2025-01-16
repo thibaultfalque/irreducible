@@ -24,13 +24,14 @@ import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.objective.IObjectiveManager;
 import org.chocosolver.solver.search.loop.monitors.IMonitorSolution;
+import org.chocosolver.solver.search.strategy.strategy.StrategiesSequencer;
 import org.chocosolver.solver.variables.Variable;
 
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
+import fr.univartois.cril.approximation.solver.DichotomicOptimizationSolver;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
-
 
 /**
  * The NormalStateSolver
@@ -42,113 +43,127 @@ import fr.univartois.cril.approximation.solver.UniverseSolverResult;
  */
 public class NormalStateSolver extends AbstractState {
 
-    private static NormalStateSolver INSTANCE;
+	private static NormalStateSolver INSTANCE;
 
-    private boolean first = true;
+	private boolean first = true;
 
-    private IMonitorSolution observer = () -> {
-    	solver.removeAllStopCriteria();
-    	solver.removeHints();
-    };
+	private IMonitorSolution observer = () -> {
+		solver.removeAllStopCriteria();
+		solver.removeHints();
+	};
 
-    private ISolverState next;
+	private ISolverState next;
 
-    private PathStrategy strat;
-    
-    private IObjectiveManager<Variable> om;
+	private PathStrategy strat;
 
-    private NormalStateSolver(Solver solver, SolverConfiguration config,
-            ApproximationSolverDecorator decorator, PathStrategy strat) {
-        super(config, solver, decorator);
-        this.strat = strat;
-        this.om = solver.getObjectiveManager();
-    }
+	public IObjectiveManager<Variable> om;
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.solver.state.ISolverState#solve()
-     */
-    @Override
-    public UniverseSolverResult solve() {
-        System.out.println("we solve with " + this);
+	private NormalStateSolver(Solver solver, SolverConfiguration config, ApproximationSolverDecorator decorator,
+			PathStrategy strat) {
+		super(config, solver, decorator);
+		this.strat = strat;
+		this.om = solver.getObjectiveManager();
+	}
 
-        first = false;
-        solver.setObjectiveManager(om);
-        solver.plugMonitor(observer);
-        var r = internalSolve();
-        System.out.println(this + " " + r);
-        solver.unplugMonitor(observer);
-        return r;
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.univartois.cril.approximation.solver.state.ISolverState#solve()
+	 */
+	@Override
+	public UniverseSolverResult solve() {
+		System.out.println("we solve with " + this);
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.solver.state.ISolverState#nextState()
-     */
-    @Override
-    public ISolverState nextState() {
-        if (next == null || strat != PathStrategy.APPROX_ORDER) {
-            next = new SubApproximationStateSolver(solver, this, decorator);
-        }
-        return next;
-    }
+		first = false;
+		solver.setObjectiveManager(om);
+		solver.plugMonitor(observer);
 
-    public static void initInstance(Solver solver, SolverConfiguration configuration,
-            ApproximationSolverDecorator decorator, PathStrategy strat) {
-        INSTANCE = new NormalStateSolver(solver, configuration, decorator, strat);
-    }
+		var strat = (StrategiesSequencer) solver.getSearch();
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+				.setEnabled(true);
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+				.setEnabled(true);
 
-    public static NormalStateSolver getInstance() {
-        return INSTANCE;
-    }
+		var r = internalSolve();
+		System.out.println(this + " " + r);
+		solver.unplugMonitor(observer);
+		return r;
+	}
 
-    @Override
-    public UniverseSolverResult solveStarter() {
-        System.out.println("we solve with starter " + this);
-        solver.setObjectiveManager(om);
-        solver.plugMonitor(observer);
-        solver.limitSolution(Integer.MAX_VALUE);
-        var r = internalSolve();
-        System.out.println(this + " " + r);
-        solver.unplugMonitor(observer);
-        return r;
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.univartois.cril.approximation.solver.state.ISolverState#nextState()
+	 */
+	@Override
+	public ISolverState nextState() {
+		if (next == null || strat != PathStrategy.APPROX_ORDER) {
+			next = new SubApproximationStateSolver(solver, this, decorator);
+		}
+		return next;
+	}
 
-    @Override
-    public ISolverState previousState() {
-        return this;
-    }
+	public static void initInstance(Solver solver, SolverConfiguration configuration,
+			ApproximationSolverDecorator decorator, PathStrategy strat) {
+		INSTANCE = new NormalStateSolver(solver, configuration, decorator, strat);
+	}
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return "NormalStateSolver []";
-    }
+	public static NormalStateSolver getInstance() {
+		return INSTANCE;
+	}
 
-    @Override
-    public void displaySolution(XCSP xcsp) {
-        decorator.displaySolution(xcsp);
-    }
+	@Override
+	public UniverseSolverResult solveStarter() {
+		System.out.println("we solve with starter " + this);
+		solver.setObjectiveManager(om);
+		solver.plugMonitor(observer);
+		solver.limitSolution(Integer.MAX_VALUE);
 
-    @Override
-    public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
-        ngStrategy.resetNoGoods(this, ace);
-    }
+		var strat = (StrategiesSequencer) solver.getSearch();
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+				.setEnabled(true);
+		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+				.setEnabled(true);
 
-    @Override
-    public int getNbRemoved() {
-        return 0;
-    }
+		var r = internalSolve();
+		System.out.println(this + " " + r);
+		solver.unplugMonitor(observer);
+		return r;
+	}
 
-    @Override
-    public boolean isRestored() {
-        return true;
-    }
+	@Override
+	public ISolverState previousState() {
+		return this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "NormalStateSolver []";
+	}
+
+	@Override
+	public void displaySolution(XCSP xcsp) {
+		decorator.displaySolution(xcsp);
+	}
+
+	@Override
+	public void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace) {
+		ngStrategy.resetNoGoods(this, ace);
+	}
+
+	@Override
+	public int getNbRemoved() {
+		return 0;
+	}
+
+	@Override
+	public boolean isRestored() {
+		return true;
+	}
 
 }
