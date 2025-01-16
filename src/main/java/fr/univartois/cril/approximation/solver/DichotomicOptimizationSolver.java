@@ -145,7 +145,6 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 				solver.log().printf(java.util.Locale.US, "o %d %.1f\n",
 						solver.getObjectiveManager().getBestSolutionValue().intValue(), solver.getTimeCount());
 				if (om.getPolicy() == ResolutionPolicy.MINIMIZE) {
-
 					ub = om.getBestSolutionValue().intValue();
 				} else {
 
@@ -169,10 +168,22 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 
 			long nextGap = sequence.nextGap();
 			solver.limitSteps(solver.getCurrentStep() * nextGap);
-
-			solver.reset();
+			if (lb < ub) {
+				solver.reset();
+			}
 			System.out.println("New bound " + lb + " " + middle + " " + ub);
 
+		}
+		if(solution!=null) {
+			solver.getMeasures().incSolutionCount();
+			int best;
+			if (om.getPolicy() == ResolutionPolicy.MINIMIZE) {
+				best = ub;
+			} else {
+
+				best = lb;
+			}
+			om.updateBestSolution(best);
 		}
 		return solution != null ? UniverseSolverResult.OPTIMUM_FOUND : UniverseSolverResult.UNSATISFIABLE;
 	}

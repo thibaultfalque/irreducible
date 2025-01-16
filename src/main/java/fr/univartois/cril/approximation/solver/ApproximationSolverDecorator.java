@@ -118,7 +118,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	private int cntSteps;
 
 	private long limitSteps = Long.MAX_VALUE;
-	
+
 //	private int nbPreviousClauses;
 //	
 //	private NogoodFromRestarts ngRestart;
@@ -135,29 +135,10 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	 */
 	public ApproximationSolverDecorator(Model model) {
 		this.solver = model.getSolver();
-		//solver.setNoLearning();
 		this.model = model;
 		this.groupConstraints = new ArrayList<>();
 		solution = new Solution(model);
 		solver.plugMonitor((IMonitorSolution) solution::record);
-//		var sml = this.solver.getSearchMonitors();
-//		Field f;
-//		try {
-//			f = SearchMonitorList.class.getDeclaredField("mrest");
-//			f.setAccessible(true);
-//			List<IMonitorRestart> list = (List<IMonitorRestart>)f.get(sml);
-//			ngRestart = (NogoodFromRestarts) list.stream().filter(m-> m instanceof NogoodFromRestarts).findFirst().get();
-//			
-//		} catch (NoSuchFieldException e) {
-//			e.printStackTrace();
-//		} catch (SecurityException e) {
-//			e.printStackTrace();
-//		} catch (IllegalArgumentException e) {
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			e.printStackTrace();
-//		}
-
 	}
 
 	/**
@@ -859,11 +840,10 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 					&& !this.state.isTimeout()) {
 				reset();
 				for (IntVar var : solution.retrieveIntVars(true)) {
-					if(var==NormalStateSolver.getInstance().om.getObjective()) {
+					if (var == NormalStateSolver.getInstance().om.getObjective()) {
 						continue;
 					}
-					
-					
+
 					solver.addHint(var, solution.getIntVal(var));
 				}
 				keepFalsified.checkConstraints(solver.getModel());
@@ -1083,7 +1063,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		ovars.forEach(ovar -> buffer.append(ovar.getName()).append(' '));
 		buffer.append(S_LIST_OUT).append(format ? "\nv \t" : "").append(S_VALU_IN);
 		ovars.forEach(ovar -> {
-				buffer.append(solution.getIntVal(ovar)).append(' ');
+			buffer.append(solution.getIntVal(ovar)).append(' ');
 		});
 		buffer.append(S_VALU_OUT).append(format ? "\nv " : "").append(S_INST_OUT);
 		return buffer.toString();
