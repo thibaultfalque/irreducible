@@ -83,6 +83,7 @@ import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
+import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 
 /**
  * The ApproximationSolverDecorator
@@ -836,7 +837,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 			reset();
 			state.resetLimitSolver();
 			result = state.solve();
-			while (result == UniverseSolverResult.SATISFIABLE && this.state.getNbRemoved() != 0
+			while (result == UniverseSolverResult.SATISFIABLE && this.state instanceof SubApproximationStateSolver
 					&& !this.state.isTimeout()) {
 				reset();
 				for (IntVar var : solution.retrieveIntVars(true)) {
