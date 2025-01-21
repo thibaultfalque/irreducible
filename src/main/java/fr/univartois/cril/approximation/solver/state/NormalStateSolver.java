@@ -78,12 +78,14 @@ public class NormalStateSolver extends AbstractState {
 		solver.setObjectiveManager(om);
 		solver.plugMonitor(observer);
 
-		var strat = (StrategiesSequencer) solver.getSearch();
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
-				.setEnabled(true);
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
-				.setEnabled(true);
-
+		var search = solver.getSearch();
+		if (search instanceof StrategiesSequencer) {
+			var strat = (StrategiesSequencer) search;
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+					.setEnabled(true);
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+					.setEnabled(true);
+		}
 		var r = internalSolve();
 		System.out.println(this + " " + r);
 		solver.unplugMonitor(observer);
@@ -118,12 +120,14 @@ public class NormalStateSolver extends AbstractState {
 		solver.setObjectiveManager(om);
 		solver.plugMonitor(observer);
 		solver.limitSolution(Integer.MAX_VALUE);
-
-		var strat = (StrategiesSequencer) solver.getSearch();
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
-				.setEnabled(true);
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
-				.setEnabled(true);
+		var search = solver.getSearch();
+		if (search instanceof StrategiesSequencer) {
+			var strat = (StrategiesSequencer) search;
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+					.setEnabled(true);
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+					.setEnabled(true);
+		}
 
 		var r = internalSolve();
 		System.out.println(this + " " + r);

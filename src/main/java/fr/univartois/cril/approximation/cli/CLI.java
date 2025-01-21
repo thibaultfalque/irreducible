@@ -68,7 +68,7 @@ public class CLI {
         dichotomicGroup.addArgument("--lin-geo-factor").help("The scale factor used with the linear, luby and geometrical sequences.").type(Long.class);
         
         var normalGroup = parser.addArgumentGroup("Normal resolution");
-        normalGroup.addArgument("--n-runs-normal").help("The number of runs to solve the approximate problem").setDefault(500).type(Integer.class);
+        normalGroup.addArgument("--n-runs-normal").help("The number of runs to solve the full problem").setDefault(50).type(Integer.class);
         normalGroup.addArgument("--factor-runs-normal").help("The increasing factor for updating the number of runs.").type(Double.class).setDefault(1.1);
         normalGroup.addArgument("--ratio-assigned-normal").help("The ratio above which the solver is kept running in normal state.").type(Double.class).setDefault(11.);
         normalGroup.addArgument("--ratio-assigned-approx").help("The ratio above which the solver is kept running in approx state.").type(Double.class).setDefault(11.);

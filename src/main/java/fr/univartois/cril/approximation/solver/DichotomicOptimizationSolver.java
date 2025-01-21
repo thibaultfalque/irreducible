@@ -189,8 +189,12 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 	}
 
 	public static void reset() {
-		s1.b = false;
-		s2.b = false;
+		if (s1 != null) {
+			s1.b = false;
+		}
+		if (s2 != null) {
+			s2.b = false;
+		}
 	}
 
 	@Override

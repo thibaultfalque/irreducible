@@ -121,11 +121,14 @@ public class SubApproximationStateSolver extends AbstractState {
 		}
 
 		solver.setObjectiveManager(ObjectiveFactory.SAT());
-		var strat = (StrategiesSequencer) solver.getSearch();
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
-				.setEnabled(false);
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
-				.setEnabled(false);
+		var search = solver.getSearch();
+		if (search instanceof StrategiesSequencer) {
+			var strat = (StrategiesSequencer) search;
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+					.setEnabled(true);
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+					.setEnabled(true);
+		}
 		last = internalSolve();
 		System.out.println(this + " answer: " + last);
 		return last;
@@ -172,11 +175,14 @@ public class SubApproximationStateSolver extends AbstractState {
 		decorator.reset();
 		resetLimitSolver();
 
-		var strat = (StrategiesSequencer) solver.getSearch();
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
-				.setEnabled(false);
-		((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
-				.setEnabled(false);
+		var search = solver.getSearch();
+		if (search instanceof StrategiesSequencer) {
+			var strat = (StrategiesSequencer) search;
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[0])
+					.setEnabled(true);
+			((DichotomicOptimizationSolver.DichotomicObjectiveVariableSearchStrategy) strat.getStrategies()[1])
+					.setEnabled(true);
+		}
 
 		last = internalSolve();
 		return last;
