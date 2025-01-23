@@ -120,6 +120,8 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 
 	private long limitSteps = Long.MAX_VALUE;
 
+	private UniverseSolverResult result;
+
 //	private int nbPreviousClauses;
 //	
 //	private NogoodFromRestarts ngRestart;
@@ -829,7 +831,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		cntSteps = 0;
 		this.state = NormalStateSolver.getInstance();
 		state.resetLimitSolver();
-		var result = state.solve();
+		result = state.solve();
 		while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout() && cntSteps < limitSteps) {
 			cntSteps++;
 			state = state.nextState();
@@ -905,14 +907,15 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 
 	private void finalOutPut(Solver solver) {
 		Logger log = solver.log().bold();
-		if (solver.getSolutionCount() > 0) {
+		if (solver.getSolutionCount() > 0 && state instanceof NormalStateSolver) {
 			log = log.green();
 			if (solver.getObjectiveManager().isOptimization() && !userinterruption) {
 				output.insert(0, "s OPTIMUM FOUND\n");
 			} else {
 				output.insert(0, "s SATISFIABLE\n");
 			}
-		} else if (!userinterruption) {
+		} else if (!userinterruption && result == UniverseSolverResult.UNSATISFIABLE
+				&& state instanceof NormalStateSolver) {
 			output.insert(0, "s UNSATISFIABLE\n");
 			log = log.red();
 		} else {
