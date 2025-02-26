@@ -56,6 +56,8 @@ public abstract class AbstractState implements ISolverState {
 	public void resetLimitSolver() {
 		solver.limitSolution(config.getLimitSolution());
 		solver.limitFail(config.getNbRun());
+		//solver.limitBacktrack(config.getNbRun());
+		//solver.limitNode(config.getNbRun());
 		this.config = config.update();
 	}
 

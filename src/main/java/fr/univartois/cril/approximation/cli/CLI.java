@@ -75,7 +75,7 @@ public class CLI {
 
         var approximationGroup = parser.addArgumentGroup("Approximation resolution");
         approximationGroup.description("This parameters controls the approximation. ");
-        approximationGroup.addArgument("--n-runs-approx").help("The number of runs to solve the approximate problem").setDefault(50).type(Integer.class);
+        approximationGroup.addArgument("--n-runs-approx").help("The number of runs to solve the approximate problem").setDefault(10).type(Integer.class);
         
         approximationGroup.addArgument("--n-sol-limit").help("The max number of solution for approximate problem.").setDefault(1).type(Integer.class);
         approximationGroup.addArgument("--factor-runs-approx").help("The increasing factor for updating the number of runs.").setDefault(1.1).type(Double.class);

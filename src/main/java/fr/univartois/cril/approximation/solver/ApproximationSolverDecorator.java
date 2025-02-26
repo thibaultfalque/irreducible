@@ -122,6 +122,8 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 
 	private UniverseSolverResult result;
 
+	private int nbConstraints = -1;
+
 //	private int nbPreviousClauses;
 //	
 //	private NogoodFromRestarts ngRestart;
@@ -803,13 +805,15 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	}
 
 	public int nConstraints() {
-		int nb = 0;
-		for (Constraint c : model.getCstrs()) {
-			if (c.isEnabled()) {
-				nb++;
+		if (nbConstraints == -1) {
+			nbConstraints = 0;
+			for (Constraint c : model.getCstrs()) {
+				if (c.isEnabled()) {
+					nbConstraints++;
+				}
 			}
 		}
-		return nb;
+		return nbConstraints;
 	}
 
 	public void setTimeout(long seconds) {
@@ -902,7 +906,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 				this.groupConstraints.get(group).add(c);
 			}
 		}
-		return this.groupConstraints;
+		return groupConstraints;
 	}
 
 	private void finalOutPut(Solver solver) {
