@@ -93,14 +93,14 @@ import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver
  *
  * @version 0.1.0
  */
-public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
+public class ApproximationSolverDecorator implements MyISolver, IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
 
 	private Solver solver;
 
 	private Model model;
 
 	private List<GroupConstraint> groupConstraints;
-
+	
 	/**
 	 * Needed to print the last solution found
 	 */
@@ -149,22 +149,27 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 	 */
 	protected boolean userinterruption = true;
 
+	@Override
 	public void setNoLearning() {
 		solver.setNoLearning();
 	}
 
+	@Override
 	public void setNoGoodRecordingFromSolutions(IntVar... vars) {
 		solver.setNoGoodRecordingFromSolutions(vars);
 	}
 
+	@Override
 	public void setDFS() {
 		solver.setDFS();
 	}
 
+	@Override
 	public void setLearningSignedClauses() {
 		solver.setLearningSignedClauses();
 	}
 
+	@Override
 	public void setLDS(int discrepancy) {
 		solver.setLDS(discrepancy);
 	}
@@ -177,6 +182,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.printVersion();
 	}
 
+	@Override
 	public void setNoGoodRecordingFromRestarts() {
 		solver.setNoGoodRecordingFromRestarts();
 	}
@@ -185,22 +191,27 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.printFeatures();
 	}
 
+	@Override
 	public void setDDS(int discrepancy) {
 		solver.setDDS(discrepancy);
 	}
 
+	@Override
 	public void limitSearch(Criterion aStopCriterion) {
 		solver.limitSearch(aStopCriterion);
 	}
 
+	@Override
 	public void setHBFS(double a, double b, long N) {
 		solver.setHBFS(a, b, N);
 	}
 
+	@Override
 	public Solution findSolution(Criterion... stop) {
 		return solver.findSolution(stop);
 	}
 
+	@Override
 	public void limitNode(long limit) {
 		solver.limitNode(limit);
 	}
@@ -209,18 +220,22 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.printShortFeatures();
 	}
 
+	@Override
 	public int hashCode() {
 		return solver.hashCode();
 	}
 
+	@Override
 	public void limitFail(long limit) {
 		solver.limitFail(limit);
 	}
 
+	@Override
 	public void setRestarts(LongCriterion restartCriterion, ICutoff restartStrategy, int restartsLimit) {
 		solver.setRestarts(restartCriterion, restartStrategy, restartsLimit);
 	}
 
+	@Override
 	public void limitBacktrack(long limit) {
 		solver.limitBacktrack(limit);
 	}
@@ -229,6 +244,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.printStatistics();
 	}
 
+	@Override
 	public void limitSolution(long limit) {
 		solver.limitSolution(limit);
 	}
@@ -241,11 +257,13 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.printShortStatistics();
 	}
 
+	@Override
 	public void setRestarts(LongCriterion restartCriterion, ICutoff restartStrategy, int restartsLimit,
 			boolean resetCutoffOnSolution) {
 		solver.setRestarts(restartCriterion, restartStrategy, restartsLimit, resetCutoffOnSolution);
 	}
 
+	@Override
 	public void limitRestart(long limit) {
 		solver.limitRestart(limit);
 	}
@@ -254,10 +272,12 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.printCSVStatistics();
 	}
 
+	@Override
 	public void limitTime(long limit) {
 		solver.limitTime(limit);
 	}
 
+	@Override
 	public List<Solution> findAllSolutions(Criterion... stop) {
 		return solver.findAllSolutions(stop);
 	}
@@ -266,10 +286,12 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showStatistics();
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		return solver.equals(obj);
 	}
 
+	@Override
 	public void limitTime(String duration) {
 		solver.limitTime(duration);
 	}
@@ -278,6 +300,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return solver.toDimacsString();
 	}
 
+	@Override
 	public void setLubyRestart(long scaleFactor, ICounter restartStrategyLimit, int restartLimit) {
 		solver.setLubyRestart(scaleFactor, restartStrategyLimit, restartLimit);
 	}
@@ -286,6 +309,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showShortStatistics();
 	}
 
+	@Override
 	public void attach(Solution solution) {
 		solver.attach(solution);
 	}
@@ -294,6 +318,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return solver.toMultiLineString();
 	}
 
+	@Override
 	public void setGeometricalRestart(long base, double geometricalFactor, ICounter restartStrategyLimit,
 			int restartLimit) {
 		solver.setGeometricalRestart(base, geometricalFactor, restartStrategyLimit, restartLimit);
@@ -307,6 +332,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showSolutions(message);
 	}
 
+	@Override
 	public Stream<Solution> streamSolutions(Criterion... stop) {
 		return solver.streamSolutions(stop);
 	}
@@ -315,6 +341,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showSolutions();
 	}
 
+	@Override
 	public void setLinearRestart(long scaleFactor, ICounter restartStrategyLimit, int restartLimit) {
 		solver.setLinearRestart(scaleFactor, restartStrategyLimit, restartLimit);
 	}
@@ -327,6 +354,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showDecisions(message);
 	}
 
+	@Override
 	public void setConstantRestart(long scaleFactor, ICounter restartStrategyLimit, int restartLimit) {
 		solver.setConstantRestart(scaleFactor, restartStrategyLimit, restartLimit);
 	}
@@ -343,10 +371,12 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showDecisions(nChars);
 	}
 
+	@Override
 	public void setRestartOnSolutions() {
 		solver.setRestartOnSolutions();
 	}
 
+	@Override
 	public Solution findOptimalSolution(IntVar objective, boolean maximize, Criterion... stop) {
 		return solver.findOptimalSolution(objective, maximize, stop);
 	}
@@ -359,6 +389,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showRestarts(message);
 	}
 
+	@Override
 	public void setLNS(INeighbor neighbor, ICounter restartCounter, Solution bootstrap) {
 		solver.setLNS(neighbor, restartCounter, bootstrap);
 	}
@@ -387,6 +418,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.verboseSolving(frequencyInMilliseconds);
 	}
 
+	@Override
 	public void setLNS(INeighbor neighbor, Solution bootstrap) {
 		solver.setLNS(neighbor, bootstrap);
 	}
@@ -395,10 +427,12 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showDashboard();
 	}
 
+	@Override
 	public void setLNS(INeighbor neighbor, ICounter restartCounter) {
 		solver.setLNS(neighbor, restartCounter);
 	}
 
+	@Override
 	public List<Solution> findAllOptimalSolutions(IntVar objective, boolean maximize, Criterion... stop) {
 		return solver.findAllOptimalSolutions(objective, maximize, stop);
 	}
@@ -407,6 +441,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.showDashboard(refresh);
 	}
 
+	@Override
 	public String toString() {
 		return solver.toString();
 	}
@@ -423,6 +458,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return solver.profilePropagation();
 	}
 
+	@Override
 	public void setLNS(INeighbor neighbor) {
 		solver.setLNS(neighbor);
 	}
@@ -439,6 +475,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return solver.outputSearchTreeToGephi(gexfFilename);
 	}
 
+	@Override
 	public Stream<Solution> streamOptimalSolutions(IntVar objective, boolean maximize, Criterion... stop) {
 		return solver.streamOptimalSolutions(objective, maximize, stop);
 	}
@@ -463,14 +500,17 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.preprocessing(timeLimitInMS);
 	}
 
+	@Override
 	public List<Solution> findParetoFront(IntVar[] objectives, boolean maximize, Criterion... stop) {
 		return solver.findParetoFront(objectives, maximize, stop);
 	}
 
+	@Override
 	public Solution findLexOptimalSolution(IntVar[] objectives, boolean maximize, Criterion... stop) {
 		return solver.findLexOptimalSolution(objectives, maximize, stop);
 	}
 
+	@Override
 	public boolean findOptimalSolutionWithBounds(IntVar bounded, Supplier<int[]> bounder,
 			BiFunction<int[], int[], int[]> boundsRelaxer, Criterion limitPerAttempt, IntPredicate stopCriterion,
 			Runnable onSolution) {
@@ -494,6 +534,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		solver.restart();
 	}
 
+	@Override
 	public void eachSolutionWithMeasure(BiConsumer<Solution, IMeasures> cons, Criterion... stop) {
 		solver.eachSolutionWithMeasure(cons, stop);
 	}
@@ -502,6 +543,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return solver.moveForward(decision);
 	}
 
+	@Override
 	public Stream<Solution> tableSampling(int pivot, int nbVariablesInTable, double probaTuple, Random random,
 			Criterion... criterion) {
 		return solver.tableSampling(pivot, nbVariablesInTable, probaTuple, random, criterion);
@@ -691,6 +733,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return solver.defaultSolutionExists();
 	}
 
+	@Override
 	public Solver ref() {
 		return solver.ref();
 	}
@@ -802,6 +845,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return model.getNbVars();
 	}
 
+	@Override
 	public int nConstraints() {
 		int nb = 0;
 		for (Constraint c : model.getCstrs()) {
@@ -1042,6 +1086,7 @@ public class ApproximationSolverDecorator implements IConstraintGroupSolver, IMo
 		return Math.max(cntSteps, 1);
 	}
 
+	@Override
 	public void restoreSolution() {
 		try {
 			if (solution.exists()) {

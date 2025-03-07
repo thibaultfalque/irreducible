@@ -24,10 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.chocosolver.parser.SetUpException;
-import org.chocosolver.parser.xcsp.XCSP;
 
 import fr.univartois.cril.approximation.cli.CLI;
 import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
+import fr.univartois.cril.approximation.solver.MyISolverAdapter;
+import fr.univartois.cril.approximation.solver.Portfolio;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 
 /**
@@ -67,7 +68,8 @@ public class Main {
 			}
 			xcsp.removeShutdownHook();
 			var model = xcsp.getModel();
-
+			
+			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
 			var builder = new ApproximationSolverBuilder(model.getSolver())
 					.withPercentage(arguments.getDouble("percentage"))
 					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
@@ -80,14 +82,33 @@ public class Main {
 				builder.withNbStep(arguments.get("n_steps")).withSequenceApproximation(arguments.get("sequence"), arguments).setDichotomic(true);
 			}
 			
-			var solver = builder.initState(arguments).build()		;
-
-			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				//solver.restoreSolution();
-				solver.displaySolution(xcsp);
-			}));
-			solver.solve();
+			var solver = builder.initState(arguments).build();
+			
+			if (arguments.getBoolean("portfolio").booleanValue()) {
+				Portfolio portfolio = new Portfolio();
+				portfolio.addSolver(solver);
+				var xcsp2 = new XCSPExtension();
+				if (xcsp2.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
+					xcsp2.createSolver();
+					xcsp2.buildModel();
+					xcsp2.configureSearch();
+				}
+				xcsp2.removeShutdownHook();
+				var model2 = xcsp2.getModel();
+				model2.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
+				portfolio.addSolver(new MyISolverAdapter(model2.getSolver()));
+			
+				portfolio.solve();
+				
+				
+			} else {
+				Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+					//solver.restoreSolution();
+					solver.displaySolution(xcsp);
+				}));
+				solver.solve();
+				
+			}
 
 
 		} catch (ArgumentParserException e) {

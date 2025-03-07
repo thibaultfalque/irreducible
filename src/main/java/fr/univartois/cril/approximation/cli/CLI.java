@@ -56,6 +56,7 @@ public class CLI {
         generalGroup.addArgument("--verbosity").type(Integer.class).setDefault(0);
         generalGroup.addArgument("--keep-nogood").type(KeepNoGoodStrategy.class).setDefault(KeepNoGoodStrategy.ALWAYS);
         generalGroup.addArgument("--keep-falsified").type(KeepFalsifiedConstraintStrategy.class).setDefault(KeepFalsifiedConstraintStrategy.NEVER);
+        generalGroup.addArgument("--portfolio").type(Boolean.class).setDefault(false);
 //        generalGroup.addArgument("--valh").type(String.class).setDefault("WarmStarterScore");
         
         
