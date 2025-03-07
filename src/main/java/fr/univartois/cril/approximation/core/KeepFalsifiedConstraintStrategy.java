@@ -10,10 +10,7 @@
 package fr.univartois.cril.approximation.core;
 
 import org.chocosolver.solver.Model;
-import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
-import org.chocosolver.solver.search.strategy.strategy.WarmStart;
-import org.chocosolver.solver.variables.Variable;
 import org.chocosolver.util.ESat;
 
 /**
@@ -25,29 +22,28 @@ import org.chocosolver.util.ESat;
  */
 public enum KeepFalsifiedConstraintStrategy {
 
-    NEVER {
+	NEVER {
 
-        @Override
-        public void checkConstraints(Model m) {
-            // Do nothing here.
-        }
+		@Override
+		public void checkConstraints(Model m) {
+			// Do nothing here.
+		}
 
-    },
+	},
 
-    ALWAYS {
+	ALWAYS {
 
-        @Override
-        public void checkConstraints( Model m) {
-            for (Constraint constr : m.getCstrs()) {
-                if (constr.isSatisfied()!=ESat.TRUE) {
-                    constr.setIgnorable(false);
-                }
-            }
-        }
+		@Override
+		public void checkConstraints(Model m) {
+			for (Constraint constr : m.getCstrs()) {
+				if (constr.isIgnorable() && constr.isSatisfied() != ESat.TRUE) {
+					constr.setIgnorable(false);
+				}
+			}
+		}
 
-    };
+	};
 
-    public abstract void checkConstraints( Model m);
+	public abstract void checkConstraints(Model m);
 
 }
-
