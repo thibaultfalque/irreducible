@@ -6,9 +6,11 @@ package fr.univartois.cril.approximation.solver;
 import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.ResolutionPolicy;
 import org.chocosolver.solver.Solution;
+import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.objective.AbstractIntObjManager;
 import org.chocosolver.solver.objective.IObjectiveManager;
 import org.chocosolver.solver.search.loop.monitors.IMonitorRestart;
+import org.chocosolver.solver.search.loop.monitors.ISearchMonitor;
 import org.chocosolver.solver.search.strategy.assignments.DecisionOperator;
 import org.chocosolver.solver.search.strategy.assignments.DecisionOperatorFactory;
 import org.chocosolver.solver.search.strategy.decision.Decision;
@@ -17,6 +19,7 @@ import org.chocosolver.solver.search.strategy.selectors.variables.VariableSelect
 import org.chocosolver.solver.search.strategy.strategy.AbstractStrategy;
 import org.chocosolver.solver.search.strategy.strategy.IntStrategy;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.solver.variables.Variable;
 
 import fr.univartois.cril.approximation.solver.sequence.ISequence;
 
@@ -108,6 +111,7 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 		System.out.println("Start bound " + lb + " " + middle + " " + ub);
 	}
 
+	@Override
 	public UniverseSolverResult solve() {
 
 		solver.limitSolution(1);
@@ -205,6 +209,24 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 	@Override
 	public void restoreSolution() {
 		solver.restoreSolution();
+	}
+
+	@Override
+	public void plugMonitor(ISearchMonitor monitor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public <V extends Variable> IObjectiveManager<V> getObjectiveManager() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Solver ref() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
