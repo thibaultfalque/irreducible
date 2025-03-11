@@ -47,9 +47,9 @@ import org.chocosolver.util.criteria.LongCriterion;
 import org.chocosolver.util.logger.Logger;
 
 public class MyISolverAdapter implements MyISolver {
-	
+
 	private Solver adaptee;
-	
+
 	public MyISolverAdapter(Solver adaptee) {
 		this.adaptee = adaptee;
 	}
@@ -61,7 +61,10 @@ public class MyISolverAdapter implements MyISolver {
 
 	@Override
 	public UniverseSolverResult solve() {
-		adaptee.solve();
+		var f = adaptee.solve();
+		while (f) {
+			f = adaptee.solve();
+		}
 		var feasible = adaptee.isFeasible();
 		if (feasible == ESat.TRUE) {
 			return UniverseSolverResult.SATISFIABLE;
@@ -80,6 +83,7 @@ public class MyISolverAdapter implements MyISolver {
 		adaptee.addRestarter(restarter);
 	}
 
+	@Override
 	public void addStopCriterion(Criterion... criterion) {
 		adaptee.addStopCriterion(criterion);
 	}

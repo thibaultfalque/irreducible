@@ -20,6 +20,7 @@ import org.chocosolver.solver.search.strategy.strategy.AbstractStrategy;
 import org.chocosolver.solver.search.strategy.strategy.IntStrategy;
 import org.chocosolver.solver.variables.IntVar;
 import org.chocosolver.solver.variables.Variable;
+import org.chocosolver.util.criteria.Criterion;
 
 import fr.univartois.cril.approximation.solver.sequence.ISequence;
 
@@ -178,7 +179,7 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 			System.out.println("New bound " + lb + " " + middle + " " + ub);
 
 		}
-		if(solution!=null) {
+		if (solution != null) {
 			solver.getMeasures().incSolutionCount();
 			int best;
 			if (om.getPolicy() == ResolutionPolicy.MINIMIZE) {
@@ -214,7 +215,7 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 	@Override
 	public void plugMonitor(ISearchMonitor monitor) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -227,6 +228,12 @@ public class DichotomicOptimizationSolver implements IApproximationSolver {
 	public Solver ref() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void addStopCriterion(Criterion... criterion) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

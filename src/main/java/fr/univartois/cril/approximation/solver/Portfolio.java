@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import org.chocosolver.solver.ResolutionPolicy;
 import org.chocosolver.solver.search.loop.monitors.IMonitorSolution;
 
+import fr.univartois.cril.approximation.solver.criteria.BooleanCriteria;
+
 public class Portfolio {
 
 	private List<MyISolver> solvers = new ArrayList<>();
@@ -21,6 +23,12 @@ public class Portfolio {
 
 	private UniverseSolverResult result = UniverseSolverResult.UNKNOWN;
 
+	private BooleanCriteria stopSolver;
+
+	public Portfolio() {
+		stopSolver = new BooleanCriteria();
+	}
+
 	public void addSolver(MyISolver solver) {
 		solvers.add(solver);
 	}
@@ -28,12 +36,15 @@ public class Portfolio {
 	public UniverseSolverResult solve() {
 		service = Executors.newFixedThreadPool(solvers.size());
 		for (int i = 0; i < solvers.size(); i++) {
-			solvers.get(i).plugMonitor(createMonitor(i));
 			var solver = solvers.get(i);
+			solver.plugMonitor(createMonitor(i));
+			solver.addStopCriterion(stopSolver);
 			service.submit(() -> solve(solver));
 		}
 		try {
-			service.awaitTermination(123456789, TimeUnit.SECONDS);
+			service.awaitTermination(600, TimeUnit.SECONDS);
+			stopSolver.setStop(true);
+			service.shutdownNow();
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
@@ -48,6 +59,7 @@ public class Portfolio {
 				result = tmp;
 			}
 		}
+
 	}
 
 	private IMonitorSolution createMonitor(int solverIndex) {
@@ -68,7 +80,7 @@ public class Portfolio {
 				bestIndex = solverIndex;
 				updated = true;
 			}
-
+			System.out.println("New bound " + bestBound + " found by the solver " + bestIndex);
 			if (updated) {
 				for (MyISolver solver : solvers) {
 					solver.getObjectiveManager().updateBestSolution(bestBound);
@@ -77,8 +89,12 @@ public class Portfolio {
 			}
 		}
 	}
-	
+
 	public MyISolver getBestSolver() {
 		return solvers.get(bestIndex);
+	}
+
+	public void stop() {
+		stopSolver.setStop(true);
 	}
 }

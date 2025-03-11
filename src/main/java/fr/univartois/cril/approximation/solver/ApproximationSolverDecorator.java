@@ -93,14 +93,15 @@ import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver
  *
  * @version 0.1.0
  */
-public class ApproximationSolverDecorator implements MyISolver, IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
+public class ApproximationSolverDecorator
+		implements MyISolver, IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
 
 	private Solver solver;
 
 	private Model model;
 
 	private List<GroupConstraint> groupConstraints;
-	
+
 	/**
 	 * Needed to print the last solution found
 	 */
@@ -587,6 +588,7 @@ public class ApproximationSolverDecorator implements MyISolver, IConstraintGroup
 		return solver.getSearch();
 	}
 
+	@Override
 	public <V extends Variable> IObjectiveManager<V> getObjectiveManager() {
 		return solver.getObjectiveManager();
 	}
@@ -691,6 +693,7 @@ public class ApproximationSolverDecorator implements MyISolver, IConstraintGroup
 		solver.removeHints();
 	}
 
+	@Override
 	public void addStopCriterion(Criterion... criterion) {
 		solver.addStopCriterion(criterion);
 	}
@@ -707,6 +710,7 @@ public class ApproximationSolverDecorator implements MyISolver, IConstraintGroup
 		return solver.getSearchMonitors();
 	}
 
+	@Override
 	public void plugMonitor(ISearchMonitor sm) {
 		solver.plugMonitor(sm);
 	}
@@ -938,7 +942,6 @@ public class ApproximationSolverDecorator implements MyISolver, IConstraintGroup
 	@Override
 	public List<GroupConstraint> getGroups() {
 		if (this.groupConstraints.isEmpty()) {
-
 			int nbGroups = Constraint.currentGroup;
 			this.groupConstraints = new ArrayList<>(Collections.nCopies(nbGroups, null));
 			for (int i = 0; i < nConstraints(); i++) {

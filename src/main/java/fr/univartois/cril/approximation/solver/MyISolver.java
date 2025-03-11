@@ -4,6 +4,7 @@ import org.chocosolver.solver.ISolver;
 import org.chocosolver.solver.objective.IObjectiveManager;
 import org.chocosolver.solver.search.loop.monitors.ISearchMonitor;
 import org.chocosolver.solver.variables.Variable;
+import org.chocosolver.util.criteria.Criterion;
 
 public interface MyISolver extends ISolver {
 
@@ -13,5 +14,5 @@ public interface MyISolver extends ISolver {
 	
 	<V extends Variable> IObjectiveManager<V> getObjectiveManager();
 	
-	
+	void addStopCriterion(Criterion... criterion);
 }

@@ -27,8 +27,6 @@ import org.chocosolver.parser.SetUpException;
 
 import fr.univartois.cril.approximation.cli.CLI;
 import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
-import fr.univartois.cril.approximation.solver.MyISolverAdapter;
-import fr.univartois.cril.approximation.solver.Portfolio;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 
 /**
@@ -52,64 +50,52 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		var parser = CLI.createCLIParser();
+		var parser = CLI.createCLIParser(true);
 		try {
 			var arguments = parser.parseArgs(args);
-
-			List<String> chocoArgs = new ArrayList<>();
-			chocoArgs.add(arguments.<String>get("instance"));
-			chocoArgs.addAll(arguments.getList("remaining"));
-
-			var xcsp = new XCSPExtension();
-			if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
-				xcsp.createSolver();
-				xcsp.buildModel();
-				xcsp.configureSearch();
-			}
-			xcsp.removeShutdownHook();
-			var model = xcsp.getModel();
-			
-			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
-			var builder = new ApproximationSolverBuilder(model.getSolver())
-					.withPercentage(arguments.getDouble("percentage"))
-					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
-					.withSpecificConstraintMeasure(arguments.getString("measure"))
-					.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
-					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("verbosity"))
-					.setTimeout(arguments.getString("global_timeout"));
-			
-			if(arguments.getBoolean("dichotomic_bound").booleanValue()) {
-				builder.withNbStep(arguments.get("n_steps")).withSequenceApproximation(arguments.get("sequence"), arguments).setDichotomic(true);
-			}
-			
-			var solver = builder.initState(arguments).build();
-			
-			if (arguments.getBoolean("portfolio").booleanValue()) {
-				Portfolio portfolio = new Portfolio();
-				portfolio.addSolver(solver);
-				var xcsp2 = new XCSPExtension();
-				if (xcsp2.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
-					xcsp2.createSolver();
-					xcsp2.buildModel();
-					xcsp2.configureSearch();
-				}
-				xcsp2.removeShutdownHook();
-				var model2 = xcsp2.getModel();
-				model2.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
-				portfolio.addSolver(new MyISolverAdapter(model2.getSolver()));
-			
-				portfolio.solve();
-				
-				
-			} else {
+			if (arguments.getBoolean("portfolio")) {
+				var portfolio = PortfolioFactory.newDefaultPortfolio(arguments);
 				Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-					//solver.restoreSolution();
+					portfolio.stop();
+				}));
+				portfolio.solve();
+			} else {
+				System.out.println("c " + arguments);
+				List<String> chocoArgs = new ArrayList<>();
+				chocoArgs.add(arguments.<String>get("instance"));
+				chocoArgs.addAll(arguments.getList("remaining"));
+
+				var xcsp = new XCSPExtension();
+				if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
+					xcsp.createSolver();
+					xcsp.buildModel();
+					xcsp.configureSearch();
+				}
+				xcsp.removeShutdownHook();
+				var model = xcsp.getModel();
+
+				model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
+				var builder = new ApproximationSolverBuilder(model.getSolver())
+						.withPercentage(arguments.getDouble("percentage"))
+						.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
+						.withSpecificConstraintMeasure(arguments.getString("measure"))
+						.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
+						.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("verbosity"))
+						.setTimeout(arguments.getString("global_timeout"));
+
+				if (arguments.getBoolean("dichotomic_bound").booleanValue()) {
+					builder.withNbStep(arguments.get("n_steps"))
+							.withSequenceApproximation(arguments.get("sequence"), arguments).setDichotomic(true);
+				}
+
+				var solver = builder.initState(arguments).build();
+
+				Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+					// solver.restoreSolution();
 					solver.displaySolution(xcsp);
 				}));
 				solver.solve();
-				
 			}
-
 
 		} catch (ArgumentParserException e) {
 			parser.handleError(e);
