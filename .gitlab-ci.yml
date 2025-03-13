@@ -15,9 +15,12 @@ before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
   - export GRADLE_USER_HOME
 
+variables:
+  GRADLE_OPTS: "-Dhttp.proxyHost=cache-iutl.univ-artois.fr -Dhttp.proxyPort=3128 -Dhttps.proxyHost=cache-iutl.univ-artois.fr -Dhttps.proxyPort=3128"
+
 build:
   stage: build
-  script: gradle --build-cache assemble
+  script: ./gradlew approx
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
@@ -25,11 +28,29 @@ build:
       - build
       - .gradle
   tags:
-   - wallon
+   - java
+
+sonarqube-check:
+  stage: test
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: ./gradlew sonar -Dsonar.projectKey=approximation -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
+  allow_failure: true
+  only:
+    - master
+    - refactoring
+    - bug_removal_constraints
+  tags:
+   - java
 
 test:
   stage: test
-  script: gradle check
+  script: ./gradlew check
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
@@ -37,10 +58,5 @@ test:
       - build
       - .gradle
   tags:
-   - wallon
-deploy:
-  stage: deploy
-  script: echo "Define your deployment script!"
-  environment: production
-  tags:
-   - wallon
+   - java
+
