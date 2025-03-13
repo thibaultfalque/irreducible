@@ -20,8 +20,11 @@
 
 package fr.univartois.cril.approximation.solver;
 
+import fr.univartois.cril.approximation.core.IConstraintsRemover;
+import fr.univartois.cril.approximation.solver.state.PathStrategy;
+
 /**
- * The SolverConfiguration
+ * The SolverConfiguration.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -29,107 +32,176 @@ package fr.univartois.cril.approximation.solver;
  * @version 0.1.0
  */
 public class SolverConfiguration {
-	private int nbRun;
-	private int initRun;
-	private double factor;
-	private long limitSolution;
-	private boolean dichotomicBound;
 
-	private double ratio;
+    /** The nb run. */
+    private int nbRun;
 
-	/**
-	 * Creates a new SolverConfiguration.
-	 * 
-	 * @param nbRun
-	 * @param factor
-	 */
-	public SolverConfiguration(int nbRun, double factor, long limitSolution, double ratio, boolean dichotomic) {
-		this.nbRun = nbRun;
-		this.initRun = nbRun;
-		this.factor = factor;
-		this.limitSolution = limitSolution;
-		this.ratio = ratio;
-		this.dichotomicBound = dichotomic;
-	}
+    /** The init run. */
+    private int initRun;
 
-	/**
-	 * Gives the nbRun of this SolverConfiguration.
-	 *
-	 * @return This SolverConfiguration's nbRun.
-	 */
-	public int getNbRun() {
-		return nbRun;
-	}
+    /** The factor. */
+    private double factor;
 
-	/**
-	 * Sets this SolverConfiguration's nbRun.
-	 *
-	 * @param nbRun The new nbRun for this SolverConfiguration.
-	 */
-	public void setNbRun(int nbRun) {
-		this.nbRun = nbRun;
-	}
+    /** The limit solution. */
+    private long limitSolution;
 
-	/**
-	 * Gives the factor of this SolverConfiguration.
-	 *
-	 * @return This SolverConfiguration's factor.
-	 */
-	public double getFactor() {
-		return factor;
-	}
+    /** The dichotomic bound. */
+    private boolean dichotomicBound;
 
-	/**
-	 * Sets this SolverConfiguration's factor.
-	 *
-	 * @param factor The new factor for this SolverConfiguration.
-	 */
-	public void setFactor(double factor) {
-		this.factor = factor;
-	}
+    /** The ratio. */
+    private double ratio;
 
-	/**
-	 * Gives the limitSolution of this SolverConfiguration.
-	 *
-	 * @return This SolverConfiguration's limitSolution.
-	 */
-	public long getLimitSolution() {
-		return limitSolution;
-	}
+    /** The remover. */
+    private IConstraintsRemover remover;
 
-	/**
-	 * Sets this SolverConfiguration's limitSolution.
-	 *
-	 * @param limitSolution The new limitSolution for this SolverConfiguration.
-	 */
-	public void setLimitSolution(long limitSolution) {
-		this.limitSolution = limitSolution;
-	}
+    /** The path strategy. */
+    private PathStrategy pathStrategy;
 
-	/**
-	 * Gives the ratio of this SolverConfiguration.
-	 *
-	 * @return This SolverConfiguration's ratio.
-	 */
-	public double getRatio() {
-		return ratio;
-	}
+    /**
+     * Creates a new SolverConfiguration.
+     *
+     * @param nbRun the nb run
+     * @param factor the factor
+     * @param limitSolution the limit solution
+     * @param ratio the ratio
+     * @param dichotomic the dichotomic
+     */
+    public SolverConfiguration(int nbRun, double factor, long limitSolution, double ratio,
+            boolean dichotomic) {
+        this.nbRun = nbRun;
+        this.initRun = nbRun;
+        this.factor = factor;
+        this.limitSolution = limitSolution;
+        this.ratio = ratio;
+        this.dichotomicBound = dichotomic;
+    }
 
-	/**
-	 * @return the dichotomicBound
-	 */
-	public boolean isDichotomicBound() {
-		return dichotomicBound;
-	}
+    /**
+     * Gives the nbRun of this SolverConfiguration.
+     *
+     * @return This SolverConfiguration's nbRun.
+     */
+    public int getNbRun() {
+        return nbRun;
+    }
 
-	/**
-	 * @param dichotomicBound the dichotomicBound to set
-	 */
-	public void setDichotomicBound(boolean dichotomicBound) {
-		this.dichotomicBound = dichotomicBound;
-	}
+    /**
+     * Sets this SolverConfiguration's nbRun.
+     *
+     * @param nbRun The new nbRun for this SolverConfiguration.
+     */
+    public void setNbRun(int nbRun) {
+        this.nbRun = nbRun;
+    }
 
-	public SolverConfiguration update() {
-		return new SolverConfiguration((int) (this.nbRun * this.factor), factor, limitSolution, ratio, dichotomicBound);
-	}
+    /**
+     * Gives the factor of this SolverConfiguration.
+     *
+     * @return This SolverConfiguration's factor.
+     */
+    public double getFactor() {
+        return factor;
+    }
+
+    /**
+     * Sets this SolverConfiguration's factor.
+     *
+     * @param factor The new factor for this SolverConfiguration.
+     */
+    public void setFactor(double factor) {
+        this.factor = factor;
+    }
+
+    /**
+     * Gives the limitSolution of this SolverConfiguration.
+     *
+     * @return This SolverConfiguration's limitSolution.
+     */
+    public long getLimitSolution() {
+        return limitSolution;
+    }
+
+    /**
+     * Sets this SolverConfiguration's limitSolution.
+     *
+     * @param limitSolution The new limitSolution for this SolverConfiguration.
+     */
+    public void setLimitSolution(long limitSolution) {
+        this.limitSolution = limitSolution;
+    }
+
+    /**
+     * Gives the ratio of this SolverConfiguration.
+     *
+     * @return This SolverConfiguration's ratio.
+     */
+    public double getRatio() {
+        return ratio;
+    }
+
+    /**
+     * Checks if is dichotomic bound.
+     *
+     * @return the dichotomicBound
+     */
+    public boolean isDichotomicBound() {
+        return dichotomicBound;
+    }
+
+    /**
+     * Sets the dichotomic bound.
+     *
+     * @param dichotomicBound the dichotomicBound to set
+     */
+    public void setDichotomicBound(boolean dichotomicBound) {
+        this.dichotomicBound = dichotomicBound;
+    }
+
+    /**
+     * Update.
+     *
+     * @return the solver configuration
+     */
+    public SolverConfiguration update() {
+        return new SolverConfiguration((int) (this.nbRun * this.factor), factor, limitSolution,
+                ratio, dichotomicBound);
+    }
+
+    /**
+     * Gets the remover.
+     *
+     * @return the remover
+     */
+    public IConstraintsRemover getRemover() {
+        return remover;
+    }
+
+    /**
+     * Sets the remover.
+     *
+     * @param remover the new remover
+     */
+    public void setRemover(IConstraintsRemover remover) {
+        this.remover = remover;
+    }
+
+    /**
+     * Gets the path strategy.
+     *
+     * @return the path strategy
+     */
+    public PathStrategy getPathStrategy() {
+        return pathStrategy;
+    }
+
+    /**
+     * Sets the path strategy.
+     *
+     * @param pathStrategy the new path strategy
+     */
+
+    public void setPathStrategy(PathStrategy pathStrategy) {
+        this.pathStrategy = pathStrategy;
+    }
+
 }
