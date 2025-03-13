@@ -28,25 +28,95 @@ import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 
 /**
- * The ISolverState
+ * The ISolverState.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
 public interface ISolverState {
-    UniverseSolverResult solve();
-    UniverseSolverResult solveStarter();
-    ISolverState nextState();
-    ISolverState previousState();
-    
-    void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace);
-    void displaySolution(XCSP xcsp);
-    int getNbRemoved();
-    boolean isTimeout();
-    boolean isRestored();
-	void resetLimitSolver();
-	SolverConfiguration getConfig();
-}
 
+    /**
+     * Solve.
+     *
+     * @return the universe solver result
+     */
+    UniverseSolverResult solve();
+
+    /**
+     * Solve starter.
+     *
+     * @return the universe solver result
+     */
+    UniverseSolverResult solveStarter();
+
+    /**
+     * Next state.
+     *
+     * @return the i solver state
+     */
+    ISolverState nextState();
+
+    /**
+     * Previous state.
+     *
+     * @return the i solver state
+     */
+    ISolverState previousState();
+
+    /**
+     * Reset no goods.
+     *
+     * @param ngStrategy the ng strategy
+     * @param ace the ace
+     */
+    void resetNoGoods(KeepNoGoodStrategy ngStrategy, Solver ace);
+
+    /**
+     * Display solution.
+     *
+     * @param xcsp the xcsp
+     */
+    void displaySolution(XCSP xcsp);
+
+    /**
+     * Gets the nb removed.
+     *
+     * @return the nb removed
+     */
+    int getNbRemoved();
+
+    /**
+     * Checks if is timeout.
+     *
+     * @return true, if is timeout
+     */
+    boolean isTimeout();
+
+    /**
+     * Checks if is restored.
+     *
+     * @return true, if is restored
+     */
+    boolean isRestored();
+
+    /**
+     * Reset limit solver.
+     */
+    void resetLimitSolver();
+
+    /**
+     * Gets the config.
+     *
+     * @return the config
+     */
+    SolverConfiguration getConfig();
+
+    /**
+     * Checks if is safe.
+     *
+     * @return true, if is safe
+     */
+    boolean isSafe();
+
+}
