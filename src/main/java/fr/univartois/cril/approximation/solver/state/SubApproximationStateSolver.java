@@ -21,9 +21,7 @@
 package fr.univartois.cril.approximation.solver.state;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import org.chocosolver.parser.xcsp.XCSP;
 import org.chocosolver.solver.Solver;
@@ -47,23 +45,11 @@ import fr.univartois.cril.approximation.solver.UniverseSolverResult;
  */
 public class SubApproximationStateSolver extends AbstractState {
 
-    /** The s remover. */
-    private static Supplier<IConstraintsRemover> sRemover;
-
     /** The remover. */
-    private static IConstraintsRemover remover;
-
-    /** The solver configuration. */
-    private static SolverConfiguration solverConfiguration;
+    private IConstraintsRemover remover;
 
     /** The path strategy. */
-    private static PathStrategy pathStrategy;
-
-    /** The sub approximation counter. */
-    private static int subApproximationCounter = 0;
-
-    /** The nb. */
-    private int nb;
+    private PathStrategy pathStrategy;
 
     /** The previous. */
     private ISolverState previous;
@@ -81,24 +67,6 @@ public class SubApproximationStateSolver extends AbstractState {
     private boolean restored;
 
     /**
-     * Creates a new SubApproximationStateSolver.
-     *
-     * @param solver the solver
-     * @param previous the previous
-     * @param decorator the decorator
-     */
-    public SubApproximationStateSolver(Solver solver, ISolverState previous,
-            ApproximationSolverDecorator decorator) {
-        super(solverConfiguration, solver, decorator);
-        this.previous = previous;
-        this.nb = subApproximationCounter;
-        subApproximationCounter++;
-        if (remover == null) {
-            remover = Objects.requireNonNull(sRemover.get());
-        }
-    }
-
-    /**
      * Instantiates a new sub approximation state solver.
      *
      * @param config the config
@@ -111,11 +79,8 @@ public class SubApproximationStateSolver extends AbstractState {
             ApproximationSolverDecorator decorator) {
         super(config, solver, decorator);
         this.previous = previous;
-        this.nb = subApproximationCounter;
-        subApproximationCounter++;
-        if (remover == null) {
-            remover = Objects.requireNonNull(sRemover.get());
-        }
+        remover = config.getRemover();
+        pathStrategy = config.getPathStrategy();
     }
 
     /*
@@ -163,22 +128,22 @@ public class SubApproximationStateSolver extends AbstractState {
         return next;
     }
 
-    /**
-     * Inits the instance.
-     *
-     * @param solver the solver
-     * @param r the r
-     * @param config the config
-     * @param ps the ps
-     */
-    public static void initInstance(Solver solver, Supplier<IConstraintsRemover> r,
-            SolverConfiguration config,
-            PathStrategy ps) {
-        sRemover = r;
-        solverConfiguration = config;
-        pathStrategy = ps;
-        solver.plugMonitor(remover);
-    }
+    // /**
+    // * Inits the instance.
+    // *
+    // * @param solver the solver
+    // * @param r the r
+    // * @param config the config
+    // * @param ps the ps
+    // */
+    // public static void initInstance(Solver solver, Supplier<IConstraintsRemover> r,
+    // SolverConfiguration config,
+    // PathStrategy ps) {
+    // sRemover = r;
+    // solverConfiguration = config;
+    // pathStrategy = ps;
+    // solver.plugMonitor(remover);
+    // }
 
     /*
      * (non-Javadoc)
@@ -214,7 +179,7 @@ public class SubApproximationStateSolver extends AbstractState {
      */
     @Override
     public String toString() {
-        return "SubApproximationStateSolver [nb=" + nb + "]";
+        return "SubApproximationStateSolver";
     }
 
     /*
