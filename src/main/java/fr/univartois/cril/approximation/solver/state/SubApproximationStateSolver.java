@@ -127,23 +127,6 @@ public class SubApproximationStateSolver extends AbstractState {
         return next;
     }
 
-    // /**
-    // * Inits the instance.
-    // *
-    // * @param solver the solver
-    // * @param r the r
-    // * @param config the config
-    // * @param ps the ps
-    // */
-    // public static void initInstance(Solver solver, Supplier<IConstraintsRemover> r,
-    // SolverConfiguration config,
-    // PathStrategy ps) {
-    // sRemover = r;
-    // solverConfiguration = config;
-    // pathStrategy = ps;
-    // solver.plugMonitor(remover);
-    // }
-
     /*
      * (non-Javadoc)
      *
