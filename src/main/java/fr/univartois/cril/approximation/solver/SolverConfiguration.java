@@ -24,7 +24,31 @@ import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 
 /**
- * The SolverConfiguration.
+ * /**
+ * The {@code SolverConfiguration} class defines the configuration settings
+ * for an approximation-based solver. It encapsulates various parameters
+ * controlling the solver’s execution, such as the number of failed,
+ * solution limits, relaxation strategies, and path selection strategies.
+ *
+ * <p>
+ * This class provides getter and setter methods to update
+ * configuration parameters dynamically, along with an {@code update()} method
+ * that generates a new configuration based on scaling factors.
+ * </p>
+ *
+ * <h2>Configuration Parameters:</h2>
+ * <ul>
+ * <li><b>nbFailed:</b> The number of failed allowing during the resolution.</li>
+ * <li><b>factor:</b> A scaling factor applied to the number of failed.</li>
+ * <li><b>limitSolution:</b> The maximum number of solutions allowed.</li>
+ * <li><b>ratio:</b> A threshold ratio affecting solver transitions.</li>
+ * <li><b>remover:</b> A strategy defining how constraints are removed
+ * during approximation.</li>
+ * <li><b>pathStrategy:</b> The path strategy that defines how constraints are
+ * reintroduced during state transitions.</li>
+ *
+ * in state transitions.</li>
+ * </ul>
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -33,113 +57,141 @@ import fr.univartois.cril.approximation.solver.state.PathStrategy;
  */
 public class SolverConfiguration {
 
-    /** The nb run. */
-    private int nbRun;
+    /**
+     * The number of failed decisions before switching between states.
+     * This value is updated dynamically during the solving process.
+     * Once this limit is reached, the solver stops the search.
+     */
+    private int nbFailed;
 
-    /** The init run. */
-    private int initRun;
+    /**
+     * The initial number of allowed failed before adjustments are made.
+     * This value is set at the beginning and remains unchanged to track baseline
+     * behavior.
+     */
+    private int initFailed;
 
-    /** The factor. */
+    /**
+     * A scaling factor applied to the number of failed when updating solver
+     * parameters.
+     */
     private double factor;
 
-    /** The limit solution. */
+    /**
+     * The maximum number of solutions the solver is allowed to find.
+     * Once this limit is reached, the solver stops the search.
+     */
     private long limitSolution;
 
-    /** The ratio. */
+    /**
+     * The threshold ratio that influences state transitions within the solver.
+     * This ratio helps determine when to switch between different solving strategies.
+     */
     private double ratio;
 
-    /** The remover. */
+    /**
+     * The strategy used to remove constraints during the approximation process.
+     * This component defines which constraints are relaxed to facilitate solving.
+     */
     private IConstraintsRemover remover;
 
-    /** The path strategy. */
+    /**
+     * The strategy that defines how constraints are reintroduced during state
+     * transitions.
+     */
     private PathStrategy pathStrategy;
 
     /**
-     * Creates a new SolverConfiguration.
+     * Creates a new {@code SolverConfiguration} instance with the specified parameters.
+     * This configuration determines how the solver behaves when handling failed attempts,
+     * adjusting solving parameters dynamically based on predefined scaling factors.
      *
-     * @param nbRun the nb run
-     * @param factor the factor
-     * @param limitSolution the limit solution
-     * @param ratio the ratio
+     * @param nbFailed the initial number of allowed failed attempts before adjustments
+     * @param factor the scaling factor applied when updating the solver's behavior
+     * @param limitSolution the maximum number of solutions the solver is allowed to find
+     * @param ratio the threshold ratio that influences state transitions in the solver
      */
-    public SolverConfiguration(int nbRun, double factor, long limitSolution, double ratio) {
-        this.nbRun = nbRun;
-        this.initRun = nbRun;
+    public SolverConfiguration(int nbFailed, double factor, long limitSolution, double ratio) {
+        this.nbFailed = nbFailed;
+        this.initFailed = nbFailed;
         this.factor = factor;
         this.limitSolution = limitSolution;
         this.ratio = ratio;
     }
 
     /**
-     * Gives the nbRun of this SolverConfiguration.
+     * Retrieves the current number of failed attempts before a solver adjustment is
+     * triggered.
      *
-     * @return This SolverConfiguration's nbRun.
+     * @return the number of failed attempts before state adaptation
      */
-    public int getNbRun() {
-        return nbRun;
+    public int getNbFailed() {
+        return nbFailed;
     }
 
     /**
-     * Sets this SolverConfiguration's nbRun.
+     * Updates the number of failed attempts before a solver adjustment is triggered.
      *
-     * @param nbRun The new nbRun for this SolverConfiguration.
+     * @param nbFailed the new number of failed attempts before adaptation
      */
-    public void setNbRun(int nbRun) {
-        this.nbRun = nbRun;
+    public void setNbFailed(int nbFailed) {
+        this.nbFailed = nbFailed;
     }
 
     /**
-     * Gives the factor of this SolverConfiguration.
+     * Retrieves the scaling factor applied when updating solver behavior.
      *
-     * @return This SolverConfiguration's factor.
+     * @return the scaling factor affecting solver adjustments
      */
     public double getFactor() {
         return factor;
     }
 
     /**
-     * Sets this SolverConfiguration's factor.
+     * Sets the scaling factor that controls solver adjustments.
      *
-     * @param factor The new factor for this SolverConfiguration.
+     * @param factor the new scaling factor
      */
     public void setFactor(double factor) {
         this.factor = factor;
     }
 
     /**
-     * Gives the limitSolution of this SolverConfiguration.
+     * Retrieves the maximum number of solutions the solver is allowed to find.
      *
-     * @return This SolverConfiguration's limitSolution.
+     * @return the solution limit imposed on the solver
      */
     public long getLimitSolution() {
         return limitSolution;
     }
 
     /**
-     * Sets this SolverConfiguration's limitSolution.
+     * Updates the maximum number of solutions the solver is allowed to find.
      *
-     * @param limitSolution The new limitSolution for this SolverConfiguration.
+     * @param limitSolution the new solution limit
      */
     public void setLimitSolution(long limitSolution) {
         this.limitSolution = limitSolution;
     }
 
     /**
-     * Gives the ratio of this SolverConfiguration.
+     * Retrieves the threshold ratio that influences solver state transitions.
      *
-     * @return This SolverConfiguration's ratio.
+     * @return the threshold ratio affecting the solver's decision-making process
      */
     public double getRatio() {
         return ratio;
     }
 
     /**
-     * Update.
+     * Generates an updated solver configuration by applying the scaling factor
+     * to the number of failed attempts. The new configuration retains the same
+     * factor, solution limit, and ratio while inheriting the remover and path strategy.
      *
-     * @return the solver configuration
+     * @return a new {@code SolverConfiguration} instance with updated parameters
      */
     public SolverConfiguration update() {
-        var s = new SolverConfiguration((int) (this.nbRun * this.factor), factor, limitSolution,
+        var s = new SolverConfiguration((int) (this.nbFailed * this.factor), factor, limitSolution,
                 ratio);
         s.setRemover(remover);
         s.setPathStrategy(pathStrategy);
@@ -147,38 +199,39 @@ public class SolverConfiguration {
     }
 
     /**
-     * Gets the remover.
+     * Retrieves the constraint removal strategy associated with this configuration.
      *
-     * @return the remover
+     * @return the constraint remover strategy
      */
     public IConstraintsRemover getRemover() {
         return remover;
     }
 
     /**
-     * Sets the remover.
+     * Sets the constraint removal strategy used by the solver.
      *
-     * @param remover the new remover
+     * @param remover the new constraint remover strategy
      */
     public void setRemover(IConstraintsRemover remover) {
         this.remover = remover;
     }
 
     /**
-     * Gets the path strategy.
+     * Retrieves the path strategy defining how constraints are reintroduced
+     * during state transitions.
      *
-     * @return the path strategy
+     * @return the current path strategy used by the solver
      */
     public PathStrategy getPathStrategy() {
         return pathStrategy;
     }
 
     /**
-     * Sets the path strategy.
+     * Updates the path strategy that determines how constraints are reintroduced
+     * during solver state transitions.
      *
      * @param pathStrategy the new path strategy
      */
-
     public void setPathStrategy(PathStrategy pathStrategy) {
         this.pathStrategy = pathStrategy;
     }
