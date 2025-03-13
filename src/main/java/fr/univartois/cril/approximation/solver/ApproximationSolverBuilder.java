@@ -210,6 +210,7 @@ public class ApproximationSolverBuilder {
         }
         PathStrategy pathStrategy = arguments.get("path_strategy");
         var remover = sRemover.get();
+        solver.plugMonitor(remover);
         var subApproximationConfiguration = new SolverConfiguration(
                 arguments.getInt("n_runs_approx"),
                 arguments.getDouble("factor_runs_approx"),
