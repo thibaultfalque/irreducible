@@ -28,8 +28,7 @@ import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
-import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
-import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
+import fr.univartois.cril.approximation.solver.state.PathStrategy;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
 import fr.univartois.cril.approximation.subapproximation.measure.MeanFilteringConstraintMeasure;
 import fr.univartois.cril.approximation.subapproximation.remover.ConstraintRemoverFactory;
@@ -61,7 +60,7 @@ public class ApproximationSolverBuilder {
      *
      * @see IConstraintsRemover
      */
-    private Supplier<IConstraintsRemover> remover;
+    private Supplier<IConstraintsRemover> sRemover;
 
     /**
      * The measure that will be used to select the constraint that we remove.
@@ -149,7 +148,7 @@ public class ApproximationSolverBuilder {
      * @return the approximation solver builder
      */
     public ApproximationSolverBuilder withSpecificConstraintRemover(String rm) {
-        remover = () -> {
+        sRemover = () -> {
             var r = ConstraintRemoverFactory.instance().createConstraintRemoverByName(rm,
                     decorator);
             r.setConstraintMeasure(measure);
@@ -206,22 +205,26 @@ public class ApproximationSolverBuilder {
      * @return the approximation solver builder
      */
     public ApproximationSolverBuilder initState(Namespace arguments) {
-        if (remover == null) {
+        if (sRemover == null) {
             throw new IllegalStateException("Constraint remover must be initialized !");
         }
-        SubApproximationStateSolver.initInstance(solver, remover,
-                new SolverConfiguration(arguments.getInt("n_runs_approx"),
-                        arguments.getDouble("factor_runs_approx"),
-                        arguments.getInt("n_sol_limit"),
-                        arguments.getDouble("ratio_assigned_approx"),
-                        arguments.getBoolean("dichotomic_bound")),
-                arguments.get("path_strategy"));
-        NormalStateSolver.initInstance(solver,
-                new SolverConfiguration(arguments.getInt("n_runs_normal"),
-                        arguments.getDouble("factor_runs_normal"),
-                        Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal"),
-                        arguments.getBoolean("dichotomic_bound")),
-                decorator, arguments.get("path_strategy"));
+        PathStrategy pathStrategy = arguments.get("path_strategy");
+        var remover = sRemover.get();
+        var subApproximationConfiguration = new SolverConfiguration(
+                arguments.getInt("n_runs_approx"),
+                arguments.getDouble("factor_runs_approx"),
+                arguments.getInt("n_sol_limit"), arguments.getDouble("ratio_assigned_approx"));
+        subApproximationConfiguration.setPathStrategy(pathStrategy);
+        subApproximationConfiguration.setRemover(remover);
+
+        var normalConfiguration = new SolverConfiguration(arguments.getInt("n_runs_normal"),
+                arguments.getDouble("factor_runs_normal"),
+                Long.MAX_VALUE, arguments.getDouble("ratio_assigned_normal"));
+        normalConfiguration.setPathStrategy(pathStrategy);
+        normalConfiguration.setRemover(remover);
+
+        var solverContext = new SolverContext(normalConfiguration, subApproximationConfiguration);
+        decorator.setContext(solverContext);
         return this;
     }
 
