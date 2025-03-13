@@ -1,12 +1,13 @@
 /**
- * JUniverse, a solver interface.
- * Copyright (c) 2022 - Univ Artois, CNRS & Exakis Nelite.
+ * approximation, a constraint programming solver based on Choco, utilizing relaxation
+ * techniques.
+ * Copyright (c) 2025 - Univ Artois, CNRS & Luxembourg University.
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 3 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -24,14 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.chocosolver.parser.SetUpException;
-import org.chocosolver.parser.xcsp.XCSP;
 
 import fr.univartois.cril.approximation.cli.CLI;
 import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 
 /**
- * The Main
+ * The Main.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -40,63 +40,53 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
  */
 public class Main {
 
-	/**
-	 * Creates a new Main.
-	 */
-	public Main() {
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * The main method.
+     *
+     * @param args the arguments
+     */
+    public static void main(String[] args) {
+        var parser = CLI.createCLIParser();
+        try {
+            var arguments = parser.parseArgs(args);
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		var parser = CLI.createCLIParser();
-		try {
-			var arguments = parser.parseArgs(args);
+            List<String> chocoArgs = new ArrayList<>();
+            chocoArgs.add(arguments.<String>get("instance"));
+            chocoArgs.addAll(arguments.getList("remaining"));
 
-			List<String> chocoArgs = new ArrayList<>();
-			chocoArgs.add(arguments.<String>get("instance"));
-			chocoArgs.addAll(arguments.getList("remaining"));
+            var xcsp = new XCSPExtension();
+            if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
+                xcsp.createSolver();
+                xcsp.buildModel();
+                xcsp.configureSearch();
+            }
+            xcsp.removeShutdownHook();
+            var model = xcsp.getModel();
 
-			var xcsp = new XCSPExtension();
-			if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
-				xcsp.createSolver();
-				xcsp.buildModel();
-				xcsp.configureSearch();
-			}
-			xcsp.removeShutdownHook();
-			var model = xcsp.getModel();
+            var builder = new ApproximationSolverBuilder(model.getSolver())
+                    .withSpecificConstraintRemover(arguments.getString("constraint_remover"))
+                    .withSpecificConstraintMeasure(arguments.getString("measure"))
+                    .withMeanComputation(arguments.getBoolean("mean"))
+                    .setKeepNogood(arguments.get("keep_nogood"))
+                    .setKeepFalsified(arguments.get("keep_falsified"))
+                    .setVerbosity(arguments.getInt("verbosity"))
+                    .setTimeout(arguments.getString("global_timeout"));
 
-			var builder = new ApproximationSolverBuilder(model.getSolver())
-					.withPercentage(arguments.getDouble("percentage"))
-					.withSpecificConstraintRemover(arguments.getString("constraint_remover"))
-					.withSpecificConstraintMeasure(arguments.getString("measure"))
-					.withMeanComputation(arguments.getBoolean("mean")).setKeepNogood(arguments.get("keep_nogood"))
-					.setKeepFalsified(arguments.get("keep_falsified")).setVerbosity(arguments.getInt("verbosity"))
-					.setTimeout(arguments.getString("global_timeout"));
-			
-			if(arguments.getBoolean("dichotomic_bound").booleanValue()) {
-				builder.withNbStep(arguments.get("n_steps")).withSequenceApproximation(arguments.get("sequence"), arguments).setDichotomic(true);
-			}
-			
-			var solver = builder.initState(arguments).build()		;
+            var solver = builder.initState(arguments).build();
 
-			model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-				//solver.restoreSolution();
-				solver.displaySolution(xcsp);
-			}));
-			solver.solve();
+            model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                solver.displaySolution(xcsp);
+            }));
+            solver.solve();
 
-
-		} catch (ArgumentParserException e) {
-			parser.handleError(e);
-			System.exit(1);
-		} catch (SetUpException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
+        } catch (ArgumentParserException e) {
+            parser.handleError(e);
+            System.exit(1);
+        } catch (SetUpException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
 
 }
