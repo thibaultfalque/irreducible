@@ -27,16 +27,17 @@ import org.chocosolver.solver.constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 
 /**
- * The PathStrategy
+ * The PathStrategy.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
-public enum PathStrategy  {
+public enum PathStrategy {
 
+    /** The approx normal. */
     APPROX_NORMAL {
+
         @Override
         public ISolverState previous(ISolverState state, ISolverState current) {
             return state.previousState();
@@ -48,11 +49,13 @@ public enum PathStrategy  {
                 remover.restoreConstraints(constraints);
             }
             System.out.println(this + " we restore " + constraints.size());
-            
         }
+
     },
-    APPROX_APPROX
-    {
+    
+    /** The approx approx. */
+    APPROX_APPROX {
+
         @Override
         public ISolverState previous(ISolverState state, ISolverState current) {
             return state;
@@ -64,29 +67,25 @@ public enum PathStrategy  {
                 remover.restoreConstraints(constraints);
             }
             System.out.println(this + " we restore " + constraints.size());
-            
-        }
-    },
-    APPROX_ORDER{
-
-        @Override
-        public ISolverState previous(ISolverState state, ISolverState current) {
-            if(state==NormalStateSolver.getInstance() || state.isRestored()) {
-                return current;
-            }
-            if(current.isRestored()) {
-                return current.nextState();
-            }
-            return state.previousState();
         }
 
-        @Override
-        public void restore(IConstraintsRemover remover, Set<Constraint> constraints) {
-        
-        }
-        
     };
 
+    /**
+     * Previous.
+     *
+     * @param state the state
+     * @param current the current
+     * @return the i solver state
+     */
     public abstract ISolverState previous(ISolverState state, ISolverState current);
-    public abstract void restore(IConstraintsRemover remover,Set<Constraint> constraints);
+
+    /**
+     * Restore.
+     *
+     * @param remover the remover
+     * @param constraints the constraints
+     */
+    public abstract void restore(IConstraintsRemover remover, Set<Constraint> constraints);
+
 }
