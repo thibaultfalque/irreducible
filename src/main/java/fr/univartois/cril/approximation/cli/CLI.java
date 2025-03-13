@@ -27,10 +27,35 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 
 /**
- * The CLI.
+ * The {@code CLI} class is responsible for handling command-line arguments
+ * for the Approximation solver. It provides a parser that allows users
+ * to configure the solver’s behavior, including normal and relaxation-based
+ * solving strategies.
+ *
+ * <p>
+ * This class uses {@link ArgumentParsers} to define various options,
+ * such as verbosity, constraint removal strategies, and time limits,
+ * allowing flexible solver configuration.
+ * </p>
+ *
+ * <h2>Supported Arguments:</h2>
+ * <ul>
+ * <li><b>General settings:</b> Instance file, verbosity, timeout, and output
+ * formatting.</li>
+ * <li><b>Normal resolution:</b> Parameters related to solving the original problem.</li>
+ * <li><b>Relaxation resolution:</b> Parameters controlling constraint relaxation and
+ * approximation mechanisms.</li>
+ * <li><b>Additional solver parameters:</b> Arguments passed directly to the Choco
+ * solver.</li>
+ * </ul>
+ *
+ * <p>
+ * This class is a utility class and should not be instantiated.
+ * </p>
  *
  * @author Thibault Falque
  * @author Romain Wallon
+ *
  * @version 0.1.0
  */
 public class CLI {
@@ -39,15 +64,43 @@ public class CLI {
     private static final String PROGRAM_NAME = "Approximation";
 
     /** The Constant DESCRIPTION. */
-    private static final String DESCRIPTION = "Resolve hard combinatorial problem using approximation";
+    private static final String DESCRIPTION = "Resolve hard combinatorial problem using relaxation";
 
     /** The Constant VERSION. */
     private static final String VERSION = "0.1.0";
 
     /**
-     * Creates the CLI parser.
+     * Instantiates a new cli.
+     */
+    private CLI() {
+        // Prevent instantiation
+    }
+
+    /**
+     * Creates and configures the command-line argument parser for the Approximation
+     * solver.
+     * This parser allows users to define various settings, including general solver
+     * configurations, normal resolution parameters, and relaxation-based resolution
+     * options.
      *
-     * @return the argument parser
+     * <p>
+     * The parser is built using {@link ArgumentParsers} and supports a wide range of
+     * arguments to fine-tune the solver's behavior.
+     * </p>
+     *
+     * <h2>Argument Groups:</h2>
+     * <ul>
+     * <li><b>General:</b> Includes instance file, verbosity, timeout, and output
+     * formatting.</li>
+     * <li><b>Normal resolution:</b> Defines parameters for solving the original
+     * problem.</li>
+     * <li><b>Relaxation resolution:</b> Controls how constraints are relaxed and
+     * reintroduced.</li>
+     * <li><b>Additional solver parameters:</b> Passes extra arguments directly to the
+     * Choco solver.</li>
+     * </ul>
+     *
+     * @return an {@link ArgumentParser} configured for the Approximation solver
      */
     public static ArgumentParser createCLIParser() {
         ArgumentParser parser = ArgumentParsers.newFor(PROGRAM_NAME).build()
@@ -78,7 +131,7 @@ public class CLI {
                 .help("The ratio above which the solver is kept running in approx state.")
                 .type(Double.class).setDefault(11.);
 
-        var approximationGroup = parser.addArgumentGroup("Approximation resolution");
+        var approximationGroup = parser.addArgumentGroup("Relaxation resolution");
         approximationGroup.description("This parameters controls the approximation. ");
         approximationGroup.addArgument("--n-runs-approx")
                 .help("The number of runs to solve the approximate problem").setDefault(10)
@@ -96,9 +149,6 @@ public class CLI {
         approximationGroup.addArgument("--measure")
                 .help("The name of the measure considered to remove constraints.")
                 .setDefault("NEffectiveFiltering").type(String.class);
-        approximationGroup.addArgument("--mean")
-                .help("Use the mean of the measure for a group instead of the sum")
-                .setDefault(false).type(Boolean.class);
         approximationGroup.addArgument("--constraint-remover")
                 .help("The type of strategy for removes constraints using the specify measure")
                 .setDefault("Group").type(String.class);
@@ -108,7 +158,7 @@ public class CLI {
         parser.addArgument("--")
                 .dest("remaining")
                 .nargs("*")
-                .help("Arguments to pass to the subcommand");
+                .help("Arguments to pass to the internal choco solver.");
 
         return parser;
     }
