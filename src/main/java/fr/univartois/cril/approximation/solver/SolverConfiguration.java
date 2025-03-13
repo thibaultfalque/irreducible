@@ -45,9 +45,6 @@ public class SolverConfiguration {
     /** The limit solution. */
     private long limitSolution;
 
-    /** The dichotomic bound. */
-    private boolean dichotomicBound;
-
     /** The ratio. */
     private double ratio;
 
@@ -64,16 +61,13 @@ public class SolverConfiguration {
      * @param factor the factor
      * @param limitSolution the limit solution
      * @param ratio the ratio
-     * @param dichotomic the dichotomic
      */
-    public SolverConfiguration(int nbRun, double factor, long limitSolution, double ratio,
-            boolean dichotomic) {
+    public SolverConfiguration(int nbRun, double factor, long limitSolution, double ratio) {
         this.nbRun = nbRun;
         this.initRun = nbRun;
         this.factor = factor;
         this.limitSolution = limitSolution;
         this.ratio = ratio;
-        this.dichotomicBound = dichotomic;
     }
 
     /**
@@ -140,31 +134,16 @@ public class SolverConfiguration {
     }
 
     /**
-     * Checks if is dichotomic bound.
-     *
-     * @return the dichotomicBound
-     */
-    public boolean isDichotomicBound() {
-        return dichotomicBound;
-    }
-
-    /**
-     * Sets the dichotomic bound.
-     *
-     * @param dichotomicBound the dichotomicBound to set
-     */
-    public void setDichotomicBound(boolean dichotomicBound) {
-        this.dichotomicBound = dichotomicBound;
-    }
-
-    /**
      * Update.
      *
      * @return the solver configuration
      */
     public SolverConfiguration update() {
-        return new SolverConfiguration((int) (this.nbRun * this.factor), factor, limitSolution,
-                ratio, dichotomicBound);
+        var s = new SolverConfiguration((int) (this.nbRun * this.factor), factor, limitSolution,
+                ratio);
+        s.setRemover(remover);
+        s.setPathStrategy(pathStrategy);
+        return s;
     }
 
     /**
