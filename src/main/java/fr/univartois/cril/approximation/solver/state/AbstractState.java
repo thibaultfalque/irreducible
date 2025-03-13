@@ -159,12 +159,15 @@ public abstract class AbstractState implements ISolverState {
         solver.log().white().printf("%s %n", solver.getMeasures().toOneLineString());
         solver.unplugMonitor(observer);
         decorator.setUserInterruption(false);
+        
         var feasible = solver.isFeasible();
-        return switch (feasible) {
-            case ESat.TRUE -> UniverseSolverResult.SATISFIABLE;
-            case ESat.FALSE -> UniverseSolverResult.UNSATISFIABLE;
-            default -> UniverseSolverResult.UNKNOWN;
-        };
+        if (feasible == ESat.TRUE) {
+        	return UniverseSolverResult.SATISFIABLE;
+        }
+        if (feasible == ESat.FALSE) {
+        	return UniverseSolverResult.UNSATISFIABLE;
+        }
+        return UniverseSolverResult.UNKNOWN;
     }
 
     /*
