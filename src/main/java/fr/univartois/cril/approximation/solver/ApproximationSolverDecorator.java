@@ -97,6 +97,9 @@ import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver
 public class ApproximationSolverDecorator
         implements IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
 
+    /** The context. */
+    private SolverContext context;
+
     /** The solver. */
     private Solver solver;
 
@@ -169,6 +172,9 @@ public class ApproximationSolverDecorator
 
     /** Indicates that the resolution stops on user instruction. */
     protected boolean userinterruption = true;
+
+    /** The normal state. */
+    private NormalStateSolver normalState;
 
     /*
      * (non-Javadoc)
@@ -1782,7 +1788,7 @@ public class ApproximationSolverDecorator
     @Override
     public UniverseSolverResult solve() {
         cntSteps = 0;
-        this.state = NormalStateSolver.getInstance();
+        this.state = getInitialState();
         state.resetLimitSolver();
         result = state.solve();
         while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout()
@@ -1798,7 +1804,7 @@ public class ApproximationSolverDecorator
                    && !this.state.isTimeout()) {
                 reset();
                 for (IntVar var : solution.retrieveIntVars(true)) {
-                    if (var == NormalStateSolver.getInstance().om.getObjective()) {
+                    if (var == normalState.om.getObjective()) {
                         continue;
                     }
 
@@ -1829,6 +1835,16 @@ public class ApproximationSolverDecorator
     }
 
     /**
+     * Gets the initial state.
+     *
+     * @return the initial state
+     */
+    private ISolverState getInitialState() {
+        normalState = new NormalStateSolver(solver, context, this);
+        return normalState;
+    }
+
+    /**
      * Solve.
      *
      * @param filename the filename
@@ -1836,12 +1852,7 @@ public class ApproximationSolverDecorator
      * @return the universe solver result
      */
     public UniverseSolverResult solve(String filename) {
-        try {
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return UniverseSolverResult.UNKNOWN;
-        }
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     /*
@@ -2120,6 +2131,24 @@ public class ApproximationSolverDecorator
         });
         buffer.append(S_VALU_OUT).append(format ? "\nv " : "").append(S_INST_OUT);
         return buffer.toString();
+    }
+
+    /**
+     * Gives the context of this ApproximationSolverDecorator.
+     *
+     * @return This ApproximationSolverDecorator's context.
+     */
+    public SolverContext getContext() {
+        return context;
+    }
+
+    /**
+     * Sets this ApproximationSolverDecorator's context.
+     *
+     * @param context The context to set.
+     */
+    public void setContext(SolverContext context) {
+        this.context = context;
     }
 
 }
