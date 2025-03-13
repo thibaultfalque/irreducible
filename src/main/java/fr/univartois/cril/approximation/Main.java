@@ -66,7 +66,6 @@ public class Main {
             var builder = new ApproximationSolverBuilder(model.getSolver())
                     .withSpecificConstraintRemover(arguments.getString("constraint_remover"))
                     .withSpecificConstraintMeasure(arguments.getString("measure"))
-                    .withMeanComputation(arguments.getBoolean("mean"))
                     .setKeepNogood(arguments.get("keep_nogood"))
                     .setKeepFalsified(arguments.get("keep_falsified"))
                     .setVerbosity(arguments.getInt("verbosity"))
