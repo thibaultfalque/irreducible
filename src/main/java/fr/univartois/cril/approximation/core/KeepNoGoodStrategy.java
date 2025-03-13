@@ -22,9 +22,9 @@ package fr.univartois.cril.approximation.core;
 
 import org.chocosolver.solver.Solver;
 
+import fr.univartois.cril.approximation.solver.state.AbstractState;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
-import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 
 /**
  * The KeepNoGoodStrategy
@@ -38,7 +38,7 @@ public enum KeepNoGoodStrategy {
     ALWAYS {
 
         @Override
-        public void resetNoGoods(SubApproximationStateSolver state, Solver ace) {
+        public void resetNoGoods(AbstractState state, Solver ace) {
             
         }
 
@@ -49,7 +49,7 @@ public enum KeepNoGoodStrategy {
     },NEVER {
 
         @Override
-        public void resetNoGoods(SubApproximationStateSolver state, Solver ace) {
+        public void resetNoGoods(AbstractState state, Solver ace) {
             //todo
         }
 
@@ -60,7 +60,7 @@ public enum KeepNoGoodStrategy {
     },NORMAL_ONLY {
 
         @Override
-        public void resetNoGoods(SubApproximationStateSolver state, Solver ace) {
+        public void resetNoGoods(AbstractState state, Solver ace) {
            
         }
 
@@ -72,7 +72,7 @@ public enum KeepNoGoodStrategy {
     public void resetNoGoods(ISolverState state, Solver ace) {
         state.resetNoGoods(this, ace);
     }
-    public abstract void resetNoGoods(SubApproximationStateSolver state, Solver ace);
+    public abstract void resetNoGoods(AbstractState state, Solver ace);
     public abstract void resetNoGoods(NormalStateSolver state, Solver ace);
 }
 
