@@ -28,7 +28,7 @@ import org.chocosolver.solver.variables.Variable;
 
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
-import fr.univartois.cril.approximation.solver.SolverConfiguration;
+import fr.univartois.cril.approximation.solver.SolverContext;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 
 /**
@@ -43,12 +43,6 @@ import fr.univartois.cril.approximation.solver.UniverseSolverResult;
  * @version 0.1.0
  */
 public class NormalStateSolver extends AbstractState {
-
-    /** The instance. */
-    private static NormalStateSolver INSTANCE;
-
-    /** The first. */
-    private boolean first = true;
 
     /**
      * Default solution observer that resets stop criteria and removes hints.
@@ -66,13 +60,6 @@ public class NormalStateSolver extends AbstractState {
      */
     private ISolverState next;
 
-    /**
-     * Defines the strategy for restoring constraints during the relaxation process.
-     * This strategy determines how and when constraints are reintroduced after being
-     * relaxed.
-     */
-    private PathStrategy strat;
-
     /** A reference to the objective manager. */
     public IObjectiveManager<Variable> om;
 
@@ -80,15 +67,13 @@ public class NormalStateSolver extends AbstractState {
      * Instantiates a new normal state solver.
      *
      * @param solver the solver
-     * @param config the config
+     * @param context the context
      * @param decorator the decorator
-     * @param strat the strat
      */
-    private NormalStateSolver(Solver solver, SolverConfiguration config,
-            ApproximationSolverDecorator decorator,
-            PathStrategy strat) {
-        super(config, solver, decorator);
-        this.strat = strat;
+    public NormalStateSolver(Solver solver, SolverContext context,
+            ApproximationSolverDecorator decorator) {
+        super(context, solver, decorator, context.getNormalConfiguration().getPathStrategy());
+        this.config = context.getNormalConfiguration();
         this.om = solver.getObjectiveManager();
     }
 
@@ -100,8 +85,6 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public UniverseSolverResult solve() {
         System.out.println("we solve with " + this);
-
-        first = false;
         solver.setObjectiveManager(om);
         solver.plugMonitor(observerSolution);
         var r = internalSolve();
@@ -118,32 +101,32 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public ISolverState nextState() {
         if (next == null) {
-            next = new SubApproximationStateSolver(solver, this, decorator);
+            next = new SubApproximationStateSolver(context, solver, this, decorator);
         }
         return next;
     }
 
-    /**
-     * Inits the instance.
-     *
-     * @param solver the solver
-     * @param configuration the configuration
-     * @param decorator the decorator
-     * @param strat the strat
-     */
-    public static void initInstance(Solver solver, SolverConfiguration configuration,
-            ApproximationSolverDecorator decorator, PathStrategy strat) {
-        INSTANCE = new NormalStateSolver(solver, configuration, decorator, strat);
-    }
+    // /**
+    // * Inits the instance.
+    // *
+    // * @param solver the solver
+    // * @param configuration the configuration
+    // * @param decorator the decorator
+    // * @param strat the strat
+    // */
+    // public static void initInstance(Solver solver, SolverConfiguration configuration,
+    // ApproximationSolverDecorator decorator, PathStrategy strat) {
+    // INSTANCE = new NormalStateSolver(solver, configuration, decorator, strat);
+    // }
 
-    /**
-     * Gets the single instance of NormalStateSolver.
-     *
-     * @return single instance of NormalStateSolver
-     */
-    public static NormalStateSolver getInstance() {
-        return INSTANCE;
-    }
+    // /**
+    // * Gets the single instance of NormalStateSolver.
+    // *
+    // * @return single instance of NormalStateSolver
+    // */
+    // public static NormalStateSolver getInstance() {
+    // return INSTANCE;
+    // }
 
     /*
      * (non-Javadoc)
@@ -241,6 +224,16 @@ public class NormalStateSolver extends AbstractState {
      */
     public void setObserverSolution(IMonitorSolution observerSolution) {
         this.observerSolution = observerSolution;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.solver.state.ISolverState#isSafe()
+     */
+    @Override
+    public boolean isSafe() {
+        return true;
     }
 
 }
