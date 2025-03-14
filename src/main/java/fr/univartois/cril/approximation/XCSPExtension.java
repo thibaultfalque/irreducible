@@ -1,6 +1,7 @@
 /**
- * 
+ *
  */
+
 package fr.univartois.cril.approximation;
 
 import org.chocosolver.parser.Level;
@@ -11,16 +12,25 @@ import org.chocosolver.solver.search.strategy.Search;
 import org.chocosolver.solver.search.strategy.SearchParams;
 
 /**
- * 
+ * The Class XCSPExtension.
  */
 class XCSPExtension extends XCSP {
-	public void removeShutdownHook() {
-		Runtime.getRuntime().removeShutdownHook(statOnKill);
-	}
 
-	@Override
-	public void freesearch(Solver solver) {
-		BlackBoxConfigurator bb = BlackBoxConfigurator.init();
+    /**
+     * Removes the shutdown hook.
+     */
+    public void removeShutdownHook() {
+        Runtime.getRuntime().removeShutdownHook(statOnKill);
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.chocosolver.parser.xcsp.XCSP#freesearch(org.chocosolver.solver.Solver)
+     */
+    @Override
+    public void freesearch(Solver solver) {
+        BlackBoxConfigurator bb = BlackBoxConfigurator.init();
         boolean opt = solver.getObjectiveManager().isOptimization();
         final SearchParams.ValSelConf defaultValSel;
         final SearchParams.VarSelConf defaultVarSel;
@@ -33,10 +43,15 @@ class XCSPExtension extends XCSP {
                     .setRestartOnSolution(true)
                     .setExcludeObjective(true)
                     .setExcludeViews(false)
-                    .setMetaStrategy(
-                            lc > 0 ? m -> Search.lastConflict(m, 1) :
-                                    cos ? Search::conflictOrderingSearch :
-                                            m -> m);
+                    .setMetaStrategy(m -> {
+                        if (lc > 0) {
+                            return Search.lastConflict(m, 1);
+                        } else if (cos) {
+                            return Search.conflictOrderingSearch(m);
+                        } else {
+                            return m;
+                        }
+                    });
         } else {
             // variable selection
             defaultValSel = new SearchParams.ValSelConf(
@@ -53,14 +68,14 @@ class XCSPExtension extends XCSP {
                     .setExcludeViews(false)
                     .setMetaStrategy(m -> Search.lastConflict(m, 1));
         }
-        bb.setIntVarStrategy((vars) -> defaultVarSel.make().apply(vars, defaultValSel.make().apply(vars[0].getModel())));
+        bb.setIntVarStrategy(vars -> defaultVarSel.make().apply(vars,
+                defaultValSel.make().apply(vars[0].getModel())));
         bb.setRestartPolicy(defaultResConf.make());
 
         if (level.isLoggable(Level.INFO)) {
             solver.log().println(bb.toString());
         }
         bb.complete(solver.getModel(), solver.getSearch());
-	}
-	
-	
+    }
+
 }
