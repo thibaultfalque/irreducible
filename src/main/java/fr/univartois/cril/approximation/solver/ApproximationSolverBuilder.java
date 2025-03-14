@@ -30,7 +30,6 @@ import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
-import fr.univartois.cril.approximation.subapproximation.measure.MeanFilteringConstraintMeasure;
 import fr.univartois.cril.approximation.subapproximation.remover.ConstraintRemoverFactory;
 import net.sourceforge.argparse4j.inf.Namespace;
 
@@ -179,21 +178,6 @@ public class ApproximationSolverBuilder {
      */
     public ApproximationSolverBuilder withSpecificConstraintMeasure(String m) {
         measure = ConstraintMeasureFactory.instance().createConstraintMeasurerByName(m, decorator);
-        return this;
-    }
-
-    /**
-     * With mean computation.
-     *
-     * @param mean the mean
-     *
-     * @return the approximation solver builder
-     */
-    public ApproximationSolverBuilder withMeanComputation(boolean mean) {
-        if (mean) {
-            measure = new MeanFilteringConstraintMeasure(measure);
-            measure.setSolver(decorator);
-        }
         return this;
     }
 
