@@ -328,16 +328,6 @@ public class ApproximationSolverDecorator
     /*
      * (non-Javadoc)
      *
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return solver.hashCode();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
      * @see
      * org.chocosolver.solver.search.loop.monitors.ISearchMonitorFactory#limitFail(long)
      */
@@ -468,16 +458,6 @@ public class ApproximationSolverDecorator
      */
     public void showStatistics() {
         solver.showStatistics();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
-        return solver.equals(obj);
     }
 
     /*
