@@ -31,6 +31,7 @@ import org.chocosolver.solver.objective.ObjectiveFactory;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
+import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.SolverContext;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 
@@ -76,10 +77,15 @@ public class SubApproximationStateSolver extends AbstractState {
             ApproximationSolverDecorator decorator) {
         super(context, solver, decorator,
                 context.getSubApproximationConfiguration().getPathStrategy());
-        this.config = context.getSubApproximationConfiguration();
         this.previous = previous;
-        remover = config.getRemover();
-        pathStrategy = config.getPathStrategy();
+        remover = getConfig().getRemover();
+        pathStrategy = getConfig().getPathStrategy();
+    }
+
+    @Override
+    public void resetLimitSolver() {
+        super.resetLimitSolver();
+        context.updateSubApproximationConfiguration();
     }
 
     /*
@@ -105,7 +111,7 @@ public class SubApproximationStateSolver extends AbstractState {
                 }
             }
         } else {
-            config.setNbFailed(Integer.MAX_VALUE);
+            getConfig().setNbFailed(Integer.MAX_VALUE);
         }
 
         solver.setObjectiveManager(ObjectiveFactory.SAT());
@@ -217,4 +223,13 @@ public class SubApproximationStateSolver extends AbstractState {
         return false;
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.solver.state.ISolverState#getConfig()
+     */
+    @Override
+    public SolverConfiguration getConfig() {
+        return context.getSubApproximationConfiguration();
+    }
 }

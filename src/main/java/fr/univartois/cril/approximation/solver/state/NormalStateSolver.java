@@ -28,6 +28,7 @@ import org.chocosolver.solver.variables.Variable;
 
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
+import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.SolverContext;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 
@@ -73,8 +74,13 @@ public class NormalStateSolver extends AbstractState {
     public NormalStateSolver(Solver solver, SolverContext context,
             ApproximationSolverDecorator decorator) {
         super(context, solver, decorator, context.getNormalConfiguration().getPathStrategy());
-        this.config = context.getNormalConfiguration();
         this.om = solver.getObjectiveManager();
+    }
+
+    @Override
+    public void resetLimitSolver() {
+        super.resetLimitSolver();
+        context.updateNormalConfiguration();
     }
 
     /*
@@ -234,4 +240,13 @@ public class NormalStateSolver extends AbstractState {
         return true;
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.solver.state.ISolverState#getConfig()
+     */
+    @Override
+    public SolverConfiguration getConfig() {
+        return context.getNormalConfiguration();
+    }
 }

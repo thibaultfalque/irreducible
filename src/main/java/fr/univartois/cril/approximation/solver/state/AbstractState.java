@@ -64,13 +64,6 @@ import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 public abstract class AbstractState implements ISolverState {
 
     /**
-     * The configuration settings for the solver in the current state.
-     * This includes parameters such as failure thresholds, scaling factors, and
-     * solution limits that influence solver behavior.
-     */
-    protected SolverConfiguration config;
-
-    /**
      * The shared context containing global solver configurations.
      * This provides access to different solver configurations and helps manage
      * transitions between solver states.
@@ -123,9 +116,8 @@ public abstract class AbstractState implements ISolverState {
      */
     @Override
     public void resetLimitSolver() {
-        solver.limitSolution(config.getLimitSolution());
-        solver.limitFail(config.getNbFailed());
-        this.config = config.update();
+        solver.limitSolution(getConfig().getLimitSolution());
+        solver.limitFail(getConfig().getNbFailed());
     }
 
     /**
@@ -134,8 +126,7 @@ public abstract class AbstractState implements ISolverState {
      * @return the universe solver result
      */
     protected UniverseSolverResult internalSolve() {
-        var observer = new RestartObserver(decorator, config.getRatio(), config.getNbFailed(),
-                config.getFactor());
+        var observer = new RestartObserver(decorator, getConfig().getRatio(), getConfig().getNbFailed(), getConfig().getFactor());
         solver.plugMonitor(observer);
         var f = false;
         if (solver.getObjectiveManager().isOptimization()) {
@@ -180,14 +171,5 @@ public abstract class AbstractState implements ISolverState {
         return decorator.isUserinterruption();
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.solver.state.ISolverState#getConfig()
-     */
-    @Override
-    public SolverConfiguration getConfig() {
-        return config;
-    }
 
 }

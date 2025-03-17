@@ -75,6 +75,10 @@ public class SolverContext {
         this.normalConfiguration = normalConfiguration;
     }
 
+    public void updateNormalConfiguration() {
+        this.normalConfiguration = normalConfiguration.update();
+    }
+
     /**
      * Gives the subApproximationConfiguration of this SolverContext.
      *
@@ -94,4 +98,7 @@ public class SolverContext {
         this.subApproximationConfiguration = subApproximationConfiguration;
     }
 
+    public void updateSubApproximationConfiguration() {
+        this.subApproximationConfiguration = subApproximationConfiguration.update();
+    }
 }
