@@ -27,7 +27,6 @@ import org.chocosolver.solver.Solver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
-import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 import fr.univartois.cril.approximation.subapproximation.measure.ConstraintMeasureFactory;
 import fr.univartois.cril.approximation.subapproximation.remover.ConstraintRemoverFactory;
@@ -79,18 +78,6 @@ public class ApproximationSolverBuilder {
     public ApproximationSolverBuilder(Solver solver) {
         this.solver = solver;
         decorator = new ApproximationSolverDecorator(solver.getModel());
-    }
-
-    /**
-     * Sets the keep nogood.
-     *
-     * @param value the value
-     *
-     * @return the approximation solver builder
-     */
-    public ApproximationSolverBuilder setKeepNogood(KeepNoGoodStrategy value) {
-        decorator.setKeepNogood(value);
-        return this;
     }
 
     /**

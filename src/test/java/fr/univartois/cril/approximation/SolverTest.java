@@ -81,7 +81,6 @@ class SolverTest {
         var builder = new ApproximationSolverBuilder(model.getSolver())
                 .withSpecificConstraintRemover(arguments.getString("constraint_remover"))
                 .withSpecificConstraintMeasure(arguments.getString("measure"))
-                .setKeepNogood(arguments.get("keep_nogood"))
                 .setKeepFalsified(arguments.get("keep_falsified"))
                 .setVerbosity(arguments.getInt("verbosity"))
                 .setTimeout(arguments.getString("global_timeout"));

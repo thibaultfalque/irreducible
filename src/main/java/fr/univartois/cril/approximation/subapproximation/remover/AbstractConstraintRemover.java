@@ -20,55 +20,49 @@
 
 package fr.univartois.cril.approximation.subapproximation.remover;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.chocosolver.solver.constraints.Constraint;
-
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
+
 /**
- * The AbstractConstraintRemover
+ * The AbstractConstraintRemover.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
+ * @param <T> the generic type
  */
 public abstract class AbstractConstraintRemover<T> implements IConstraintsRemover {
 
-	protected IConstraintMeasure measure;
+    /** The measure. */
+    protected IConstraintMeasure measure;
 
-	protected IConstraintGroupSolver groupSolver;
-	
-	protected Set<Constraint> ignoredConstraint;
-	
-	protected Heap<T> heapConstraint;
+    /** The group solver. */
+    protected IConstraintGroupSolver groupSolver;
 
-	public AbstractConstraintRemover(IConstraintGroupSolver groupSolver) {
-		this.groupSolver = groupSolver;
-		this.ignoredConstraint=new HashSet<>(groupSolver.getConstraints().size());
-	}
+    /** The heap constraint. */
+    protected Heap<T> heapConstraint;
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#
-	 * setConstraintMeasure(fr.univartois.cril.approximation.core.measure.
-	 * IConstraintMeasure)
-	 */
-	@Override
-	public void setConstraintMeasure(IConstraintMeasure measure) {
-		this.measure = measure;
-	}
-
-    @Override
-    public Set<Constraint> getIgnoredConstraints() {
-    	return ignoredConstraint;
+    /**
+     * Instantiates a new abstract constraint remover.
+     *
+     * @param groupSolver the group solver
+     */
+    public AbstractConstraintRemover(IConstraintGroupSolver groupSolver) {
+        this.groupSolver = groupSolver;
     }
-    
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.remover.IConstraintsRemover#
+     * setConstraintMeasure(fr.univartois.cril.approximation.core.measure.
+     * IConstraintMeasure)
+     */
+    @Override
+    public void setConstraintMeasure(IConstraintMeasure measure) {
+        this.measure = measure;
+    }
 
 }

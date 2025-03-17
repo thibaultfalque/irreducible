@@ -25,7 +25,7 @@ import org.chocosolver.solver.constraints.Constraint;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
- * The IConstraintMeasureSelector
+ * The IConstraintMeasureSelector.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -34,23 +34,73 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
  */
 public interface IConstraintMeasure {
 
-	default void setSolver(IConstraintGroupSolver solver) {
-	}
+    /**
+     * Sets the solver.
+     *
+     * @param solver the new solver
+     */
+    default void setSolver(IConstraintGroupSolver solver) {
+    }
 
-	double computeScore(Constraint c);
+    /**
+     * Compute score.
+     *
+     * @param c the c
+     *
+     * @return the double
+     */
+    double computeScore(Constraint c);
 
-	default double computeScore(GroupConstraint g, int count) {
-		double result = 0.0;
-		for (Constraint c : g.getConstraints()) {
-			result += computeScore(c);
-		}
-		return count > 0 ? result / count : result;
+    /**
+     * Compute score.
+     *
+     * @param g the g
+     * @param count the count
+     *
+     * @return the double
+     */
+    default double computeScore(GroupConstraint g, int count) {
+        double result = 0.0;
+        for (Constraint c : g.getConstraints()) {
+            result += computeScore(c);
+        }
+        result = count > 0 ? result / (count * g.getConstraints().size()) : result;
+        g.setScore(result);
+        return result;
+    }
 
-	}
+    /**
+     * Update measure N effective filtering.
+     *
+     * @param <T> the generic type
+     * @param heap the heap
+     * @param c the c
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
+    <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue, double newValue);
 
-	<T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue, double newValue);
+    /**
+     * Update measure WDEG weight.
+     *
+     * @param <T> the generic type
+     * @param heap the heap
+     * @param c the c
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
+    <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue);
 
-	<T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue);
+    /**
+     * Update measure N effective backtracking.
+     *
+     * @param <T> the generic type
+     * @param heap the heap
+     * @param c the c
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
+    <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
+            double newValue);
 
-	<T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue, double newValue);
 }

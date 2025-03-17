@@ -25,9 +25,8 @@ import java.util.List;
 
 import org.chocosolver.solver.constraints.Constraint;
 
-
 /**
- * The GroupConstraint
+ * The GroupConstraint.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -36,21 +35,34 @@ import org.chocosolver.solver.constraints.Constraint;
  */
 public class GroupConstraint {
 
+    /** The constraints. */
     private List<Constraint> constraints;
+
+    /** The n group. */
     private int nGroup;
+
+    /** The score. */
+    private double score;
+
     /**
      * Creates a new GroupConstraint.
+     *
+     * @param nGroup the n group
      */
     public GroupConstraint(int nGroup) {
-        this.nGroup=nGroup;
-        this.constraints=new ArrayList<>();
+        this.nGroup = nGroup;
+        this.constraints = new ArrayList<>();
     }
-    
+
+    /**
+     * Adds the.
+     *
+     * @param c the c
+     */
     public void add(Constraint c) {
         this.constraints.add(c);
     }
 
-    
     /**
      * Gives the constraints of this GroupConstraint.
      *
@@ -60,7 +72,6 @@ public class GroupConstraint {
         return constraints;
     }
 
-    
     /**
      * Gives the group number of this GroupConstraint.
      *
@@ -69,5 +80,23 @@ public class GroupConstraint {
     public int getGroupNumber() {
         return nGroup;
     }
-}
 
+    /**
+     * Gives the score of this GroupConstraint.
+     *
+     * @return This GroupConstraint's score.
+     */
+    public double getScore() {
+        return score;
+    }
+
+    /**
+     * Sets this GroupConstraint's score.
+     *
+     * @param score The score to set.
+     */
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+}

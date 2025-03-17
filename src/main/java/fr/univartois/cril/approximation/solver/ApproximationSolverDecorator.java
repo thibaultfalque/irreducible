@@ -80,7 +80,6 @@ import fr.univartois.cril.approximation.XCSPParserExtension;
 import fr.univartois.cril.approximation.core.GroupConstraint;
 import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
-import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 
@@ -117,9 +116,6 @@ public class ApproximationSolverDecorator
 
     /** The state. */
     private ISolverState state;
-
-    /** The keep nogood. */
-    private KeepNoGoodStrategy keepNogood = KeepNoGoodStrategy.ALWAYS;
 
     /** The keep falsified. */
     private KeepFalsifiedConstraintStrategy keepFalsified = KeepFalsifiedConstraintStrategy.NEVER;
@@ -1976,15 +1972,6 @@ public class ApproximationSolverDecorator
         } else {
             System.out.println("s UNKNOWN");
         }
-    }
-
-    /**
-     * Sets the keep nogood.
-     *
-     * @param keepNogood the new keep nogood
-     */
-    public void setKeepNogood(KeepNoGoodStrategy keepNogood) {
-        this.keepNogood = keepNogood;
     }
 
     /**

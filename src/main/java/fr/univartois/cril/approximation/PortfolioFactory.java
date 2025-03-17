@@ -29,6 +29,7 @@ public class PortfolioFactory {
      * New default portfolio.
      *
      * @param args the args
+     *
      * @return the portfolio
      */
     public static Portfolio newDefaultPortfolio(Namespace args) {
@@ -71,7 +72,6 @@ public class PortfolioFactory {
                             .withSpecificConstraintRemover(
                                     arguments.getString("constraint_remover"))
                             .withSpecificConstraintMeasure(arguments.getString("measure"))
-                            .setKeepNogood(arguments.get("keep_nogood"))
                             .setKeepFalsified(arguments.get("keep_falsified"))
                             .setVerbosity(arguments.getInt("verbosity"))
                             .setTimeout(arguments.getString("global_timeout"));

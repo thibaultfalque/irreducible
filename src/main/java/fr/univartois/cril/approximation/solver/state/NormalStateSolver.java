@@ -100,9 +100,7 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public ISolverState nextState() {
-        if (next == null) {
-            next = new SubApproximationStateSolver(context, solver, this, decorator);
-        }
+        next = new SubApproximationStateSolver(context, solver, this, decorator);
         return next;
     }
 

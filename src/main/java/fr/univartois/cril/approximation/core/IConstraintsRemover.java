@@ -22,13 +22,12 @@ package fr.univartois.cril.approximation.core;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.search.loop.monitors.IMonitorApprox;
 
 /**
- * The IConstraintsSelector
+ * The IConstraintsSelector.
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -36,9 +35,26 @@ import org.chocosolver.solver.search.loop.monitors.IMonitorApprox;
  * @version 0.1.0
  */
 public interface IConstraintsRemover extends IMonitorApprox {
-	void setConstraintMeasure(IConstraintMeasure measure);
-    List<Constraint> computeNextConstraintsToRemove();
-    Set<Constraint> getIgnoredConstraints();
-    void restoreConstraints(Collection<Constraint> constraints);
-}
 
+    /**
+     * Sets the constraint measure.
+     *
+     * @param measure the new constraint measure
+     */
+    void setConstraintMeasure(IConstraintMeasure measure);
+
+    /**
+     * Compute next constraints to remove.
+     *
+     * @return the list
+     */
+    List<Constraint> computeNextConstraintsToRemove();
+
+    /**
+     * Restore constraints.
+     *
+     * @param constraints the constraints
+     */
+    void restoreConstraints(Collection<Constraint> constraints);
+
+}

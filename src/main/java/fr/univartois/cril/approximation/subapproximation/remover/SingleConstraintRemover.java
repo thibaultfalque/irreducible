@@ -31,15 +31,19 @@ import fr.univartois.cril.approximation.util.CollectionFactory;
 import fr.univartois.cril.approximation.util.collections.heaps.HeapFactory;
 
 /**
- * The SingleConstraintRemover
+ * The SingleConstraintRemover.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
 public class SingleConstraintRemover extends AbstractConstraintRemover<Constraint> {
 
+    /**
+     * Instantiates a new single constraint remover.
+     *
+     * @param groupSolver the group solver
+     */
     public SingleConstraintRemover(IConstraintGroupSolver groupSolver) {
         super(groupSolver);
     }
@@ -62,7 +66,6 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
             }
             c = heapConstraint.poll();
         }
-        ignoredConstraint.add(c);
         return List.of(c);
     }
 
@@ -78,7 +81,7 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
     public void setConstraintMeasure(IConstraintMeasure measure) {
         super.setConstraintMeasure(measure);
         this.heapConstraint = HeapFactory.newMaximumHeap(this.groupSolver.nConstraints(),
-                () -> CollectionFactory.newMapInt(Constraint.class, k -> k.getCidxInModel(),
+                () -> CollectionFactory.newMapInt(Constraint.class, Constraint::getCidxInModel,
                         i -> this.groupSolver.getConstraint(i), this.groupSolver.nConstraints()),
                 (a, b) -> Double.compare(measure.computeScore(a), measure.computeScore(b)));
         for (Constraint c : groupSolver.getConstraints()) {
@@ -86,29 +89,47 @@ public class SingleConstraintRemover extends AbstractConstraintRemover<Constrain
         }
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.chocosolver.solver.search.loop.monitors.IMonitorApprox#whenEffectiveFilteringChange(org.chocosolver.solver.constraints.Constraint, int, int)
+     */
     @Override
     public void whenEffectiveFilteringChange(Constraint c, int old, int newValue) {
         measure.updateMeasureNEffectiveFiltering(heapConstraint, c, old, newValue);
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.chocosolver.solver.search.loop.monitors.IMonitorApprox#whenWDEGWeightChange(org.chocosolver.solver.constraints.Constraint, double, double)
+     */
     @Override
     public void whenWDEGWeightChange(Constraint c, double old, double newValue) {
         measure.updateMeasureWDEGWeight(heapConstraint, c, old, newValue);
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.IConstraintsRemover#restoreConstraints(java.util.Collection)
+     */
     @Override
     public void restoreConstraints(Collection<Constraint> constraints) {
         for (Constraint c : constraints) {
             c.setEnabled(true);
             heapConstraint.add(c);
         }
-
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.chocosolver.solver.search.loop.monitors.IMonitorApprox#whenBacktrackingChange(org.chocosolver.solver.constraints.Constraint, int, int)
+     */
     @Override
     public void whenBacktrackingChange(Constraint c, int old, int newValue) {
         measure.updateMeasureNEffectiveBacktracking(heapConstraint, c, old, newValue);
-
     }
 
 }
