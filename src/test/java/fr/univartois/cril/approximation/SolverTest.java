@@ -62,7 +62,7 @@ class SolverTest {
                 "-restarts", "[luby,500,5000,true]", "-lc", "1"
         };
 
-        var parser = CLI.createCLIParser();
+        var parser = CLI.createCLIParser(true);
         var arguments = parser.parseArgs(args);
 
         List<String> chocoArgs = new ArrayList<>();
@@ -81,7 +81,6 @@ class SolverTest {
         var builder = new ApproximationSolverBuilder(model.getSolver())
                 .withSpecificConstraintRemover(arguments.getString("constraint_remover"))
                 .withSpecificConstraintMeasure(arguments.getString("measure"))
-                .withMeanComputation(arguments.getBoolean("mean"))
                 .setKeepNogood(arguments.get("keep_nogood"))
                 .setKeepFalsified(arguments.get("keep_falsified"))
                 .setVerbosity(arguments.getInt("verbosity"))

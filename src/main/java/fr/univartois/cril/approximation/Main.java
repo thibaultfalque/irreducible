@@ -46,38 +46,46 @@ public class Main {
      * @param args the arguments
      */
     public static void main(String[] args) {
-        var parser = CLI.createCLIParser();
+        var parser = CLI.createCLIParser(true);
         try {
             var arguments = parser.parseArgs(args);
+            if (arguments.getBoolean("portfolio")) {
+                var portfolio = PortfolioFactory.newDefaultPortfolio(arguments);
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    portfolio.stop();
+                }));
+                portfolio.solve();
+            } else {
+                System.out.println("c " + arguments);
+                List<String> chocoArgs = new ArrayList<>();
+                chocoArgs.add(arguments.<String>get("instance"));
+                chocoArgs.addAll(arguments.getList("remaining"));
 
-            List<String> chocoArgs = new ArrayList<>();
-            chocoArgs.add(arguments.<String>get("instance"));
-            chocoArgs.addAll(arguments.getList("remaining"));
+                var xcsp = new XCSPExtension();
+                if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
+                    xcsp.createSolver();
+                    xcsp.buildModel();
+                    xcsp.configureSearch();
+                }
+                xcsp.removeShutdownHook();
+                var model = xcsp.getModel();
 
-            var xcsp = new XCSPExtension();
-            if (xcsp.setUp(chocoArgs.toArray(new String[chocoArgs.size()]))) {
-                xcsp.createSolver();
-                xcsp.buildModel();
-                xcsp.configureSearch();
+                model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
+                var builder = new ApproximationSolverBuilder(model.getSolver())
+                        .withSpecificConstraintRemover(arguments.getString("constraint_remover"))
+                        .withSpecificConstraintMeasure(arguments.getString("measure"))
+                        .setKeepNogood(arguments.get("keep_nogood"))
+                        .setKeepFalsified(arguments.get("keep_falsified"))
+                        .setVerbosity(arguments.getInt("verbosity"))
+                        .setTimeout(arguments.getString("global_timeout"));
+
+                var solver = builder.initState(arguments).build();
+
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    solver.displaySolution(xcsp);
+                }));
+                solver.solve();
             }
-            xcsp.removeShutdownHook();
-            var model = xcsp.getModel();
-
-            var builder = new ApproximationSolverBuilder(model.getSolver())
-                    .withSpecificConstraintRemover(arguments.getString("constraint_remover"))
-                    .withSpecificConstraintMeasure(arguments.getString("measure"))
-                    .setKeepNogood(arguments.get("keep_nogood"))
-                    .setKeepFalsified(arguments.get("keep_falsified"))
-                    .setVerbosity(arguments.getInt("verbosity"))
-                    .setTimeout(arguments.getString("global_timeout"));
-
-            var solver = builder.initState(arguments).build();
-
-            model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                solver.displaySolution(xcsp);
-            }));
-            solver.solve();
 
         } catch (ArgumentParserException e) {
             parser.handleError(e);

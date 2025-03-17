@@ -83,7 +83,6 @@ import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
-import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver;
 
 /**
  * The ApproximationSolverDecorator is a decorator for the Choco solver. It integrates the
@@ -95,7 +94,8 @@ import fr.univartois.cril.approximation.solver.state.SubApproximationStateSolver
  * @version 0.1.0
  */
 public class ApproximationSolverDecorator
-        implements IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
+
+        implements MyISolver, IConstraintGroupSolver, IMonitorSolution, IApproximationSolver {
 
     /** The context. */
     private SolverContext context;
@@ -1145,6 +1145,7 @@ public class ApproximationSolverDecorator
      *
      * @return the objective manager
      */
+    @Override
     public <V extends Variable> IObjectiveManager<V> getObjectiveManager() {
         return solver.getObjectiveManager();
     }
@@ -1376,6 +1377,7 @@ public class ApproximationSolverDecorator
      *
      * @param criterion the criterion
      */
+    @Override
     public void addStopCriterion(Criterion... criterion) {
         solver.addStopCriterion(criterion);
     }
@@ -1410,6 +1412,7 @@ public class ApproximationSolverDecorator
      *
      * @param sm the sm
      */
+    @Override
     public void plugMonitor(ISearchMonitor sm) {
         solver.plugMonitor(sm);
     }
@@ -1780,7 +1783,7 @@ public class ApproximationSolverDecorator
             state.resetLimitSolver();
             result = state.solve();
             while (result == UniverseSolverResult.SATISFIABLE
-                   && this.state instanceof SubApproximationStateSolver
+                   && !this.state.isSafe()
                    && !this.state.isTimeout()) {
                 reset();
                 for (IntVar var : solution.retrieveIntVars(true)) {
