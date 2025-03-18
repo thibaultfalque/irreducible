@@ -82,6 +82,11 @@ public class SubApproximationStateSolver extends AbstractState {
         pathStrategy = getConfig().getPathStrategy();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.solver.state.AbstractState#resetLimitSolver()
+     */
     @Override
     public void resetLimitSolver() {
         super.resetLimitSolver();
@@ -229,7 +234,8 @@ public class SubApproximationStateSolver extends AbstractState {
      * @see fr.univartois.cril.approximation.solver.state.ISolverState#getConfig()
      */
     @Override
-    public SolverConfiguration getConfig() {
+    public final SolverConfiguration getConfig() {
         return context.getSubApproximationConfiguration();
     }
+
 }
