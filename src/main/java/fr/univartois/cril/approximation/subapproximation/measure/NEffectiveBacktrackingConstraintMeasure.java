@@ -26,16 +26,13 @@ import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
- * The NEffectiveFilteringConstraintMeasureSelector
+ * The NEffectiveFilteringConstraintMeasureSelector.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
-public class NEffectiveBacktrackingConstraintMeasure extends AbstractMeasure {
-
-    
+public class NEffectiveBacktrackingConstraintMeasure implements IConstraintMeasure {
 
     /*
      * (non-Javadoc)
@@ -48,16 +45,30 @@ public class NEffectiveBacktrackingConstraintMeasure extends AbstractMeasure {
         return c.getnEffectiveBacktracking();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.IConstraintMeasure#updateMeasureNEffectiveFiltering(fr.univartois.cril.approximation.util.collections.heaps.Heap, java.lang.Object, double, double)
+     */
     @Override
     public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue,
             double newValue) {
-
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.IConstraintMeasure#updateMeasureWDEGWeight(fr.univartois.cril.approximation.util.collections.heaps.Heap, java.lang.Object, double, double)
+     */
     @Override
     public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
     }
-    
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.core.IConstraintMeasure#updateMeasureNEffectiveBacktracking(fr.univartois.cril.approximation.util.collections.heaps.Heap, java.lang.Object, double, double)
+     */
     @Override
     public <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
             double newValue) {
@@ -66,8 +77,6 @@ public class NEffectiveBacktrackingConstraintMeasure extends AbstractMeasure {
         } else {
             heap.decrease(c);
         }
-
     }
-
 
 }

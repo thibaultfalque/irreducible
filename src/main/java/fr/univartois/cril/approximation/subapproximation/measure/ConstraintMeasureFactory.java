@@ -27,17 +27,18 @@ import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.AbstractFactory;
 
 /**
- * The ConstraintMeasureFactory
+ * The ConstraintMeasureFactory.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
 public class ConstraintMeasureFactory extends AbstractFactory<IConstraintMeasure> {
 
+    /** The Constant PACKAGE. */
     private static final String PACKAGE = "fr.univartois.cril.approximation.subapproximation.measure.";
 
+    /** The Constant CLASS_NAME_SUFFIX. */
     private static final String CLASS_NAME_SUFFIX = "ConstraintMeasure";
 
     /**
@@ -45,10 +46,19 @@ public class ConstraintMeasureFactory extends AbstractFactory<IConstraintMeasure
      */
     private static final ConstraintMeasureFactory INSTANCE = new ConstraintMeasureFactory();
 
+    /**
+     * Instantiates a new constraint measure factory.
+     */
     private ConstraintMeasureFactory() {
-
     }
 
+    /**
+     * Creates a new ConstraintMeasure object.
+     *
+     * @param name the name
+     * @param adapter the adapter
+     * @return the i constraint measure
+     */
     public IConstraintMeasure createConstraintMeasurerByName(String name,
             IConstraintGroupSolver adapter) {
         try {
@@ -59,16 +69,21 @@ public class ConstraintMeasureFactory extends AbstractFactory<IConstraintMeasure
             } else {
                 m = createByName(PACKAGE + name + CLASS_NAME_SUFFIX).newInstance();
             }
-            m.setSolver(adapter);
             return m;
         } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException e) {
+                 | InvocationTargetException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * Instance.
+     *
+     * @return the constraint measure factory
+     */
     public static ConstraintMeasureFactory instance() {
         return INSTANCE;
     }
+
 }

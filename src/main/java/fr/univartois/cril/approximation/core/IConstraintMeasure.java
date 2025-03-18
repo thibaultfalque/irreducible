@@ -35,14 +35,6 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 public interface IConstraintMeasure {
 
     /**
-     * Sets the solver.
-     *
-     * @param solver the new solver
-     */
-    default void setSolver(IConstraintGroupSolver solver) {
-    }
-
-    /**
      * Compute score.
      *
      * @param c the c

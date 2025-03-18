@@ -26,17 +26,20 @@ import fr.univartois.cril.approximation.core.IConstraintMeasure;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
- * The NEffectiveFilteringConstraintMeasureSelector
+ * The NEffectiveFilteringConstraintMeasureSelector.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
-public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
+public class NEffectiveFilteringConstraintMeasure implements IConstraintMeasure {
 
-    
-
+    /**
+     * Compute score.
+     *
+     * @param c the c
+     * @return the double
+     */
     /*
      * (non-Javadoc)
      *
@@ -48,6 +51,15 @@ public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
         return c.getnEffectiveFiltering();
     }
 
+    /**
+     * Update measure N effective filtering.
+     *
+     * @param <T> the generic type
+     * @param heap the heap
+     * @param c the c
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
     @Override
     public <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue,
             double newValue) {
@@ -56,19 +68,34 @@ public class NEffectiveFilteringConstraintMeasure extends AbstractMeasure {
         } else {
             heap.decrease(c);
         }
-
     }
 
+    /**
+     * Update measure WDEG weight.
+     *
+     * @param <T> the generic type
+     * @param heap the heap
+     * @param c the c
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
     @Override
     public <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue) {
     }
 
+    /**
+     * Update measure N effective backtracking.
+     *
+     * @param <T> the generic type
+     * @param heap the heap
+     * @param c the c
+     * @param oldValue the old value
+     * @param newValue the new value
+     */
     @Override
     public <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
             double newValue) {
         // TODO Auto-generated method stub
-        
     }
-
 
 }
