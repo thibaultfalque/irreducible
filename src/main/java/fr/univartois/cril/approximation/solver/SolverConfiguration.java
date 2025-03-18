@@ -65,13 +65,6 @@ public class SolverConfiguration {
     private int nbFailed;
 
     /**
-     * The initial number of allowed failed before adjustments are made.
-     * This value is set at the beginning and remains unchanged to track baseline
-     * behavior.
-     */
-    private int initFailed;
-
-    /**
      * A scaling factor applied to the number of failed when updating solver
      * parameters.
      */
@@ -113,7 +106,6 @@ public class SolverConfiguration {
      */
     public SolverConfiguration(int nbFailed, double factor, long limitSolution, double ratio) {
         this.nbFailed = nbFailed;
-        this.initFailed = nbFailed;
         this.factor = factor;
         this.limitSolution = limitSolution;
         this.ratio = ratio;
