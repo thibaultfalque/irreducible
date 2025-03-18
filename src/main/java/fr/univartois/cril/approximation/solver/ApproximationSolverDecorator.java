@@ -23,9 +23,9 @@ package fr.univartois.cril.approximation.solver;
 import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -58,7 +58,6 @@ import org.chocosolver.solver.search.loop.monitors.ISearchMonitor;
 import org.chocosolver.solver.search.loop.monitors.SearchMonitorList;
 import org.chocosolver.solver.search.loop.monitors.SolvingStatisticsFlow;
 import org.chocosolver.solver.search.loop.move.Move;
-import org.chocosolver.solver.search.loop.propagate.Propagate;
 import org.chocosolver.solver.search.measure.IMeasures;
 import org.chocosolver.solver.search.measure.MeasuresRecorder;
 import org.chocosolver.solver.search.restart.AbstractRestart;
@@ -122,12 +121,6 @@ public class ApproximationSolverDecorator
 
     /** The solution. */
     private Solution solution;
-
-    /** The cnt steps. */
-    private int cntSteps;
-
-    /** The limit steps. */
-    private long limitSteps = Long.MAX_VALUE;
 
     /** The result. */
     private UniverseSolverResult result;
@@ -287,8 +280,8 @@ public class ApproximationSolverDecorator
      * long)
      */
     @Override
-    public void setHBFS(double a, double b, long N) {
-        solver.setHBFS(a, b, N);
+    public void setHBFS(double a, double b, long n) {
+        solver.setHBFS(a, b, n);
     }
 
     /*
@@ -782,15 +775,6 @@ public class ApproximationSolverDecorator
         return solver.findAllOptimalSolutions(objective, maximize, stop);
     }
 
-    /**
-     * Show dashboard.
-     *
-     * @param refresh the refresh
-     */
-    public void showDashboard(long refresh) {
-        solver.showDashboard(refresh);
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -882,17 +866,6 @@ public class ApproximationSolverDecorator
     public Stream<Solution> streamOptimalSolutions(IntVar objective, boolean maximize,
             Criterion... stop) {
         return solver.streamOptimalSolutions(objective, maximize, stop);
-    }
-
-    /**
-     * Output search tree to CP profiler.
-     *
-     * @param domain the domain
-     *
-     * @return the closeable
-     */
-    public Closeable outputSearchTreeToCPProfiler(boolean domain) {
-        return solver.outputSearchTreeToCPProfiler(domain);
     }
 
     /**
@@ -1000,12 +973,12 @@ public class ApproximationSolverDecorator
     /**
      * Find minimum conflicting set.
      *
-     * @param conflictingSet the conflicting set
+     * @param conflicting the conflicting set
      *
      * @return the list
      */
-    public List<Constraint> findMinimumConflictingSet(List<Constraint> conflictingSet) {
-        return solver.findMinimumConflictingSet(conflictingSet);
+    public List<Constraint> findMinimumConflictingSet(List<Constraint> conflicting) {
+        return solver.findMinimumConflictingSet(conflicting);
     }
 
     /**
@@ -1094,15 +1067,6 @@ public class ApproximationSolverDecorator
      */
     public Move getMove() {
         return solver.getMove();
-    }
-
-    /**
-     * Gets the propagate.
-     *
-     * @return the propagate
-     */
-    public Propagate getPropagate() {
-        return solver.getPropagate();
     }
 
     /**
@@ -1273,15 +1237,6 @@ public class ApproximationSolverDecorator
     }
 
     /**
-     * Sets the propagate.
-     *
-     * @param p the new propagate
-     */
-    public void setPropagate(Propagate p) {
-        solver.setPropagate(p);
-    }
-
-    /**
      * Adds the restarter.
      *
      * @param restarter the restarter
@@ -1354,11 +1309,11 @@ public class ApproximationSolverDecorator
     /**
      * Adds the hint.
      *
-     * @param var the var
+     * @param variable the var
      * @param val the val
      */
-    public void addHint(IntVar var, int val) {
-        solver.addHint(var, val);
+    public void addHint(IntVar variable, int val) {
+        solver.addHint(variable, val);
     }
 
     /**
@@ -1766,13 +1721,10 @@ public class ApproximationSolverDecorator
      */
     @Override
     public UniverseSolverResult solve() {
-        cntSteps = 0;
         this.state = getInitialState();
         state.resetLimitSolver();
         result = state.solve();
-        while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout()
-               && cntSteps < limitSteps) {
-            cntSteps++;
+        while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout()) {
             state = state.nextState();
             System.out.println("Start new state: " + this.state);
             reset();
@@ -1782,12 +1734,12 @@ public class ApproximationSolverDecorator
                    && !this.state.isSafe()
                    && !this.state.isTimeout()) {
                 reset();
-                for (IntVar var : solution.retrieveIntVars(true)) {
-                    if (var == normalState.om.getObjective()) {
+                for (IntVar variable : solution.retrieveIntVars(true)) {
+                    if (variable == normalState.om.getObjective()) {
                         continue;
                     }
 
-                    solver.addHint(var, solution.getIntVal(var));
+                    solver.addHint(variable, solution.getIntVal(variable));
                 }
                 keepFalsified.checkConstraints(solver.getModel());
                 state = state.previousState();
@@ -1799,7 +1751,7 @@ public class ApproximationSolverDecorator
             System.out.println(result + " after while");
         }
         System.out.println(result + " before end");
-        if (this.state.isTimeout() || cntSteps >= limitSteps) {
+        if (this.state.isTimeout()) {
             System.out.println("We reset the solver and restore all constraints.");
             reset();
             var old = this.state;
@@ -1874,7 +1826,7 @@ public class ApproximationSolverDecorator
      */
     private void finalOutPut(Solver solver) {
         Logger log = solver.log().bold();
-        if (solver.getSolutionCount() > 0 && state instanceof NormalStateSolver) {
+        if (solver.getSolutionCount() > 0 && state.isSafe()) {
             log = log.green();
             if (solver.getObjectiveManager().isOptimization() && !userinterruption) {
                 output.insert(0, "s OPTIMUM FOUND\n");
@@ -1882,7 +1834,7 @@ public class ApproximationSolverDecorator
                 output.insert(0, "s SATISFIABLE\n");
             }
         } else if (!userinterruption && result == UniverseSolverResult.UNSATISFIABLE
-                   && state instanceof NormalStateSolver) {
+                   && state.isSafe()) {
             output.insert(0, "s UNSATISFIABLE\n");
             log = log.red();
         } else {
@@ -1890,10 +1842,17 @@ public class ApproximationSolverDecorator
             log = log.black();
         }
         if (level.isLoggable(Level.COMPET)) {
-            output.append("d FOUND SOLUTIONS ").append(solver.getSolutionCount()).append("\n");
+            output.append("d FOUND SOLUTIONS ").append(solver.getSolutionCount()).append('\n');
             log.println(output.toString());
         }
         log.reset();
+        otherLevelOutput(solver);
+    }
+
+    /**
+     * @param solver
+     */
+    private void otherLevelOutput(Solver solver) {
         if (level.is(Level.RESANA)) {
             solver.log().printf(java.util.Locale.US, "s %s %.1f\n", !userinterruption ? "T" : "S",
                     solver.getTimeCount());
@@ -1909,29 +1868,33 @@ public class ApproximationSolverDecorator
                     solver.getSearchState());
         }
         if (level.is(Level.IRACE)) {
+            long resultValue = getObjectiveBound(solver);
+
             solver.log().printf(Locale.US, "%d %d",
-                    solver.getObjectiveManager()
-                            .isOptimization() ? (ResolutionPolicy.MAXIMIZE
-                                    .equals(solver.getObjectiveManager().getPolicy()) ? -1 : 1)
-                                                * solver.getObjectiveManager()
-                                                        .getBestSolutionValue()
-                                                        .intValue() : -solver.getSolutionCount(),
+                    resultValue,
                     !userinterruption ? (int) Math.ceil(solver.getTimeCount()) : Integer.MAX_VALUE);
         }
         if (level.isLoggable(Level.INFO)) {
             solver.log().bold().white().printf("%s \n", solver.getMeasures().toOneLineString());
         }
-        // if (csv) {
-        // solver.printCSVStatistics();
-        // }
-        // if (cs) {
-        // try {
-        // new SolutionChecker(true, instance, new
-        // ByteArrayInputStream(output.toString().getBytes()));
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
-        // }
+    }
+
+    /**
+     * @param solver
+     * @return
+     */
+    private long getObjectiveBound(Solver solver) {
+        long resultValue;
+        if (solver.getObjectiveManager().isOptimization()) {
+            if (ResolutionPolicy.MAXIMIZE == solver.getObjectiveManager().getPolicy()) {
+                resultValue = -solver.getObjectiveManager().getBestSolutionValue().intValue();
+            } else {
+                resultValue = solver.getObjectiveManager().getBestSolutionValue().intValue();
+            }
+        } else {
+            resultValue = -solver.getSolutionCount();
+        }
+        return resultValue;
     }
 
     /*
@@ -2030,33 +1993,6 @@ public class ApproximationSolverDecorator
         return solution;
     }
 
-    /**
-     * Gets the limit steps.
-     *
-     * @return the limitSteps
-     */
-    public long getLimitSteps() {
-        return limitSteps;
-    }
-
-    /**
-     * Limit steps.
-     *
-     * @param limitSteps the limitSteps to set
-     */
-    public void limitSteps(long limitSteps) {
-        this.limitSteps = limitSteps;
-    }
-
-    /**
-     * Gets the current step.
-     *
-     * @return the current step
-     */
-    public int getCurrentStep() {
-        return Math.max(cntSteps, 1);
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -2081,7 +2017,7 @@ public class ApproximationSolverDecorator
      *
      * @return the string
      */
-    public String printSolution(boolean format, HashMap<XVar, IntVar> map) {
+    public String printSolution(boolean format, Map<XVar, IntVar> map) {
         StringBuilder buffer = new StringBuilder();
         var ovars = new ArrayList<>(map.values());
         ovars.sort(IntVar::compareTo);
@@ -2091,14 +2027,12 @@ public class ApproximationSolverDecorator
             buffer.append("cost='").append(solver.getObjectiveManager().getBestSolutionValue())
                     .append("' ");
         }
-        buffer.append(">");
+        buffer.append('>');
         buffer.append(format ? "\nv \t" : "").append(S_LIST_IN);
         // list variables
         ovars.forEach(ovar -> buffer.append(ovar.getName()).append(' '));
         buffer.append(S_LIST_OUT).append(format ? "\nv \t" : "").append(S_VALU_IN);
-        ovars.forEach(ovar -> {
-            buffer.append(solution.getIntVal(ovar)).append(' ');
-        });
+        ovars.forEach(ovar -> buffer.append(solution.getIntVal(ovar)).append(' '));
         buffer.append(S_VALU_OUT).append(format ? "\nv " : "").append(S_INST_OUT);
         return buffer.toString();
     }

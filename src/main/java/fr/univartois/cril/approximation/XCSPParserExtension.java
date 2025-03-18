@@ -22,6 +22,7 @@
 package fr.univartois.cril.approximation;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.chocosolver.parser.xcsp.XCSPParser;
 import org.chocosolver.solver.variables.IntVar;
@@ -49,13 +50,13 @@ public class XCSPParserExtension extends XCSPParser {
      *
      * @return the vars of problem
      */
-    public HashMap<XVar, IntVar> getVarsOfProblem() {
+    public Map<XVar, IntVar> getVarsOfProblem() {
         try {
             var f = XCSPParser.class.getDeclaredField("mvars");
             f.setAccessible(true);
             return (HashMap<XVar, IntVar>) f.get(decoree);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
         }
     }
 
