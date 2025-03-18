@@ -1,0 +1,2 @@
+--approx --path-strategy APPROX_NORMAL --measure WdegFiltering --n-runs-normal 500  --n-runs-approx 500   -- -limit=[1800s] -f -varh DOMWDEG -valsel [MIN,true,32,true]  -restarts [luby,500,5000,true] -lc 1
+--default -- -limit=[1800s] -f -varh DOMWDEG -valsel [MIN,true,32,true]  -restarts [luby,500,5000,true] -lc 1

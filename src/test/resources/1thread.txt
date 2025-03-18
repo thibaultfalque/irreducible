@@ -1,0 +1,1 @@
+--default -- -limit=[1800s] -f -varh DOMWDEG -valsel [MIN,true,32,true]  -restarts [luby,500,5000,true] -lc 1 -lvl FINE
