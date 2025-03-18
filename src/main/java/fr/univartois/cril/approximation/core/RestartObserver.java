@@ -84,11 +84,11 @@ public class RestartObserver implements IVariableMonitor, IMonitorRestart {
 
 
 	@Override
-	public void onUpdate(Variable arg0, IEventType arg1) {
-		if (arg0.getDomainSize() == 1 && !assignedVars.contains(arg0.getName())) {
-			assignedVars.add(arg0.getName());
-		} else if (arg0.getDomainSize() != 1 && assignedVars.contains(arg0.getName())) {
-			assignedVars.remove(arg0.getName());
+	public void onUpdate(Variable variable, IEventType event) {
+		if (variable.getDomainSize() == 1 && !assignedVars.contains(variable.getName())) {
+			assignedVars.add(variable.getName());
+		} else if (variable.getDomainSize() != 1 && assignedVars.contains(variable.getName())) {
+			assignedVars.remove(variable.getName());
 		} 
 	}
 
