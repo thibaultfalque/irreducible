@@ -67,9 +67,6 @@ public class ApproximationSolverBuilder {
      */
     private IConstraintMeasure measure;
 
-    /** The number of steps. */
-    private long nbSteps;
-
     /**
      * Instantiates a new approximation solver builder.
      *
@@ -105,24 +102,14 @@ public class ApproximationSolverBuilder {
     }
 
     /**
-     * Sets the timeout using a string representation.
-     * For example, "10s" for 10 seconds or "100ms" for 100 milliseconds.
+     * Sets the timeout in ms.
      *
      * @param timeout the timeout
      *
      * @return the approximation solver builder
      */
-    public ApproximationSolverBuilder setTimeout(String timeout) {
-        if (timeout != null) {
-            if (timeout.contains("ms")) {
-                decorator.setTimeoutMs(Long.parseLong(timeout.replace("ms", "")));
-            } else if (timeout.contains("s")) {
-                decorator.setTimeout(Long.parseLong(timeout.replace("s", "")));
-            } else {
-                throw new IllegalArgumentException(
-                        timeout + " is not a correct format for set the timeout");
-            }
-        }
+    public ApproximationSolverBuilder setTimeout(long timeout) {
+        decorator.setTimeoutMs(timeout);
         return this;
     }
 
@@ -140,19 +127,6 @@ public class ApproximationSolverBuilder {
             r.setConstraintMeasure(measure);
             return r;
         };
-        return this;
-    }
-
-    /**
-     * The maximum number of steps (a step is a normal state or a relaxation state) that
-     * the approximation solver will perform.
-     *
-     * @param nbSteps the number of steps
-     *
-     * @return the approximation solver builder with the number of steps added
-     */
-    public ApproximationSolverBuilder withNbStep(long nbSteps) {
-        this.nbSteps = nbSteps;
         return this;
     }
 

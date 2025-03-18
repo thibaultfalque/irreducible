@@ -7,6 +7,7 @@ package fr.univartois.cril.approximation;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,13 @@ import net.sourceforge.argparse4j.inf.Namespace;
 public class PortfolioFactory {
 
     /**
+     * Prevent instantiation.
+     */
+    private PortfolioFactory() {
+        throw new AssertionError("The class PortfolioFactory should not be instantiated.");
+    }
+
+    /**
      * New default portfolio.
      *
      * @param args the args
@@ -33,12 +41,13 @@ public class PortfolioFactory {
      * @return the portfolio
      */
     public static Portfolio newDefaultPortfolio(Namespace args) {
-        var portfolio = new Portfolio();
+        var portfolio = new Portfolio(args.getLong("global_timeout"));
         String filePath = args.getString("portfolio_configuration");
         if (filePath == null) {
             throw new IllegalArgumentException("The portfolio configuration file can't be null");
         }
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(
+                new FileReader(filePath, StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
                 System.out.println("c Creating a new solver...");
@@ -67,18 +76,17 @@ public class PortfolioFactory {
                 var model = xcsp.getModel();
 
                 model.getSolver().logWithANSI(!arguments.getBoolean("no_print_color"));
-                if (arguments.getBoolean("approx")) {
+                if (Boolean.TRUE.equals(arguments.getBoolean("approx"))) {
                     var builder = new ApproximationSolverBuilder(model.getSolver())
                             .withSpecificConstraintRemover(
                                     arguments.getString("constraint_remover"))
                             .withSpecificConstraintMeasure(arguments.getString("measure"))
                             .setKeepFalsified(arguments.get("keep_falsified"))
-                            .setVerbosity(arguments.getInt("verbosity"))
-                            .setTimeout(arguments.getString("global_timeout"));
+                            .setVerbosity(arguments.getInt("verbosity"));
 
                     var solver = builder.initState(arguments).build();
                     portfolio.addSolver(solver);
-                } else if (arguments.getBoolean("default")) {
+                } else if (Boolean.TRUE.equals(arguments.getBoolean("default"))) {
                     System.out.println("c default solver...");
                     portfolio.addSolver(new MyISolverAdapter(model.getSolver()));
                 } else {
@@ -87,11 +95,7 @@ public class PortfolioFactory {
                 }
 
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArgumentParserException e) {
-            e.printStackTrace();
-        } catch (SetUpException e) {
+        } catch (IOException | ArgumentParserException | SetUpException e) {
             e.printStackTrace();
         }
         return portfolio;

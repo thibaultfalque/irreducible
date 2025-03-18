@@ -83,7 +83,7 @@ class SolverTest {
                 .withSpecificConstraintMeasure(arguments.getString("measure"))
                 .setKeepFalsified(arguments.get("keep_falsified"))
                 .setVerbosity(arguments.getInt("verbosity"))
-                .setTimeout(arguments.getString("global_timeout"));
+                .setTimeout(arguments.getLong("global_timeout"));
 
         var solver = builder.initState(arguments).build();
         assertNotNull(solver, "The solver should be successfully configured and built");

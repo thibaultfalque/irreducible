@@ -20,12 +20,16 @@
 
 package fr.univartois.cril.approximation.cli;
 
+import java.util.Map;
+
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
-import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.Argument;
+import net.sourceforge.argparse4j.inf.ArgumentAction;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
 
 /**
  * The {@code CLI} class is responsible for handling command-line arguments
@@ -60,6 +64,86 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
  * @version 0.1.0
  */
 public class CLI {
+
+    /**
+     * The {@code TimeoutAction} class is a custom argument action used to parse and
+     * handle timeout values
+     * provided via command-line arguments. This class implements the
+     * {@link ArgumentAction} interface
+     * from the argparse4j library.
+     *
+     * <p>
+     * The timeout value can be specified in milliseconds ("ms") or seconds ("s"). The
+     * parsed value is
+     * then converted into milliseconds and stored in the argument attributes map.
+     * </p>
+     *
+     * <p>
+     * Example usage:
+     *
+     * <pre>
+     *     --global-timeout 500ms   // Sets timeout to 500 milliseconds
+     *     --global-timeout 10s     // Sets timeout to 10,000 milliseconds (10 seconds)
+     * </pre>
+     * </p>
+     */
+    private static class TimeoutAction implements ArgumentAction {
+
+        /**
+         * Parses the timeout argument and converts it into milliseconds.
+         *
+         * @param parser The {@link ArgumentParser} instance managing arguments.
+         * @param arg The {@link Argument} associated with this action.
+         * @param attrs The attributes map where the parsed value will be stored.
+         * @param flag The flag that triggered this action.
+         * @param value The raw timeout value provided as a string.
+         *
+         * @throws ArgumentParserException If an error occurs during parsing.
+         * @throws IllegalArgumentException If the provided timeout format is invalid.
+         */
+        @Override
+        public void run(ArgumentParser parser, Argument arg,
+                Map<String, Object> attrs, String flag, Object value)
+                throws ArgumentParserException {
+            var timeout = (String) value;
+            long t = 0;
+            if (timeout != null) {
+                if (timeout.contains("ms")) {
+                    t = Long.parseLong(timeout.replace("ms", ""));
+                } else if (timeout.contains("s")) {
+                    t = Long.parseLong(timeout.replace("s", "")) * 1000;
+                } else {
+                    throw new IllegalArgumentException(
+                            timeout + " is not a correct format for setting the timeout");
+                }
+            }
+
+            attrs.put(arg.getDest(), t);
+        }
+
+        /**
+         * Called when the argument is attached to the parser. This method can be used to
+         * modify the argument before parsing, but it is left empty in this
+         * implementation.
+         *
+         * @param arg The argument being attached.
+         */
+        @Override
+        public void onAttach(Argument arg) {
+            // No action required
+        }
+
+        /**
+         * Specifies whether the argument requires an additional value.
+         *
+         * @return {@code true}, indicating that this action consumes an argument value.
+         */
+        @Override
+        public boolean consumeArgument() {
+            return true;
+        }
+
+    }
 
     /** The Constant PROGRAM_NAME. */
     private static final String PROGRAM_NAME = "Approximation";
@@ -118,6 +202,8 @@ public class CLI {
                 .description(DESCRIPTION)
                 .version(VERSION);
 
+        var timeoutAction = new TimeoutAction();
+
         var approxGroup = parser.addMutuallyExclusiveGroup("kind").required(true);
         approxGroup.addArgument("--approx").help("Configures an approximate solver.")
                 .action(Arguments.storeTrue());
@@ -130,11 +216,9 @@ public class CLI {
 
         var generalGroup = parser.addArgumentGroup("General");
         generalGroup.addArgument("-i", "--instance").type(String.class).required(withInstance);
-        generalGroup.addArgument("--global-timeout").type(String.class);
-        generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(true);
+        generalGroup.addArgument("--global-timeout").action(timeoutAction);
+        generalGroup.addArgument("--no-print-color").type(Boolean.class).setDefault(Boolean.TRUE);
         generalGroup.addArgument("--verbosity").type(Integer.class).setDefault(0);
-        generalGroup.addArgument("--keep-nogood").type(KeepNoGoodStrategy.class)
-                .setDefault(KeepNoGoodStrategy.ALWAYS);
         generalGroup.addArgument("--keep-falsified").type(KeepFalsifiedConstraintStrategy.class)
                 .setDefault(KeepFalsifiedConstraintStrategy.NEVER);
         generalGroup.addArgument("--portfolio-configuration").type(String.class);
