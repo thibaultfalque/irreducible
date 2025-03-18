@@ -214,8 +214,8 @@ public class MyISolverAdapter implements MyISolver {
      * org.chocosolver.util.criteria.Criterion[])
      */
     @Override
-    public List<Solution> findAllOptimalSolutions(IntVar arg0, boolean arg1, Criterion... arg2) {
-        return adaptee.findAllOptimalSolutions(arg0, arg1, arg2);
+    public List<Solution> findAllOptimalSolutions(IntVar variable, boolean b, Criterion... stop) {
+        return adaptee.findAllOptimalSolutions(variable, b, stop);
     }
 
     /*
