@@ -1,4 +1,5 @@
 # Approximation Solver
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=thibaultfalque_irreducible&metric=alert_status&token=76206a5e946ea5e87358a97d8712fd5f6c6a0019)](https://sonarcloud.io/summary/new_code?id=thibaultfalque_irreducible)
 
 ## Overview
 
