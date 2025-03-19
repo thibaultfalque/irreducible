@@ -26,26 +26,42 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.chocosolver.util.criteria.Criterion;
 
 /**
- * The Class BooleanCriteria.
+ * A criterion that allows stopping a solving process based on a boolean flag.
+ * <p>
+ * The {@code BooleanCriteria} class implements {@link Criterion} and provides a simple
+ * mechanism to signal when a solver should stop by setting an atomic boolean value.
+ * </p>
+ *
+ * <p>
+ * This criterion is useful for managing termination conditions across multiple solvers
+ * running in parallel.
+ * </p>
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @version 0.1.0
  */
 public class BooleanCriteria implements Criterion {
 
-    /** The stop. */
+    /**
+     * The atomic boolean flag indicating whether the stop condition is met.
+     */
     private AtomicBoolean stop = new AtomicBoolean(false);
 
     /**
-     * Sets the stop.
+     * Sets the stop condition.
      *
-     * @param value the new stop
+     * @param value {@code true} to indicate stopping, {@code false} otherwise.
      */
     public void setStop(boolean value) {
         stop.set(value);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Checks whether the stop condition is met.
      *
-     * @see org.chocosolver.util.criteria.Criterion#isMet()
+     * @return {@code true} if stopping is required, otherwise {@code false}.
      */
     @Override
     public boolean isMet() {

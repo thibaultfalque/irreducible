@@ -28,36 +28,47 @@ import org.chocosolver.solver.variables.Variable;
 import org.chocosolver.util.criteria.Criterion;
 
 /**
- * The Interface MyISolver.
+ * Interface defining a solver with additional functionalities.
+ * <p>
+ * The {@code MyISolver} interface extends {@link ISolver} and provides
+ * methods for solving, managing search monitors, handling objectives,
+ * and defining stop criteria.
+ * </p>
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @version 0.1.0
  */
 public interface MyISolver extends ISolver {
 
     /**
-     * Solve.
+     * Solves the problem using the configured solver.
      *
-     * @return the universe solver result
+     * @return The result of the solving process as a {@link UniverseSolverResult}.
      */
     UniverseSolverResult solve();
 
     /**
-     * Plug monitor.
+     * Attaches a search monitor to the solver.
      *
-     * @param monitor the monitor
+     * @param monitor The search monitor to be plugged in.
      */
     void plugMonitor(ISearchMonitor monitor);
 
     /**
-     * Gets the objective manager.
+     * Retrieves the objective manager handling optimization objectives.
      *
-     * @param <V> the value type
-     * @return the objective manager
+     * @param <V> The type of the objective variable.
+     *
+     * @return The objective manager associated with this solver.
      */
     <V extends Variable> IObjectiveManager<V> getObjectiveManager();
 
     /**
-     * Adds the stop criterion.
+     * Adds one or more stop criteria to the solver.
      *
-     * @param criterion the criterion
+     * @param criterion The stop criteria to be added.
      */
     void addStopCriterion(Criterion... criterion);
 

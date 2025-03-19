@@ -67,11 +67,6 @@ public class ConsoleSolverListener implements ISolverListener {
         out.println("Start new state: " + state);
     }
 
-    /**
-     * On solve with starter.
-     *
-     * @param state the state
-     */
     /*
      * (non-Javadoc)
      *
@@ -84,11 +79,6 @@ public class ConsoleSolverListener implements ISolverListener {
         out.println("Solve with starter " + state);
     }
 
-    /**
-     * On solve.
-     *
-     * @param state the state
-     */
     /*
      * (non-Javadoc)
      *

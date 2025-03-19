@@ -32,32 +32,60 @@ import org.chocosolver.solver.search.loop.monitors.IMonitorSolution;
 import fr.univartois.cril.approximation.solver.criteria.BooleanCriteria;
 
 /**
- * The Class Portfolio.
+ * A class that manages a portfolio of solvers running in parallel.
+ * <p>
+ * The {@code Portfolio} class allows multiple solvers to be executed concurrently,
+ * selecting the best solution found among them. It uses a fixed thread pool to run
+ * solvers within a specified timeout.
+ * </p>
+ *
+ * <p>
+ * The portfolio keeps track of the best bound found and updates all solvers accordingly.
+ * If an optimization problem is being solved, the best solution value is propagated to
+ * all solvers to improve efficiency.
+ * </p>
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @version 0.1.0
  */
 public class Portfolio {
 
-    /** The solvers. */
+    /**
+     * List of solvers included in the portfolio.
+     */
     private List<MyISolver> solvers = new ArrayList<>();
 
-    /** The best index. */
+    /**
+     * Index of the solver that found the best solution.
+     */
     private Integer bestIndex;
 
-    /** The best bound. */
+    /**
+     * Best bound found among all solvers.
+     */
     private Integer bestBound;
 
-    /** The result. */
+    /**
+     * Result of the solving process.
+     */
     private UniverseSolverResult result = UniverseSolverResult.UNKNOWN;
 
-    /** The stop solver. */
+    /**
+     * Stop criterion for terminating solvers when needed.
+     */
     private BooleanCriteria stopSolver;
 
-    /** The timeout. */
+    /**
+     * Timeout for the execution of solvers.
+     */
     private long timeout;
 
     /**
-     * Instantiates a new portfolio.
+     * Creates a new {@code Portfolio} with the specified timeout.
      *
-     * @param timeout the timeout
+     * @param timeout The maximum time allowed for the solvers to run (in milliseconds).
      */
     public Portfolio(long timeout) {
         stopSolver = new BooleanCriteria();
@@ -65,18 +93,18 @@ public class Portfolio {
     }
 
     /**
-     * Adds the solver.
+     * Adds a solver to the portfolio.
      *
-     * @param solver the solver
+     * @param solver The solver to add.
      */
     public void addSolver(MyISolver solver) {
         solvers.add(solver);
     }
 
     /**
-     * Solve.
+     * Executes all solvers in the portfolio concurrently.
      *
-     * @return the universe solver result
+     * @return The result of the solving process as a {@link UniverseSolverResult}.
      */
     public UniverseSolverResult solve() {
         var service = Executors.newFixedThreadPool(solvers.size());
@@ -99,9 +127,9 @@ public class Portfolio {
     }
 
     /**
-     * Solve.
+     * Runs the solving process for a given solver.
      *
-     * @param solver the solver
+     * @param solver The solver to execute.
      */
     private void solve(MyISolver solver) {
         var tmp = solver.solve();
@@ -113,20 +141,20 @@ public class Portfolio {
     }
 
     /**
-     * Creates the monitor.
+     * Creates a monitor for tracking solutions found by solvers.
      *
-     * @param solverIndex the solver index
+     * @param solverIndex The index of the solver being monitored.
      *
-     * @return the i monitor solution
+     * @return A monitor that triggers when a solution is found.
      */
     private IMonitorSolution createMonitor(int solverIndex) {
         return () -> onSolution(solverIndex);
     }
 
     /**
-     * On solution.
+     * Handles the event of a solution being found by a solver.
      *
-     * @param solverIndex the solver index
+     * @param solverIndex The index of the solver that found the solution.
      */
     private synchronized void onSolution(int solverIndex) {
         var om = solvers.get(solverIndex).getObjectiveManager();
@@ -153,16 +181,16 @@ public class Portfolio {
     }
 
     /**
-     * Gets the best solver.
+     * Retrieves the solver that found the best solution.
      *
-     * @return the best solver
+     * @return The solver that obtained the best solution.
      */
     public synchronized MyISolver getBestSolver() {
         return solvers.get(bestIndex);
     }
 
     /**
-     * Stop.
+     * Stops all solvers in the portfolio.
      */
     public void stop() {
         stopSolver.setStop(true);

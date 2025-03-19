@@ -27,7 +27,14 @@ import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.search.loop.monitors.IMonitorApprox;
 
 /**
- * The IConstraintsSelector.
+ * Interface for removing constraints in an approximation solver.
+ * <p>
+ * The {@code IConstraintsRemover} interface extends {@link IMonitorApprox} and provides
+ * functionality to dynamically remove and restore constraints during the solving process.
+ * Implementations of this interface determine which constraints should be removed based
+ * on
+ * a given constraint measure and other heuristic criteria.
+ * </p>
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -37,23 +44,23 @@ import org.chocosolver.solver.search.loop.monitors.IMonitorApprox;
 public interface IConstraintsRemover extends IMonitorApprox {
 
     /**
-     * Sets the constraint measure.
+     * Sets the constraint measure used to evaluate constraints.
      *
-     * @param measure the new constraint measure
+     * @param measure The constraint measure to set.
      */
     void setConstraintMeasure(IConstraintMeasure measure);
 
     /**
-     * Compute next constraints to remove.
+     * Computes and returns the next set of constraints to be removed.
      *
-     * @return the list
+     * @return A list of constraints selected for removal.
      */
     List<Constraint> computeNextConstraintsToRemove();
 
     /**
-     * Restore constraints.
+     * Restores previously removed constraints back into the solver.
      *
-     * @param constraints the constraints
+     * @param constraints The collection of constraints to restore.
      */
     void restoreConstraints(Collection<Constraint> constraints);
 

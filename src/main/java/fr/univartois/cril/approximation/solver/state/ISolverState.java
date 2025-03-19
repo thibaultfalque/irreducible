@@ -29,7 +29,16 @@ import fr.univartois.cril.approximation.solver.UniverseSolverResult;
 import fr.univartois.cril.approximation.util.ISolverListener;
 
 /**
- * The ISolverState.
+ * Represents the state of a solver during the solving process.
+ * <p>
+ * The {@code ISolverState} interface defines methods to manage different
+ * stages of the solver, such as transitioning between states, resetting constraints,
+ * handling solutions, and managing solver configurations.
+ * </p>
+ * <p>
+ * Implementations of this interface allow for the tracking and control of
+ * solver execution flow, including timeout handling and restoration.
+ * </p>
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -39,30 +48,30 @@ import fr.univartois.cril.approximation.util.ISolverListener;
 public interface ISolverState {
 
     /**
-     * Solve.
+     * Solves the current state of the solver.
      *
-     * @return the universe solver result
+     * @return The result of the solving process as a {@link UniverseSolverResult}.
      */
     UniverseSolverResult solve();
 
     /**
-     * Solve starter.
+     * Solves using the initial state setup.
      *
-     * @return the universe solver result
+     * @return The result of the solving process as a {@link UniverseSolverResult}.
      */
     UniverseSolverResult solveStarter();
 
     /**
-     * Next state.
+     * Moves to the next state of the solver.
      *
-     * @return the i solver state
+     * @return The next solver state.
      */
     ISolverState nextState();
 
     /**
-     * Previous state.
+     * Moves to the previous state of the solver.
      *
-     * @return the i solver state
+     * @return The previous solver state.
      */
     ISolverState previousState();
 
@@ -82,16 +91,16 @@ public interface ISolverState {
     void displaySolution(XCSP xcsp);
 
     /**
-     * Gets the nb removed.
+     * Retrieves the number of removed constraints.
      *
-     * @return the nb removed
+     * @return The number of constraints removed during solving.
      */
     int getNbRemoved();
 
     /**
-     * Checks if is timeout.
+     * Checks if the solver has reached a timeout condition.
      *
-     * @return true, if is timeout
+     * @return {@code true} if the solver has timed out, {@code false} otherwise.
      */
     boolean isTimeout();
 
@@ -115,16 +124,16 @@ public interface ISolverState {
     SolverConfiguration getConfig();
 
     /**
-     * Checks if is safe.
+     * Checks if the solver state is considered safe.
      *
-     * @return true, if is safe
+     * @return {@code true} if the state is safe, {@code false} otherwise.
      */
     boolean isSafe();
 
     /**
-     * Sets the solver listener.
+     * Sets a solver listener to track solver events.
      *
-     * @param listener the new solver listener
+     * @param listener The solver listener to attach.
      */
     void setSolverListener(ISolverListener listener);
 

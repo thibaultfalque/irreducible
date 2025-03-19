@@ -31,7 +31,17 @@ import fr.univartois.cril.approximation.solver.ApproximationSolverBuilder;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 
 /**
- * The Main.
+ * The {@code Main} class is the entry point for the Approximation solver.
+ * <p>
+ * This class parses command-line arguments, initializes the solver,
+ * and executes the solving process. It supports portfolio-based
+ * solving, relaxation solving and standard constraint solving using the Choco solver.
+ * </p>
+ * <p>
+ * The solver incorporates relaxation techniques and can be configured
+ * using various parameters, such as constraint removal strategies,
+ * constraint measurement, verbosity level, and timeout settings.
+ * </p>
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -41,9 +51,15 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 public class Main {
 
     /**
-     * The main method.
+     * The main method, which serves as the entry point for the application.
+     * <p>
+     * This method initializes the command-line parser, extracts arguments,
+     * and either runs a portfolio solver, relaxation solver or a standard constraint
+     * solver using Choco.
+     * Shutdown hooks are registered to ensure proper cleanup.
+     * </p>
      *
-     * @param args the arguments
+     * @param args The command-line arguments provided by the user.
      */
     public static void main(String[] args) {
         var parser = CLI.createCLIParser(true);

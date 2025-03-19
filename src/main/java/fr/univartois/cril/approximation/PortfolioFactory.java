@@ -39,23 +39,46 @@ import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
 
 /**
- * A factory for creating Portfolio objects.
+ * A factory class for creating {@link Portfolio} objects.
+ * <p>
+ * This class is responsible for initializing a portfolio of solvers based on
+ * a configuration file. The created portfolio can manage multiple solvers,
+ * including default solvers and approximation-based solvers.
+ * </p>
+ * <p>
+ * The portfolio configuration is read from a file, where each line defines a
+ * solver instance with its parameters.
+ * </p>
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @version 0.1.0
  */
 public class PortfolioFactory {
 
     /**
-     * Prevent instantiation.
+     * Private constructor to prevent instantiation of the factory class.
+     * <p>
+     * This class should not be instantiated since it provides only static methods.
+     * </p>
      */
     private PortfolioFactory() {
         throw new AssertionError("The class PortfolioFactory should not be instantiated.");
     }
 
     /**
-     * New default portfolio.
+     * Creates a new default {@link Portfolio} using the specified arguments.
+     * <p>
+     * This method reads a portfolio configuration file and initializes solvers
+     * accordingly. Each solver instance is added to the portfolio.
+     * </p>
      *
-     * @param args the args
+     * @param args The parsed command-line arguments containing configuration options.
      *
-     * @return the portfolio
+     * @return A configured {@link Portfolio} instance.
+     *
+     * @throws IllegalArgumentException If the portfolio configuration file is missing.
      */
     public static Portfolio newDefaultPortfolio(Namespace args) {
         var portfolio = new Portfolio(args.getLong("global_timeout"));

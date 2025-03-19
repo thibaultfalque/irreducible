@@ -28,7 +28,7 @@ package fr.univartois.cril.approximation.solver;
  * @author Thibault Falque
  * @author Romain Wallon
  *
- * @version 0.2.0
+ * @version 0.1.0
  */
 public enum UniverseSolverResult {
 

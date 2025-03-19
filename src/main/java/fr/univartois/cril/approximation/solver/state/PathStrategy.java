@@ -27,7 +27,17 @@ import org.chocosolver.solver.constraints.Constraint;
 import fr.univartois.cril.approximation.core.IConstraintsRemover;
 
 /**
- * The PathStrategy.
+ * Defines strategies for navigating and restoring solver states in an approximation
+ * solver.
+ * <p>
+ * The {@code PathStrategy} enum provides two strategies when a solution is found:
+ * <ul>
+ * <li>{@link #APPROX_NORMAL} - Moves to the original solver state.</li>
+ * <li>{@link #APPROX_APPROX} - Moves to the previous state.</li>
+ * </ul>
+ * Both strategies support restoring removed constraints using an
+ * {@link IConstraintsRemover}.
+ * </p>
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -36,7 +46,7 @@ import fr.univartois.cril.approximation.core.IConstraintsRemover;
  */
 public enum PathStrategy {
 
-    /** The approx normal. */
+    /** Strategy that moves to the original state when a solution is found. */
     APPROX_NORMAL {
 
         @Override
@@ -53,7 +63,7 @@ public enum PathStrategy {
 
     },
 
-    /** The approx approx. */
+    /** Strategy that moves to the previous state when a solution is found. */
     APPROX_APPROX {
 
         @Override
@@ -71,20 +81,20 @@ public enum PathStrategy {
     };
 
     /**
-     * Previous.
+     * Determines the previous solver state based on the strategy.
      *
-     * @param state the state
-     * @param current the current
+     * @param state The reference solver state.
+     * @param current The current solver state.
      *
-     * @return the i solver state
+     * @return The solver state to transition to.
      */
     public abstract ISolverState previous(ISolverState state, ISolverState current);
 
     /**
-     * Restore.
+     * Restores constraints using the given constraint remover.
      *
-     * @param remover the remover
-     * @param constraints the constraints
+     * @param remover The constraint remover responsible for restoring constraints.
+     * @param constraints The set of constraints to restore.
      */
     public abstract void restore(IConstraintsRemover remover, Set<Constraint> constraints);
 

@@ -25,7 +25,17 @@ import org.chocosolver.solver.constraints.Constraint;
 import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 
 /**
- * The IConstraintMeasureSelector.
+ * Interface defining a measure for evaluating constraints in an approximation solver.
+ * <p>
+ * The {@code IConstraintMeasure} interface provides methods to compute scores for
+ * individual constraints and constraint groups, as well as update measurement values
+ * in various heuristic techniques, such as weighted degree (WDEG) and effective
+ * filtering.
+ * </p>
+ * <p>
+ * Implementations of this interface should define how constraint scores are computed
+ * and updated dynamically during solving.
+ * </p>
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -35,21 +45,21 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
 public interface IConstraintMeasure {
 
     /**
-     * Compute score.
+     * Computes the score of a given constraint.
      *
-     * @param c the c
+     * @param c The constraint to evaluate.
      *
-     * @return the double
+     * @return The computed score for the constraint.
      */
     double computeScore(Constraint c);
 
     /**
-     * Compute score.
+     * Computes the score for a group of constraints.
      *
-     * @param g the g
-     * @param count the count
+     * @param g The constraint group to evaluate.
+     * @param count the number of times this group has already been removed..
      *
-     * @return the double
+     * @return The computed score for the constraint group.
      */
     default double computeScore(GroupConstraint g, int count) {
         double result = 0.0;
@@ -62,35 +72,35 @@ public interface IConstraintMeasure {
     }
 
     /**
-     * Update measure N effective filtering.
+     * Updates the measure for effective filtering in constraint selection.
      *
-     * @param <T> the generic type
-     * @param heap the heap
-     * @param c the c
-     * @param oldValue the old value
-     * @param newValue the new value
+     * @param <T> The type of elements in the heap.
+     * @param heap The heap structure used for constraint ordering.
+     * @param c The constraint to update.
+     * @param oldValue The previous score value.
+     * @param newValue The updated score value.
      */
     <T> void updateMeasureNEffectiveFiltering(Heap<T> heap, T c, double oldValue, double newValue);
 
     /**
-     * Update measure WDEG weight.
+     * Updates the measure for weighted degree (WDEG) heuristic.
      *
-     * @param <T> the generic type
-     * @param heap the heap
-     * @param c the c
-     * @param oldValue the old value
-     * @param newValue the new value
+     * @param <T> The type of elements in the heap.
+     * @param heap The heap structure used for constraint ordering.
+     * @param c The constraint to update.
+     * @param oldValue The previous weight value.
+     * @param newValue The updated weight value.
      */
     <T> void updateMeasureWDEGWeight(Heap<T> heap, T c, double oldValue, double newValue);
 
     /**
-     * Update measure N effective backtracking.
+     * Updates the measure for backtracking efficiency in constraint selection.
      *
-     * @param <T> the generic type
-     * @param heap the heap
-     * @param c the c
-     * @param oldValue the old value
-     * @param newValue the new value
+     * @param <T> The type of elements in the heap.
+     * @param heap The heap structure used for constraint ordering.
+     * @param c The constraint to update.
+     * @param oldValue The previous score value.
+     * @param newValue The updated score value.
      */
     <T> void updateMeasureNEffectiveBacktracking(Heap<T> heap, T c, double oldValue,
             double newValue);

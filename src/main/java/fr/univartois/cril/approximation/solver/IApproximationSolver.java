@@ -24,28 +24,33 @@ package fr.univartois.cril.approximation.solver;
 import org.chocosolver.parser.xcsp.XCSP;
 
 /**
- * The Interface IApproximationSolver.
+ * Interface defining an approximation solver.
+ * <p>
+ * The {@code IApproximationSolver} extends {@link MyISolver} and provides additional
+ * functionality to handle approximate solving methods. It supports solving, displaying,
+ * and restoring solutions.
+ * </p>
+ *
+ * @author Thibault Falque
+ * @author Romain Wallon
+ *
+ * @version 0.1.0
  */
 public interface IApproximationSolver extends MyISolver {
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Solves the problem using an approximation strategy.
      *
-     * @see fr.univartois.cril.approximation.solver.MyISolver#solve()
+     * @return The result of the solving process as a {@link UniverseSolverResult}.
      */
     @Override
     UniverseSolverResult solve();
 
     /**
-     * Display solution.
+     * Displays the solution using the provided XCSP parser.
      *
-     * @param xcsp the xcsp
+     * @param xcsp The XCSP parser instance used for displaying the solution.
      */
     void displaySolution(XCSP xcsp);
-
-    /**
-     * Restore solution.
-     */
-    void restoreSolution();
 
 }

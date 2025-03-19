@@ -2013,22 +2013,6 @@ public class ApproximationSolverDecorator
         return solution;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see fr.univartois.cril.approximation.solver.IApproximationSolver#restoreSolution()
-     */
-    @Override
-    public void restoreSolution() {
-        try {
-            if (solution.exists()) {
-                solution.restore();
-            }
-        } catch (ContradictionException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Prints the solution.
      *

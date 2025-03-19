@@ -26,7 +26,12 @@ import java.util.List;
 import org.chocosolver.solver.constraints.Constraint;
 
 /**
- * The GroupConstraint.
+ * Represents a group of constraints in an approximation solver.
+ * <p>
+ * A {@code GroupConstraint} consists of a collection of constraints that are
+ * associated with a specific group number. Each group can be assigned a score,
+ * which may be used for evaluating the relaxation or approximation of constraints.
+ * </p>
  *
  * @author Thibault Falque
  * @author Romain Wallon
@@ -35,19 +40,25 @@ import org.chocosolver.solver.constraints.Constraint;
  */
 public class GroupConstraint {
 
-    /** The constraints. */
+    /**
+     * The list of constraints associated with this group.
+     */
     private List<Constraint> constraints;
 
-    /** The n group. */
+    /**
+     * The group number identifying this constraint group.
+     */
     private int nGroup;
 
-    /** The score. */
+    /**
+     * The score associated with this group, used for evaluation purposes.
+     */
     private double score;
 
     /**
-     * Creates a new GroupConstraint.
+     * Creates a new {@code GroupConstraint} with the specified group number.
      *
-     * @param nGroup the n group
+     * @param nGroup The group number to assign to this constraint group.
      */
     public GroupConstraint(int nGroup) {
         this.nGroup = nGroup;
@@ -55,45 +66,45 @@ public class GroupConstraint {
     }
 
     /**
-     * Adds the.
+     * Adds a constraint to this group.
      *
-     * @param c the c
+     * @param c The constraint to add.
      */
     public void add(Constraint c) {
         this.constraints.add(c);
     }
 
     /**
-     * Gives the constraints of this GroupConstraint.
+     * Retrieves the list of constraints in this group.
      *
-     * @return This GroupConstraint's constraints.
+     * @return The list of constraints associated with this group.
      */
     public List<Constraint> getConstraints() {
         return constraints;
     }
 
     /**
-     * Gives the group number of this GroupConstraint.
+     * Retrieves the group number of this constraint group.
      *
-     * @return This GroupConstraint's nGroup.
+     * @return The group number assigned to this constraint group.
      */
     public int getGroupNumber() {
         return nGroup;
     }
 
     /**
-     * Gives the score of this GroupConstraint.
+     * Retrieves the score associated with this constraint group.
      *
-     * @return This GroupConstraint's score.
+     * @return The score assigned to this group.
      */
     public double getScore() {
         return score;
     }
 
     /**
-     * Sets this GroupConstraint's score.
+     * Sets the score for this constraint group.
      *
-     * @param score The score to set.
+     * @param score The score value to assign to this group.
      */
     public void setScore(double score) {
         this.score = score;
