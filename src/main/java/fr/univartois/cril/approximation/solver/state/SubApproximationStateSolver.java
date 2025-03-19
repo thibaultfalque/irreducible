@@ -100,14 +100,14 @@ public class SubApproximationStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solve() {
-        System.out.println("we solve with " + this);
+        listener.onSolve(this);
         if (removedConstraints == null) {
             removedConstraints = new HashSet<>(remover.computeNextConstraintsToRemove());
             nbRemoved += removedConstraints.size();
         } else {
             restored = true;
         }
-        System.out.println(this + " we removed " + removedConstraints.size() + " constraints");
+        listener.onRemoveConstraints(this, removedConstraints.size());
 
         if (!removedConstraints.isEmpty()) {
             for (Constraint c : removedConstraints) {
@@ -121,7 +121,8 @@ public class SubApproximationStateSolver extends AbstractState {
 
         solver.setObjectiveManager(ObjectiveFactory.SAT());
         last = internalSolve();
-        System.out.println(this + " answer: " + last);
+        listener.onResult(this, last);
+        listener.onStateSolved(this);
         return last;
     }
 
@@ -132,9 +133,8 @@ public class SubApproximationStateSolver extends AbstractState {
      */
     @Override
     public ISolverState nextState() {
-        if (next == null) {
-            next = new SubApproximationStateSolver(context, solver, this, decorator);
-        }
+        next = new SubApproximationStateSolver(context, solver, this, decorator);
+        next.setSolverListener(listener);
         return next;
     }
 
@@ -145,12 +145,13 @@ public class SubApproximationStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solveStarter() {
-        System.out.println("we solve with starter " + this);
+        listener.onSolveWithStarter(this);
         solver.setObjectiveManager(ObjectiveFactory.SAT());
-
         decorator.reset();
         resetLimitSolver();
         last = internalSolve();
+        listener.onResult(this, last);
+        listener.onStateSolved(this);
         return last;
     }
 
@@ -162,6 +163,7 @@ public class SubApproximationStateSolver extends AbstractState {
     @Override
     public ISolverState previousState() {
         pathStrategy.restore(remover, removedConstraints);
+        listener.onRestoreConstraints(this, removedConstraints.size());
         return pathStrategy.previous(previous, this);
     }
 

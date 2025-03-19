@@ -62,7 +62,7 @@ public class NormalStateSolver extends AbstractState {
     private ISolverState next;
 
     /** A reference to the objective manager. */
-    public IObjectiveManager<Variable> om;
+    private IObjectiveManager<Variable> om;
 
     /**
      * Instantiates a new normal state solver.
@@ -77,6 +77,11 @@ public class NormalStateSolver extends AbstractState {
         this.om = solver.getObjectiveManager();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see fr.univartois.cril.approximation.solver.state.AbstractState#resetLimitSolver()
+     */
     @Override
     public void resetLimitSolver() {
         super.resetLimitSolver();
@@ -90,12 +95,13 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solve() {
-        System.out.println("we solve with " + this);
+        listener.onSolve(this);
         solver.setObjectiveManager(om);
         solver.plugMonitor(observerSolution);
         var r = internalSolve();
-        System.out.println(this + " " + r);
         solver.unplugMonitor(observerSolution);
+        listener.onResult(this, r);
+        listener.onStateSolved(this);
         return r;
     }
 
@@ -107,30 +113,9 @@ public class NormalStateSolver extends AbstractState {
     @Override
     public ISolverState nextState() {
         next = new SubApproximationStateSolver(context, solver, this, decorator);
+        next.setSolverListener(listener);
         return next;
     }
-
-    // /**
-    // * Inits the instance.
-    // *
-    // * @param solver the solver
-    // * @param configuration the configuration
-    // * @param decorator the decorator
-    // * @param strat the strat
-    // */
-    // public static void initInstance(Solver solver, SolverConfiguration configuration,
-    // ApproximationSolverDecorator decorator, PathStrategy strat) {
-    // INSTANCE = new NormalStateSolver(solver, configuration, decorator, strat);
-    // }
-
-    // /**
-    // * Gets the single instance of NormalStateSolver.
-    // *
-    // * @return single instance of NormalStateSolver
-    // */
-    // public static NormalStateSolver getInstance() {
-    // return INSTANCE;
-    // }
 
     /*
      * (non-Javadoc)
@@ -139,7 +124,7 @@ public class NormalStateSolver extends AbstractState {
      */
     @Override
     public UniverseSolverResult solveStarter() {
-        System.out.println("we solve with starter " + this);
+        listener.onSolveWithStarter(this);
         solver.setObjectiveManager(om);
         solver.plugMonitor(observerSolution);
         solver.limitSolution(Integer.MAX_VALUE);
@@ -147,6 +132,8 @@ public class NormalStateSolver extends AbstractState {
         var r = internalSolve();
         System.out.println(this + " " + r);
         solver.unplugMonitor(observerSolution);
+        listener.onResult(this, r);
+        listener.onStateSolved(this);
         return r;
     }
 
@@ -249,4 +236,14 @@ public class NormalStateSolver extends AbstractState {
     public SolverConfiguration getConfig() {
         return context.getNormalConfiguration();
     }
+
+    /**
+     * Gives the om of this NormalStateSolver.
+     *
+     * @return This NormalStateSolver's om.
+     */
+    public IObjectiveManager<Variable> getOm() {
+        return om;
+    }
+
 }

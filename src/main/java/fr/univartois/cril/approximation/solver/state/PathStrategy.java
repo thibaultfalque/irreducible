@@ -31,6 +31,7 @@ import fr.univartois.cril.approximation.core.IConstraintsRemover;
  *
  * @author Thibault Falque
  * @author Romain Wallon
+ *
  * @version 0.1.0
  */
 public enum PathStrategy {
@@ -48,11 +49,10 @@ public enum PathStrategy {
             if (!constraints.isEmpty()) {
                 remover.restoreConstraints(constraints);
             }
-            System.out.println(this + " we restore " + constraints.size());
         }
 
     },
-    
+
     /** The approx approx. */
     APPROX_APPROX {
 
@@ -66,7 +66,6 @@ public enum PathStrategy {
             if (!constraints.isEmpty()) {
                 remover.restoreConstraints(constraints);
             }
-            System.out.println(this + " we restore " + constraints.size());
         }
 
     };
@@ -76,6 +75,7 @@ public enum PathStrategy {
      *
      * @param state the state
      * @param current the current
+     *
      * @return the i solver state
      */
     public abstract ISolverState previous(ISolverState state, ISolverState current);

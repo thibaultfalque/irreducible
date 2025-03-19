@@ -81,6 +81,8 @@ import fr.univartois.cril.approximation.core.IConstraintGroupSolver;
 import fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy;
 import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
+import fr.univartois.cril.approximation.util.ConsoleSolverListener;
+import fr.univartois.cril.approximation.util.ISolverListener;
 
 /**
  * The ApproximationSolverDecorator is a decorator for the Choco solver. It integrates the
@@ -128,6 +130,9 @@ public class ApproximationSolverDecorator
     /** The nb constraints. */
     private int nbConstraints = -1;
 
+    /** The listener. */
+    private ISolverListener listener;
+
     /** The Constant S_INST_IN. */
     private static final String S_INST_IN = "v <instantiation id='sol%s' type='solution' ";
 
@@ -157,6 +162,7 @@ public class ApproximationSolverDecorator
         this.groupConstraints = new ArrayList<>();
         solution = new Solution(model);
         solver.plugMonitor((IMonitorSolution) solution::record);
+        this.listener = new ConsoleSolverListener();
     }
 
     /** Indicates that the resolution stops on user instruction. */
@@ -1722,20 +1728,25 @@ public class ApproximationSolverDecorator
     @Override
     public UniverseSolverResult solve() {
         this.state = getInitialState();
+        listener.onStartState(this.state);
         state.resetLimitSolver();
+        listener.onResetSolver();
         result = state.solve();
+        listener.onEndState(this.state);
         while (result == UniverseSolverResult.UNKNOWN && !this.state.isTimeout()) {
             state = state.nextState();
-            System.out.println("Start new state: " + this.state);
+            listener.onStartState(this.state);
             reset();
             state.resetLimitSolver();
+            listener.onResetSolver();
             result = state.solve();
+            listener.onEndState(this.state);
             while (result == UniverseSolverResult.SATISFIABLE
                    && !this.state.isSafe()
                    && !this.state.isTimeout()) {
                 reset();
                 for (IntVar variable : solution.retrieveIntVars(true)) {
-                    if (variable == normalState.om.getObjective()) {
+                    if (variable == normalState.getOm().getObjective()) {
                         continue;
                     }
 
@@ -1743,16 +1754,18 @@ public class ApproximationSolverDecorator
                 }
                 keepFalsified.checkConstraints(solver.getModel());
                 state = state.previousState();
+                listener.onStartState(this.state);
                 state.resetLimitSolver();
-                System.out.println("change to previous state: " + this.state);
+                listener.onResetSolver();
                 result = state.solveStarter();
-                System.out.println(result + " after state.solve()");
+                listener.onEndState(this.state);
+
             }
-            System.out.println(result + " after while");
+            // System.out.println(result + " after while");
         }
-        System.out.println(result + " before end");
+        // System.out.println(result + " before end");
         if (this.state.isTimeout()) {
-            System.out.println("We reset the solver and restore all constraints.");
+            listener.onCompleteRestore();
             reset();
             var old = this.state;
             this.state = this.state.previousState();
@@ -1762,6 +1775,7 @@ public class ApproximationSolverDecorator
                 result = UniverseSolverResult.UNKNOWN;
             }
         }
+        listener.onFinishResolution(state, result);
         return result;
     }
 
@@ -1772,6 +1786,7 @@ public class ApproximationSolverDecorator
      */
     private ISolverState getInitialState() {
         normalState = new NormalStateSolver(solver, context, this);
+        normalState.setSolverListener(listener);
         return normalState;
     }
 
@@ -1850,7 +1865,9 @@ public class ApproximationSolverDecorator
     }
 
     /**
-     * @param solver
+     * Other level output.
+     *
+     * @param solver the solver
      */
     private void otherLevelOutput(Solver solver) {
         if (level.is(Level.RESANA)) {
@@ -1880,8 +1897,11 @@ public class ApproximationSolverDecorator
     }
 
     /**
-     * @param solver
-     * @return
+     * Gets the objective bound.
+     *
+     * @param solver the solver
+     *
+     * @return the objective bound
      */
     private long getObjectiveBound(Solver solver) {
         long resultValue;

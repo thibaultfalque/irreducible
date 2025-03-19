@@ -26,12 +26,14 @@ import org.chocosolver.solver.Solver;
 import fr.univartois.cril.approximation.core.KeepNoGoodStrategy;
 import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
+import fr.univartois.cril.approximation.util.ISolverListener;
 
 /**
  * The ISolverState.
  *
  * @author Thibault Falque
  * @author Romain Wallon
+ *
  * @version 0.1.0
  */
 public interface ISolverState {
@@ -118,5 +120,12 @@ public interface ISolverState {
      * @return true, if is safe
      */
     boolean isSafe();
+
+    /**
+     * Sets the solver listener.
+     *
+     * @param listener the new solver listener
+     */
+    void setSolverListener(ISolverListener listener);
 
 }

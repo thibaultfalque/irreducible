@@ -25,9 +25,9 @@ import org.chocosolver.util.ESat;
 
 import fr.univartois.cril.approximation.core.RestartObserver;
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
-import fr.univartois.cril.approximation.solver.SolverConfiguration;
 import fr.univartois.cril.approximation.solver.SolverContext;
 import fr.univartois.cril.approximation.solver.UniverseSolverResult;
+import fr.univartois.cril.approximation.util.ISolverListener;
 
 /**
  * The {@code AbstractState} class serves as a base class for different solver states
@@ -91,6 +91,9 @@ public abstract class AbstractState implements ISolverState {
      */
     protected PathStrategy pathStrategy;
 
+    /** The listener. */
+    protected ISolverListener listener;
+
     /**
      * Constructs a new {@code AbstractState} instance, initializing the solver state
      * with the provided context, solver, decorator, and path strategy.
@@ -126,7 +129,8 @@ public abstract class AbstractState implements ISolverState {
      * @return the universe solver result
      */
     protected UniverseSolverResult internalSolve() {
-        var observer = new RestartObserver(decorator, getConfig().getRatio(), getConfig().getNbFailed(), getConfig().getFactor());
+        var observer = new RestartObserver(decorator, getConfig().getRatio(),
+                getConfig().getNbFailed(), getConfig().getFactor());
         solver.plugMonitor(observer);
         var f = false;
         if (solver.getObjectiveManager().isOptimization()) {
@@ -150,13 +154,13 @@ public abstract class AbstractState implements ISolverState {
         solver.log().white().printf("%s %n", solver.getMeasures().toOneLineString());
         solver.unplugMonitor(observer);
         decorator.setUserInterruption(false);
-        
+
         var feasible = solver.isFeasible();
         if (feasible == ESat.TRUE) {
-        	return UniverseSolverResult.SATISFIABLE;
+            return UniverseSolverResult.SATISFIABLE;
         }
         if (feasible == ESat.FALSE) {
-        	return UniverseSolverResult.UNSATISFIABLE;
+            return UniverseSolverResult.UNSATISFIABLE;
         }
         return UniverseSolverResult.UNKNOWN;
     }
@@ -171,5 +175,16 @@ public abstract class AbstractState implements ISolverState {
         return decorator.isUserinterruption();
     }
 
+    /*
+     * (non-Javadoc)
+     *
+     * @see
+     * fr.univartois.cril.approximation.solver.state.ISolverState#setSolverListener(fr.
+     * univartois.cril.approximation.util.ISolverListener)
+     */
+    @Override
+    public void setSolverListener(ISolverListener listener) {
+        this.listener = listener;
+    }
 
 }
