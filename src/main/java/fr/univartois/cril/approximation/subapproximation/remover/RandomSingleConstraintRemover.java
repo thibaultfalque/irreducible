@@ -1,6 +1,7 @@
 /**
- * approximation
- * Copyright (c) 2025 - Romain Wallon.
+ * approximation, a constraint programming solver based on Choco, utilizing relaxation
+ * techniques.
+ * Copyright (c) 2025 - Univ Artois, CNRS & Luxembourg University.
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
