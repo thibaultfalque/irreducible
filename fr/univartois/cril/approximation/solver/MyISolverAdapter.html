@@ -126,7 +126,7 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addStopCriterion(org.chocosolver.util.criteria.Criterion...)" class="member-name-link">addStopCriterion</a><wbr>(org.chocosolver.util.criteria.Criterion...&nbsp;criterion)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the stop criterion.</div>
+<div class="block">Adds one or more stop criteria to the solver.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attach(org.chocosolver.solver.Solution)" class="member-name-link">attach</a><wbr>(org.chocosolver.solver.Solution&nbsp;solution)</code></div>
@@ -313,7 +313,7 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;V extends org.chocosolver.solver.variables.Variable&gt;<br>org.chocosolver.solver.objective.IObjectiveManager&lt;V&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getObjectiveManager()" class="member-name-link">getObjectiveManager</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the objective manager.</div>
+<div class="block">Retrieves the objective manager handling optimization objectives.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReadingTimeCount()" class="member-name-link">getReadingTimeCount</a>()</code></div>
@@ -517,7 +517,7 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#plugMonitor(org.chocosolver.solver.search.loop.monitors.ISearchMonitor)" class="member-name-link">plugMonitor</a><wbr>(org.chocosolver.solver.search.loop.monitors.ISearchMonitor&nbsp;sm)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Plug monitor.</div>
+<div class="block">Attaches a search monitor to the solver.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#preprocessing(long)" class="member-name-link">preprocessing</a><wbr>(long&nbsp;arg0)</code></div>
@@ -782,7 +782,7 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Solve.</div>
+<div class="block">Solves the problem using the configured solver.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;org.chocosolver.solver.Solution&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#streamOptimalSolutions(org.chocosolver.solver.variables.IntVar,boolean,org.chocosolver.util.criteria.Criterion...)" class="member-name-link">streamOptimalSolutions</a><wbr>(org.chocosolver.solver.variables.IntVar&nbsp;arg0,
@@ -900,12 +900,12 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <h3>solve</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></span>&nbsp;<span class="element-name">solve</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MyISolver.html#solve()">MyISolver</a></code></span></div>
-<div class="block">Solve.</div>
+<div class="block">Solves the problem using the configured solver.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="MyISolver.html#solve()">solve</a></code>&nbsp;in interface&nbsp;<code><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></code></dd>
 <dt>Returns:</dt>
-<dd>the universe solver result</dd>
+<dd>The result of the solving process as a <a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver"><code>UniverseSolverResult</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -938,12 +938,12 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <h3>addStopCriterion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addStopCriterion</span><wbr><span class="parameters">(org.chocosolver.util.criteria.Criterion...&nbsp;criterion)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MyISolver.html#addStopCriterion(org.chocosolver.util.criteria.Criterion...)">MyISolver</a></code></span></div>
-<div class="block">Adds the stop criterion.</div>
+<div class="block">Adds one or more stop criteria to the solver.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="MyISolver.html#addStopCriterion(org.chocosolver.util.criteria.Criterion...)">addStopCriterion</a></code>&nbsp;in interface&nbsp;<code><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>criterion</code> - the criterion</dd>
+<dd><code>criterion</code> - The stop criteria to be added.</dd>
 </dl>
 </section>
 </li>
@@ -1369,14 +1369,14 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters-long">&lt;V extends org.chocosolver.solver.variables.Variable&gt;</span>
 <span class="return-type">org.chocosolver.solver.objective.IObjectiveManager&lt;V&gt;</span>&nbsp;<span class="element-name">getObjectiveManager</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MyISolver.html#getObjectiveManager()">MyISolver</a></code></span></div>
-<div class="block">Gets the objective manager.</div>
+<div class="block">Retrieves the objective manager handling optimization objectives.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="MyISolver.html#getObjectiveManager()">getObjectiveManager</a></code>&nbsp;in interface&nbsp;<code><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></code></dd>
 <dt>Type Parameters:</dt>
-<dd><code>V</code> - the value type</dd>
+<dd><code>V</code> - The type of the objective variable.</dd>
 <dt>Returns:</dt>
-<dd>the objective manager</dd>
+<dd>The objective manager associated with this solver.</dd>
 </dl>
 </section>
 </li>
@@ -1855,12 +1855,12 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <h3>plugMonitor</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">plugMonitor</span><wbr><span class="parameters">(org.chocosolver.solver.search.loop.monitors.ISearchMonitor&nbsp;sm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MyISolver.html#plugMonitor(org.chocosolver.solver.search.loop.monitors.ISearchMonitor)">MyISolver</a></code></span></div>
-<div class="block">Plug monitor.</div>
+<div class="block">Attaches a search monitor to the solver.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="MyISolver.html#plugMonitor(org.chocosolver.solver.search.loop.monitors.ISearchMonitor)">plugMonitor</a></code>&nbsp;in interface&nbsp;<code><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>sm</code> - the monitor</dd>
+<dd><code>sm</code> - The search monitor to be plugged in.</dd>
 </dl>
 </section>
 </li>

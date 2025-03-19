@@ -197,7 +197,7 @@ implements <a href="ISolverState.html" title="interface in fr.univartois.cril.ap
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isTimeout()" class="member-name-link">isTimeout</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Checks if is timeout.</div>
+<div class="block">Checks if the solver has reached a timeout condition.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetLimitSolver()" class="member-name-link">resetLimitSolver</a>()</code></div>
@@ -207,7 +207,7 @@ implements <a href="ISolverState.html" title="interface in fr.univartois.cril.ap
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSolverListener(fr.univartois.cril.approximation.util.ISolverListener)" class="member-name-link">setSolverListener</a><wbr>(<a href="../../util/ISolverListener.html" title="interface in fr.univartois.cril.approximation.util">ISolverListener</a>&nbsp;listener)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the solver listener.</div>
+<div class="block">Sets a solver listener to track solver events.</div>
 </div>
 </div>
 </div>
@@ -339,12 +339,12 @@ implements <a href="ISolverState.html" title="interface in fr.univartois.cril.ap
 <h3>isTimeout</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isTimeout</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#isTimeout()">ISolverState</a></code></span></div>
-<div class="block">Checks if is timeout.</div>
+<div class="block">Checks if the solver has reached a timeout condition.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="ISolverState.html#isTimeout()">isTimeout</a></code>&nbsp;in interface&nbsp;<code><a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a></code></dd>
 <dt>Returns:</dt>
-<dd>true, if is timeout</dd>
+<dd><code>true</code> if the solver has timed out, <code>false</code> otherwise.</dd>
 </dl>
 </section>
 </li>
@@ -353,12 +353,12 @@ implements <a href="ISolverState.html" title="interface in fr.univartois.cril.ap
 <h3>setSolverListener</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setSolverListener</span><wbr><span class="parameters">(<a href="../../util/ISolverListener.html" title="interface in fr.univartois.cril.approximation.util">ISolverListener</a>&nbsp;listener)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#setSolverListener(fr.univartois.cril.approximation.util.ISolverListener)">ISolverState</a></code></span></div>
-<div class="block">Sets the solver listener.</div>
+<div class="block">Sets a solver listener to track solver events.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="ISolverState.html#setSolverListener(fr.univartois.cril.approximation.util.ISolverListener)">setSolverListener</a></code>&nbsp;in interface&nbsp;<code><a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>listener</code> - the new solver listener</dd>
+<dd><code>listener</code> - The solver listener to attach.</dd>
 </dl>
 </section>
 </li>

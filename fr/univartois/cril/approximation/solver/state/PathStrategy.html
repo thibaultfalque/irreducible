@@ -83,7 +83,17 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public enum </span><span class="element-name type-name-label">PathStrategy</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="PathStrategy.html" title="enum class in fr.univartois.cril.approximation.solver.state">PathStrategy</a>&gt;</span></div>
-<div class="block">The PathStrategy.</div>
+<div class="block">Defines strategies for navigating and restoring solver states in an approximation
+ solver.
+ <p>
+ The <code>PathStrategy</code> enum provides two strategies when a solution is found:
+ <ul>
+ <li><a href="#APPROX_NORMAL"><code>APPROX_NORMAL</code></a> - Moves to the original solver state.</li>
+ <li><a href="#APPROX_APPROX"><code>APPROX_APPROX</code></a> - Moves to the previous state.</li>
+ </ul>
+ Both strategies support restoring removed constraints using an
+ <a href="../../core/IConstraintsRemover.html" title="interface in fr.univartois.cril.approximation.core"><code>IConstraintsRemover</code></a>.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -106,11 +116,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="#APPROX_APPROX" class="member-name-link">APPROX_APPROX</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">The approx approx.</div>
+<div class="block">Strategy that moves to the previous state when a solution is found.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="#APPROX_NORMAL" class="member-name-link">APPROX_NORMAL</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">The approx normal.</div>
+<div class="block">Strategy that moves to the original state when a solution is found.</div>
 </div>
 </div>
 </section>
@@ -130,13 +140,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#previous(fr.univartois.cril.approximation.solver.state.ISolverState,fr.univartois.cril.approximation.solver.state.ISolverState)" class="member-name-link">previous</a><wbr>(<a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a>&nbsp;state,
  <a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a>&nbsp;current)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Previous.</div>
+<div class="block">Determines the previous solver state based on the strategy.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#restore(fr.univartois.cril.approximation.core.IConstraintsRemover,java.util.Set)" class="member-name-link">restore</a><wbr>(<a href="../../core/IConstraintsRemover.html" title="interface in fr.univartois.cril.approximation.core">IConstraintsRemover</a>&nbsp;remover,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;&nbsp;constraints)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Restore.</div>
+<div class="block">Restores constraints using the given constraint remover.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PathStrategy.html" title="enum class in fr.univartois.cril.approximation.solver.state">PathStrategy</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
@@ -173,14 +183,14 @@ the order they are declared.</div>
 <section class="detail" id="APPROX_NORMAL">
 <h3>APPROX_NORMAL</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PathStrategy.html" title="enum class in fr.univartois.cril.approximation.solver.state">PathStrategy</a></span>&nbsp;<span class="element-name">APPROX_NORMAL</span></div>
-<div class="block">The approx normal.</div>
+<div class="block">Strategy that moves to the original state when a solution is found.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="APPROX_APPROX">
 <h3>APPROX_APPROX</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PathStrategy.html" title="enum class in fr.univartois.cril.approximation.solver.state">PathStrategy</a></span>&nbsp;<span class="element-name">APPROX_APPROX</span></div>
-<div class="block">The approx approx.</div>
+<div class="block">Strategy that moves to the previous state when a solution is found.</div>
 </section>
 </li>
 </ul>
@@ -227,13 +237,13 @@ not permitted.)</div>
 <h3>previous</h3>
 <div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a></span>&nbsp;<span class="element-name">previous</span><wbr><span class="parameters">(<a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a>&nbsp;state,
  <a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a>&nbsp;current)</span></div>
-<div class="block">Previous.</div>
+<div class="block">Determines the previous solver state based on the strategy.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>state</code> - the state</dd>
-<dd><code>current</code> - the current</dd>
+<dd><code>state</code> - The reference solver state.</dd>
+<dd><code>current</code> - The current solver state.</dd>
 <dt>Returns:</dt>
-<dd>the i solver state</dd>
+<dd>The solver state to transition to.</dd>
 </dl>
 </section>
 </li>
@@ -242,11 +252,11 @@ not permitted.)</div>
 <h3>restore</h3>
 <div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">restore</span><wbr><span class="parameters">(<a href="../../core/IConstraintsRemover.html" title="interface in fr.univartois.cril.approximation.core">IConstraintsRemover</a>&nbsp;remover,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;&nbsp;constraints)</span></div>
-<div class="block">Restore.</div>
+<div class="block">Restores constraints using the given constraint remover.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>remover</code> - the remover</dd>
-<dd><code>constraints</code> - the constraints</dd>
+<dd><code>remover</code> - The constraint remover responsible for restoring constraints.</dd>
+<dd><code>constraints</code> - The set of constraints to restore.</dd>
 </dl>
 </section>
 </li>

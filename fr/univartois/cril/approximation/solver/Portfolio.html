@@ -77,7 +77,18 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Portfolio</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">The Class Portfolio.</div>
+<div class="block">A class that manages a portfolio of solvers running in parallel.
+ <p>
+ The <code>Portfolio</code> class allows multiple solvers to be executed concurrently,
+ selecting the best solution found among them. It uses a fixed thread pool to run
+ solvers within a specified timeout.
+ </p>
+
+ <p>
+ The portfolio keeps track of the best bound found and updates all solvers accordingly.
+ If an optimization problem is being solved, the best solution value is propagated to
+ all solvers to improve efficiency.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -91,7 +102,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long)" class="member-name-link">Portfolio</a><wbr>(long&nbsp;timeout)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Instantiates a new portfolio.</div>
+<div class="block">Creates a new <code>Portfolio</code> with the specified timeout.</div>
 </div>
 </div>
 </section>
@@ -110,22 +121,22 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addSolver(fr.univartois.cril.approximation.solver.MyISolver)" class="member-name-link">addSolver</a><wbr>(<a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a>&nbsp;solver)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the solver.</div>
+<div class="block">Adds a solver to the portfolio.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBestSolver()" class="member-name-link">getBestSolver</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the best solver.</div>
+<div class="block">Retrieves the solver that found the best solution.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Solve.</div>
+<div class="block">Executes all solvers in the portfolio concurrently.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stop()" class="member-name-link">stop</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Stop.</div>
+<div class="block">Stops all solvers in the portfolio.</div>
 </div>
 </div>
 </div>
@@ -148,10 +159,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;(long)">
 <h3>Portfolio</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Portfolio</span><wbr><span class="parameters">(long&nbsp;timeout)</span></div>
-<div class="block">Instantiates a new portfolio.</div>
+<div class="block">Creates a new <code>Portfolio</code> with the specified timeout.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>timeout</code> - the timeout</dd>
+<dd><code>timeout</code> - The maximum time allowed for the solvers to run (in milliseconds).</dd>
 </dl>
 </section>
 </li>
@@ -167,10 +178,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="addSolver(fr.univartois.cril.approximation.solver.MyISolver)">
 <h3>addSolver</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addSolver</span><wbr><span class="parameters">(<a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a>&nbsp;solver)</span></div>
-<div class="block">Adds the solver.</div>
+<div class="block">Adds a solver to the portfolio.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>solver</code> - the solver</dd>
+<dd><code>solver</code> - The solver to add.</dd>
 </dl>
 </section>
 </li>
@@ -178,10 +189,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="solve()">
 <h3>solve</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></span>&nbsp;<span class="element-name">solve</span>()</div>
-<div class="block">Solve.</div>
+<div class="block">Executes all solvers in the portfolio concurrently.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the universe solver result</dd>
+<dd>The result of the solving process as a <a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver"><code>UniverseSolverResult</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -189,10 +200,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getBestSolver()">
 <h3>getBestSolver</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></span>&nbsp;<span class="element-name">getBestSolver</span>()</div>
-<div class="block">Gets the best solver.</div>
+<div class="block">Retrieves the solver that found the best solution.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the best solver</dd>
+<dd>The solver that obtained the best solution.</dd>
 </dl>
 </section>
 </li>
@@ -200,7 +211,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="stop()">
 <h3>stop</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">stop</span>()</div>
-<div class="block">Stop.</div>
+<div class="block">Stops all solvers in the portfolio.</div>
 </section>
 </li>
 </ul>

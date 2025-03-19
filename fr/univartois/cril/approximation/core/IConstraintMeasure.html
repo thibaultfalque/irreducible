@@ -77,7 +77,17 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IConstraintMeasure</span></div>
-<div class="block">The IConstraintMeasureSelector.</div>
+<div class="block">Interface defining a measure for evaluating constraints in an approximation solver.
+ <p>
+ The <code>IConstraintMeasure</code> interface provides methods to compute scores for
+ individual constraints and constraint groups, as well as update measurement values
+ in various heuristic techniques, such as weighted degree (WDEG) and effective
+ filtering.
+ </p>
+ <p>
+ Implementations of this interface should define how constraint scores are computed
+ and updated dynamically during solving.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -96,12 +106,12 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#computeScore(fr.univartois.cril.approximation.core.GroupConstraint,int)" class="member-name-link">computeScore</a><wbr>(<a href="GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a>&nbsp;g,
  int&nbsp;count)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">Compute score.</div>
+<div class="block">Computes the score for a group of constraints.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>double</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#computeScore(org.chocosolver.solver.constraints.Constraint)" class="member-name-link">computeScore</a><wbr>(org.chocosolver.solver.constraints.Constraint&nbsp;c)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Compute score.</div>
+<div class="block">Computes the score of a given constraint.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateMeasureNEffectiveBacktracking(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)" class="member-name-link">updateMeasureNEffectiveBacktracking</a><wbr>(<a href="../util/collections/heaps/Heap.html" title="class in fr.univartois.cril.approximation.util.collections.heaps">Heap</a>&lt;T&gt;&nbsp;heap,
@@ -109,7 +119,7 @@ loadScripts(document, 'script');</script>
  double&nbsp;oldValue,
  double&nbsp;newValue)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Update measure N effective backtracking.</div>
+<div class="block">Updates the measure for backtracking efficiency in constraint selection.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateMeasureNEffectiveFiltering(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)" class="member-name-link">updateMeasureNEffectiveFiltering</a><wbr>(<a href="../util/collections/heaps/Heap.html" title="class in fr.univartois.cril.approximation.util.collections.heaps">Heap</a>&lt;T&gt;&nbsp;heap,
@@ -117,7 +127,7 @@ loadScripts(document, 'script');</script>
  double&nbsp;oldValue,
  double&nbsp;newValue)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Update measure N effective filtering.</div>
+<div class="block">Updates the measure for effective filtering in constraint selection.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateMeasureWDEGWeight(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)" class="member-name-link">updateMeasureWDEGWeight</a><wbr>(<a href="../util/collections/heaps/Heap.html" title="class in fr.univartois.cril.approximation.util.collections.heaps">Heap</a>&lt;T&gt;&nbsp;heap,
@@ -125,7 +135,7 @@ loadScripts(document, 'script');</script>
  double&nbsp;oldValue,
  double&nbsp;newValue)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Update measure WDEG weight.</div>
+<div class="block">Updates the measure for weighted degree (WDEG) heuristic.</div>
 </div>
 </div>
 </div>
@@ -145,12 +155,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="computeScore(org.chocosolver.solver.constraints.Constraint)">
 <h3>computeScore</h3>
 <div class="member-signature"><span class="return-type">double</span>&nbsp;<span class="element-name">computeScore</span><wbr><span class="parameters">(org.chocosolver.solver.constraints.Constraint&nbsp;c)</span></div>
-<div class="block">Compute score.</div>
+<div class="block">Computes the score of a given constraint.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>c</code> - the c</dd>
+<dd><code>c</code> - The constraint to evaluate.</dd>
 <dt>Returns:</dt>
-<dd>the double</dd>
+<dd>The computed score for the constraint.</dd>
 </dl>
 </section>
 </li>
@@ -159,13 +169,13 @@ loadScripts(document, 'script');</script>
 <h3>computeScore</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">computeScore</span><wbr><span class="parameters">(<a href="GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a>&nbsp;g,
  int&nbsp;count)</span></div>
-<div class="block">Compute score.</div>
+<div class="block">Computes the score for a group of constraints.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>g</code> - the g</dd>
-<dd><code>count</code> - the count</dd>
+<dd><code>g</code> - The constraint group to evaluate.</dd>
+<dd><code>count</code> - the number of times this group has already been removed..</dd>
 <dt>Returns:</dt>
-<dd>the double</dd>
+<dd>The computed score for the constraint group.</dd>
 </dl>
 </section>
 </li>
@@ -176,15 +186,15 @@ loadScripts(document, 'script');</script>
  T&nbsp;c,
  double&nbsp;oldValue,
  double&nbsp;newValue)</span></div>
-<div class="block">Update measure N effective filtering.</div>
+<div class="block">Updates the measure for effective filtering in constraint selection.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>T</code> - the generic type</dd>
+<dd><code>T</code> - The type of elements in the heap.</dd>
 <dt>Parameters:</dt>
-<dd><code>heap</code> - the heap</dd>
-<dd><code>c</code> - the c</dd>
-<dd><code>oldValue</code> - the old value</dd>
-<dd><code>newValue</code> - the new value</dd>
+<dd><code>heap</code> - The heap structure used for constraint ordering.</dd>
+<dd><code>c</code> - The constraint to update.</dd>
+<dd><code>oldValue</code> - The previous score value.</dd>
+<dd><code>newValue</code> - The updated score value.</dd>
 </dl>
 </section>
 </li>
@@ -195,15 +205,15 @@ loadScripts(document, 'script');</script>
  T&nbsp;c,
  double&nbsp;oldValue,
  double&nbsp;newValue)</span></div>
-<div class="block">Update measure WDEG weight.</div>
+<div class="block">Updates the measure for weighted degree (WDEG) heuristic.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>T</code> - the generic type</dd>
+<dd><code>T</code> - The type of elements in the heap.</dd>
 <dt>Parameters:</dt>
-<dd><code>heap</code> - the heap</dd>
-<dd><code>c</code> - the c</dd>
-<dd><code>oldValue</code> - the old value</dd>
-<dd><code>newValue</code> - the new value</dd>
+<dd><code>heap</code> - The heap structure used for constraint ordering.</dd>
+<dd><code>c</code> - The constraint to update.</dd>
+<dd><code>oldValue</code> - The previous weight value.</dd>
+<dd><code>newValue</code> - The updated weight value.</dd>
 </dl>
 </section>
 </li>
@@ -214,15 +224,15 @@ loadScripts(document, 'script');</script>
  T&nbsp;c,
  double&nbsp;oldValue,
  double&nbsp;newValue)</span></div>
-<div class="block">Update measure N effective backtracking.</div>
+<div class="block">Updates the measure for backtracking efficiency in constraint selection.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>T</code> - the generic type</dd>
+<dd><code>T</code> - The type of elements in the heap.</dd>
 <dt>Parameters:</dt>
-<dd><code>heap</code> - the heap</dd>
-<dd><code>c</code> - the c</dd>
-<dd><code>oldValue</code> - the old value</dd>
-<dd><code>newValue</code> - the new value</dd>
+<dd><code>heap</code> - The heap structure used for constraint ordering.</dd>
+<dd><code>c</code> - The constraint to update.</dd>
+<dd><code>oldValue</code> - The previous score value.</dd>
+<dd><code>newValue</code> - The updated score value.</dd>
 </dl>
 </section>
 </li>

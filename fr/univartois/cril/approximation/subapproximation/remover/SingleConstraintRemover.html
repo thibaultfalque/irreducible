@@ -125,17 +125,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#computeNextConstraintsToRemove()" class="member-name-link">computeNextConstraintsToRemove</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Compute next constraints to remove.</div>
+<div class="block">Computes and returns the next set of constraints to be removed.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreConstraints(java.util.Collection)" class="member-name-link">restoreConstraints</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;&nbsp;constraints)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Restore constraints.</div>
+<div class="block">Restores previously removed constraints back into the solver.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConstraintMeasure(fr.univartois.cril.approximation.core.IConstraintMeasure)" class="member-name-link">setConstraintMeasure</a><wbr>(<a href="../../core/IConstraintMeasure.html" title="interface in fr.univartois.cril.approximation.core">IConstraintMeasure</a>&nbsp;measure)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the constraint measure.</div>
+<div class="block">Sets the constraint measure used to evaluate constraints.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#whenBacktrackingChange(org.chocosolver.solver.constraints.Constraint,int,int)" class="member-name-link">whenBacktrackingChange</a><wbr>(org.chocosolver.solver.constraints.Constraint&nbsp;c,
@@ -193,10 +193,10 @@ loadScripts(document, 'script');</script>
 <h3>computeNextConstraintsToRemove</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;</span>&nbsp;<span class="element-name">computeNextConstraintsToRemove</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../core/IConstraintsRemover.html#computeNextConstraintsToRemove()">IConstraintsRemover</a></code></span></div>
-<div class="block">Compute next constraints to remove.</div>
+<div class="block">Computes and returns the next set of constraints to be removed.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the list</dd>
+<dd>A list of constraints selected for removal.</dd>
 </dl>
 </section>
 </li>
@@ -205,14 +205,14 @@ loadScripts(document, 'script');</script>
 <h3>setConstraintMeasure</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setConstraintMeasure</span><wbr><span class="parameters">(<a href="../../core/IConstraintMeasure.html" title="interface in fr.univartois.cril.approximation.core">IConstraintMeasure</a>&nbsp;measure)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../core/IConstraintsRemover.html#setConstraintMeasure(fr.univartois.cril.approximation.core.IConstraintMeasure)">IConstraintsRemover</a></code></span></div>
-<div class="block">Sets the constraint measure.</div>
+<div class="block">Sets the constraint measure used to evaluate constraints.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../core/IConstraintsRemover.html#setConstraintMeasure(fr.univartois.cril.approximation.core.IConstraintMeasure)">setConstraintMeasure</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/IConstraintsRemover.html" title="interface in fr.univartois.cril.approximation.core">IConstraintsRemover</a></code></dd>
 <dt>Overrides:</dt>
 <dd><code><a href="AbstractConstraintRemover.html#setConstraintMeasure(fr.univartois.cril.approximation.core.IConstraintMeasure)">setConstraintMeasure</a></code>&nbsp;in class&nbsp;<code><a href="AbstractConstraintRemover.html" title="class in fr.univartois.cril.approximation.subapproximation.remover">AbstractConstraintRemover</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;</code></dd>
 <dt>Parameters:</dt>
-<dd><code>measure</code> - the new constraint measure</dd>
+<dd><code>measure</code> - The constraint measure to set.</dd>
 </dl>
 </section>
 </li>
@@ -237,10 +237,10 @@ loadScripts(document, 'script');</script>
 <h3>restoreConstraints</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">restoreConstraints</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;&nbsp;constraints)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../core/IConstraintsRemover.html#restoreConstraints(java.util.Collection)">IConstraintsRemover</a></code></span></div>
-<div class="block">Restore constraints.</div>
+<div class="block">Restores previously removed constraints back into the solver.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>constraints</code> - the constraints</dd>
+<dd><code>constraints</code> - The collection of constraints to restore.</dd>
 </dl>
 </section>
 </li>

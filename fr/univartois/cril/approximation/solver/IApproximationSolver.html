@@ -82,7 +82,12 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IApproximationSolver</span><span class="extends-implements">
 extends <a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></span></div>
-<div class="block">The Interface IApproximationSolver.</div>
+<div class="block">Interface defining an approximation solver.
+ <p>
+ The <code>IApproximationSolver</code> extends <a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver"><code>MyISolver</code></a> and provides additional
+ functionality to handle approximate solving methods. It supports solving, displaying,
+ and restoring solutions.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -100,17 +105,12 @@ extends <a href="MyISolver.html" title="interface in fr.univartois.cril.approxim
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#displaySolution(org.chocosolver.parser.xcsp.XCSP)" class="member-name-link">displaySolution</a><wbr>(org.chocosolver.parser.xcsp.XCSP&nbsp;xcsp)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Display solution.</div>
+<div class="block">Displays the solution using the provided XCSP parser.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#restoreSolution()" class="member-name-link">restoreSolution</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Restore solution.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Solve.</div>
+<div class="block">Solves the problem using an approximation strategy.</div>
 </div>
 </div>
 </div>
@@ -148,13 +148,12 @@ extends <a href="MyISolver.html" title="interface in fr.univartois.cril.approxim
 <section class="detail" id="solve()">
 <h3>solve</h3>
 <div class="member-signature"><span class="return-type"><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></span>&nbsp;<span class="element-name">solve</span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MyISolver.html#solve()">MyISolver</a></code></span></div>
-<div class="block">Solve.</div>
+<div class="block">Solves the problem using an approximation strategy.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="MyISolver.html#solve()">solve</a></code>&nbsp;in interface&nbsp;<code><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></code></dd>
 <dt>Returns:</dt>
-<dd>the universe solver result</dd>
+<dd>The result of the solving process as a <a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver"><code>UniverseSolverResult</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -162,18 +161,11 @@ extends <a href="MyISolver.html" title="interface in fr.univartois.cril.approxim
 <section class="detail" id="displaySolution(org.chocosolver.parser.xcsp.XCSP)">
 <h3>displaySolution</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">displaySolution</span><wbr><span class="parameters">(org.chocosolver.parser.xcsp.XCSP&nbsp;xcsp)</span></div>
-<div class="block">Display solution.</div>
+<div class="block">Displays the solution using the provided XCSP parser.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>xcsp</code> - the xcsp</dd>
+<dd><code>xcsp</code> - The XCSP parser instance used for displaying the solution.</dd>
 </dl>
-</section>
-</li>
-<li>
-<section class="detail" id="restoreSolution()">
-<h3>restoreSolution</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">restoreSolution</span>()</div>
-<div class="block">Restore solution.</div>
 </section>
 </li>
 </ul>

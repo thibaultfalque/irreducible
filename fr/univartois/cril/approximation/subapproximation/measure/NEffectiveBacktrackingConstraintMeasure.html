@@ -113,7 +113,7 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#computeScore(org.chocosolver.solver.constraints.Constraint)" class="member-name-link">computeScore</a><wbr>(org.chocosolver.solver.constraints.Constraint&nbsp;c)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Compute score.</div>
+<div class="block">Computes the score of a given constraint.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateMeasureNEffectiveBacktracking(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)" class="member-name-link">updateMeasureNEffectiveBacktracking</a><wbr>(<a href="../../util/collections/heaps/Heap.html" title="class in fr.univartois.cril.approximation.util.collections.heaps">Heap</a>&lt;T&gt;&nbsp;heap,
@@ -121,7 +121,7 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
  double&nbsp;oldValue,
  double&nbsp;newValue)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Update measure N effective backtracking.</div>
+<div class="block">Updates the measure for backtracking efficiency in constraint selection.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateMeasureNEffectiveFiltering(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)" class="member-name-link">updateMeasureNEffectiveFiltering</a><wbr>(<a href="../../util/collections/heaps/Heap.html" title="class in fr.univartois.cril.approximation.util.collections.heaps">Heap</a>&lt;T&gt;&nbsp;heap,
@@ -129,7 +129,7 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
  double&nbsp;oldValue,
  double&nbsp;newValue)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Update measure N effective filtering.</div>
+<div class="block">Updates the measure for effective filtering in constraint selection.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateMeasureWDEGWeight(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)" class="member-name-link">updateMeasureWDEGWeight</a><wbr>(<a href="../../util/collections/heaps/Heap.html" title="class in fr.univartois.cril.approximation.util.collections.heaps">Heap</a>&lt;T&gt;&nbsp;heap,
@@ -137,7 +137,7 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
  double&nbsp;oldValue,
  double&nbsp;newValue)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Update measure WDEG weight.</div>
+<div class="block">Updates the measure for weighted degree (WDEG) heuristic.</div>
 </div>
 </div>
 </div>
@@ -178,14 +178,14 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
 <h3>computeScore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">computeScore</span><wbr><span class="parameters">(org.chocosolver.solver.constraints.Constraint&nbsp;c)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../core/IConstraintMeasure.html#computeScore(org.chocosolver.solver.constraints.Constraint)">IConstraintMeasure</a></code></span></div>
-<div class="block">Compute score.</div>
+<div class="block">Computes the score of a given constraint.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../core/IConstraintMeasure.html#computeScore(org.chocosolver.solver.constraints.Constraint)">computeScore</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/IConstraintMeasure.html" title="interface in fr.univartois.cril.approximation.core">IConstraintMeasure</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>c</code> - the c</dd>
+<dd><code>c</code> - The constraint to evaluate.</dd>
 <dt>Returns:</dt>
-<dd>the double</dd>
+<dd>The computed score for the constraint.</dd>
 </dl>
 </section>
 </li>
@@ -197,17 +197,17 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
  double&nbsp;oldValue,
  double&nbsp;newValue)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../core/IConstraintMeasure.html#updateMeasureNEffectiveFiltering(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)">IConstraintMeasure</a></code></span></div>
-<div class="block">Update measure N effective filtering.</div>
+<div class="block">Updates the measure for effective filtering in constraint selection.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../core/IConstraintMeasure.html#updateMeasureNEffectiveFiltering(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)">updateMeasureNEffectiveFiltering</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/IConstraintMeasure.html" title="interface in fr.univartois.cril.approximation.core">IConstraintMeasure</a></code></dd>
 <dt>Type Parameters:</dt>
-<dd><code>T</code> - the generic type</dd>
+<dd><code>T</code> - The type of elements in the heap.</dd>
 <dt>Parameters:</dt>
-<dd><code>heap</code> - the heap</dd>
-<dd><code>c</code> - the c</dd>
-<dd><code>oldValue</code> - the old value</dd>
-<dd><code>newValue</code> - the new value</dd>
+<dd><code>heap</code> - The heap structure used for constraint ordering.</dd>
+<dd><code>c</code> - The constraint to update.</dd>
+<dd><code>oldValue</code> - The previous score value.</dd>
+<dd><code>newValue</code> - The updated score value.</dd>
 </dl>
 </section>
 </li>
@@ -219,17 +219,17 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
  double&nbsp;oldValue,
  double&nbsp;newValue)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../core/IConstraintMeasure.html#updateMeasureWDEGWeight(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)">IConstraintMeasure</a></code></span></div>
-<div class="block">Update measure WDEG weight.</div>
+<div class="block">Updates the measure for weighted degree (WDEG) heuristic.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../core/IConstraintMeasure.html#updateMeasureWDEGWeight(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)">updateMeasureWDEGWeight</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/IConstraintMeasure.html" title="interface in fr.univartois.cril.approximation.core">IConstraintMeasure</a></code></dd>
 <dt>Type Parameters:</dt>
-<dd><code>T</code> - the generic type</dd>
+<dd><code>T</code> - The type of elements in the heap.</dd>
 <dt>Parameters:</dt>
-<dd><code>heap</code> - the heap</dd>
-<dd><code>c</code> - the c</dd>
-<dd><code>oldValue</code> - the old value</dd>
-<dd><code>newValue</code> - the new value</dd>
+<dd><code>heap</code> - The heap structure used for constraint ordering.</dd>
+<dd><code>c</code> - The constraint to update.</dd>
+<dd><code>oldValue</code> - The previous weight value.</dd>
+<dd><code>newValue</code> - The updated weight value.</dd>
 </dl>
 </section>
 </li>
@@ -241,17 +241,17 @@ implements <a href="../../core/IConstraintMeasure.html" title="interface in fr.u
  double&nbsp;oldValue,
  double&nbsp;newValue)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../core/IConstraintMeasure.html#updateMeasureNEffectiveBacktracking(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)">IConstraintMeasure</a></code></span></div>
-<div class="block">Update measure N effective backtracking.</div>
+<div class="block">Updates the measure for backtracking efficiency in constraint selection.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../../core/IConstraintMeasure.html#updateMeasureNEffectiveBacktracking(fr.univartois.cril.approximation.util.collections.heaps.Heap,T,double,double)">updateMeasureNEffectiveBacktracking</a></code>&nbsp;in interface&nbsp;<code><a href="../../core/IConstraintMeasure.html" title="interface in fr.univartois.cril.approximation.core">IConstraintMeasure</a></code></dd>
 <dt>Type Parameters:</dt>
-<dd><code>T</code> - the generic type</dd>
+<dd><code>T</code> - The type of elements in the heap.</dd>
 <dt>Parameters:</dt>
-<dd><code>heap</code> - the heap</dd>
-<dd><code>c</code> - the c</dd>
-<dd><code>oldValue</code> - the old value</dd>
-<dd><code>newValue</code> - the new value</dd>
+<dd><code>heap</code> - The heap structure used for constraint ordering.</dd>
+<dd><code>c</code> - The constraint to update.</dd>
+<dd><code>oldValue</code> - The previous score value.</dd>
+<dd><code>newValue</code> - The updated score value.</dd>
 </dl>
 </section>
 </li>

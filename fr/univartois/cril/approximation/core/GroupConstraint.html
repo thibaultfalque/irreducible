@@ -77,7 +77,12 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">GroupConstraint</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">The GroupConstraint.</div>
+<div class="block">Represents a group of constraints in an approximation solver.
+ <p>
+ A <code>GroupConstraint</code> consists of a collection of constraints that are
+ associated with a specific group number. Each group can be assigned a score,
+ which may be used for evaluating the relaxation or approximation of constraints.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -91,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int)" class="member-name-link">GroupConstraint</a><wbr>(int&nbsp;nGroup)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates a new GroupConstraint.</div>
+<div class="block">Creates a new <code>GroupConstraint</code> with the specified group number.</div>
 </div>
 </div>
 </section>
@@ -110,27 +115,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(org.chocosolver.solver.constraints.Constraint)" class="member-name-link">add</a><wbr>(org.chocosolver.solver.constraints.Constraint&nbsp;c)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds the.</div>
+<div class="block">Adds a constraint to this group.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConstraints()" class="member-name-link">getConstraints</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gives the constraints of this GroupConstraint.</div>
+<div class="block">Retrieves the list of constraints in this group.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGroupNumber()" class="member-name-link">getGroupNumber</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gives the group number of this GroupConstraint.</div>
+<div class="block">Retrieves the group number of this constraint group.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getScore()" class="member-name-link">getScore</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gives the score of this GroupConstraint.</div>
+<div class="block">Retrieves the score associated with this constraint group.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setScore(double)" class="member-name-link">setScore</a><wbr>(double&nbsp;score)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets this GroupConstraint's score.</div>
+<div class="block">Sets the score for this constraint group.</div>
 </div>
 </div>
 </div>
@@ -153,10 +158,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;(int)">
 <h3>GroupConstraint</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">GroupConstraint</span><wbr><span class="parameters">(int&nbsp;nGroup)</span></div>
-<div class="block">Creates a new GroupConstraint.</div>
+<div class="block">Creates a new <code>GroupConstraint</code> with the specified group number.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>nGroup</code> - the n group</dd>
+<dd><code>nGroup</code> - The group number to assign to this constraint group.</dd>
 </dl>
 </section>
 </li>
@@ -172,10 +177,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="add(org.chocosolver.solver.constraints.Constraint)">
 <h3>add</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(org.chocosolver.solver.constraints.Constraint&nbsp;c)</span></div>
-<div class="block">Adds the.</div>
+<div class="block">Adds a constraint to this group.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>c</code> - the c</dd>
+<dd><code>c</code> - The constraint to add.</dd>
 </dl>
 </section>
 </li>
@@ -183,10 +188,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getConstraints()">
 <h3>getConstraints</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;</span>&nbsp;<span class="element-name">getConstraints</span>()</div>
-<div class="block">Gives the constraints of this GroupConstraint.</div>
+<div class="block">Retrieves the list of constraints in this group.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>This GroupConstraint's constraints.</dd>
+<dd>The list of constraints associated with this group.</dd>
 </dl>
 </section>
 </li>
@@ -194,10 +199,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getGroupNumber()">
 <h3>getGroupNumber</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getGroupNumber</span>()</div>
-<div class="block">Gives the group number of this GroupConstraint.</div>
+<div class="block">Retrieves the group number of this constraint group.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>This GroupConstraint's nGroup.</dd>
+<dd>The group number assigned to this constraint group.</dd>
 </dl>
 </section>
 </li>
@@ -205,10 +210,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getScore()">
 <h3>getScore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">getScore</span>()</div>
-<div class="block">Gives the score of this GroupConstraint.</div>
+<div class="block">Retrieves the score associated with this constraint group.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>This GroupConstraint's score.</dd>
+<dd>The score assigned to this group.</dd>
 </dl>
 </section>
 </li>
@@ -216,10 +221,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setScore(double)">
 <h3>setScore</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setScore</span><wbr><span class="parameters">(double&nbsp;score)</span></div>
-<div class="block">Sets this GroupConstraint's score.</div>
+<div class="block">Sets the score for this constraint group.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>score</code> - The score to set.</dd>
+<dd><code>score</code> - The score value to assign to this group.</dd>
 </dl>
 </section>
 </li>

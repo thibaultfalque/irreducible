@@ -77,7 +77,17 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Main</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">The Main.</div>
+<div class="block">The <code>Main</code> class is the entry point for the Approximation solver.
+ <p>
+ This class parses command-line arguments, initializes the solver,
+ and executes the solving process. It supports portfolio-based
+ solving, relaxation solving and standard constraint solving using the Choco solver.
+ </p>
+ <p>
+ The solver incorporates relaxation techniques and can be configured
+ using various parameters, such as constraint removal strategies,
+ constraint measurement, verbosity level, and timeout settings.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -108,7 +118,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#main(java.lang.String%5B%5D)" class="member-name-link">main</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">The main method.</div>
+<div class="block">The main method, which serves as the entry point for the application.</div>
 </div>
 </div>
 </div>
@@ -145,10 +155,16 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="main(java.lang.String[])">
 <h3>main</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">main</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
-<div class="block">The main method.</div>
+<div class="block">The main method, which serves as the entry point for the application.
+ <p>
+ This method initializes the command-line parser, extracts arguments,
+ and either runs a portfolio solver, relaxation solver or a standard constraint
+ solver using Choco.
+ Shutdown hooks are registered to ensure proper cleanup.
+ </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>args</code> - the arguments</dd>
+<dd><code>args</code> - The command-line arguments provided by the user.</dd>
 </dl>
 </section>
 </li>

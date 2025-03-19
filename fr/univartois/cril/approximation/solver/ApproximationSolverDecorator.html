@@ -188,7 +188,7 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displaySolution(org.chocosolver.parser.xcsp.XCSP)" class="member-name-link">displaySolution</a><wbr>(org.chocosolver.parser.xcsp.XCSP&nbsp;xcsp)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Display solution.</div>
+<div class="block">Displays the solution using the provided XCSP parser.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eachSolutionWithMeasure(java.util.function.BiConsumer,org.chocosolver.util.criteria.Criterion...)" class="member-name-link">eachSolutionWithMeasure</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;org.chocosolver.solver.Solution,<wbr>org.chocosolver.solver.search.measure.IMeasures&gt;&nbsp;cons,
@@ -256,7 +256,7 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.chocosolver.solver.constraints.Constraint</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConstraint(int)" class="member-name-link">getConstraint</a><wbr>(int&nbsp;index)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gives the constraint with the specified index</div>
+<div class="block">Gives the constraint with the specified index.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConstraints()" class="member-name-link">getConstraints</a>()</code></div>
@@ -315,10 +315,14 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../core/GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGroup(int)" class="member-name-link">getGroup</a><wbr>(int&nbsp;index)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the group.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../core/GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getGroups()" class="member-name-link">getGroups</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the groups.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getJumpTo()" class="member-name-link">getJumpTo</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -550,10 +554,14 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nConstraints()" class="member-name-link">nConstraints</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">N constraints.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nGroups()" class="member-name-link">nGroups</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">N groups.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nVariables()" class="member-name-link">nVariables</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -671,302 +679,297 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Restart.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreSolution()" class="member-name-link">restoreSolution</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#searchLoop()" class="member-name-link">searchLoop</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Restore solution.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#searchLoop()" class="member-name-link">searchLoop</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Search loop.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConstantRestart(long,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setConstantRestart</a><wbr>(long&nbsp;scaleFactor,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConstantRestart(long,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setConstantRestart</a><wbr>(long&nbsp;scaleFactor,
  org.chocosolver.solver.search.limits.ICounter&nbsp;restartStrategyLimit,
  int&nbsp;restartLimit)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContext(fr.univartois.cril.approximation.solver.SolverContext)" class="member-name-link">setContext</a><wbr>(<a href="SolverContext.html" title="class in fr.univartois.cril.approximation.solver">SolverContext</a>&nbsp;context)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets this ApproximationSolverDecorator's context.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDDS(int)" class="member-name-link">setDDS</a><wbr>(int&nbsp;discrepancy)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDFS()" class="member-name-link">setDFS</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEngine(org.chocosolver.solver.propagation.PropagationEngine)" class="member-name-link">setEngine</a><wbr>(org.chocosolver.solver.propagation.PropagationEngine&nbsp;propagationEngine)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setContext(fr.univartois.cril.approximation.solver.SolverContext)" class="member-name-link">setContext</a><wbr>(<a href="SolverContext.html" title="class in fr.univartois.cril.approximation.solver">SolverContext</a>&nbsp;context)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the engine.</div>
+<div class="block">Sets this ApproximationSolverDecorator's context.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEventObserver(org.chocosolver.solver.learn.AbstractEventObserver)" class="member-name-link">setEventObserver</a><wbr>(org.chocosolver.solver.learn.AbstractEventObserver&nbsp;explainer)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDDS(int)" class="member-name-link">setDDS</a><wbr>(int&nbsp;discrepancy)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDFS()" class="member-name-link">setDFS</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEngine(org.chocosolver.solver.propagation.PropagationEngine)" class="member-name-link">setEngine</a><wbr>(org.chocosolver.solver.propagation.PropagationEngine&nbsp;propagationEngine)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the event observer.</div>
+<div class="block">Sets the engine.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setGeometricalRestart(long,double,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setGeometricalRestart</a><wbr>(long&nbsp;base,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setEventObserver(org.chocosolver.solver.learn.AbstractEventObserver)" class="member-name-link">setEventObserver</a><wbr>(org.chocosolver.solver.learn.AbstractEventObserver&nbsp;explainer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the event observer.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setGeometricalRestart(long,double,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setGeometricalRestart</a><wbr>(long&nbsp;base,
  double&nbsp;geometricalFactor,
  org.chocosolver.solver.search.limits.ICounter&nbsp;restartStrategyLimit,
  int&nbsp;restartLimit)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHBFS(double,double,long)" class="member-name-link">setHBFS</a><wbr>(double&nbsp;a,
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setHBFS(double,double,long)" class="member-name-link">setHBFS</a><wbr>(double&nbsp;a,
  double&nbsp;b,
  long&nbsp;n)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setJumpTo(int)" class="member-name-link">setJumpTo</a><wbr>(int&nbsp;jto)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setJumpTo(int)" class="member-name-link">setJumpTo</a><wbr>(int&nbsp;jto)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the jump to.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setKeepFalsified(fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy)" class="member-name-link">setKeepFalsified</a><wbr>(<a href="../core/KeepFalsifiedConstraintStrategy.html" title="enum class in fr.univartois.cril.approximation.core">KeepFalsifiedConstraintStrategy</a>&nbsp;keepFalsified)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setKeepFalsified(fr.univartois.cril.approximation.core.KeepFalsifiedConstraintStrategy)" class="member-name-link">setKeepFalsified</a><wbr>(<a href="../core/KeepFalsifiedConstraintStrategy.html" title="enum class in fr.univartois.cril.approximation.core">KeepFalsifiedConstraintStrategy</a>&nbsp;keepFalsified)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets this ApproximationSolverDecorator's keepFalsified.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLDS(int)" class="member-name-link">setLDS</a><wbr>(int&nbsp;discrepancy)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLearner(org.chocosolver.solver.search.loop.learn.Learn)" class="member-name-link">setLearner</a><wbr>(org.chocosolver.solver.search.loop.learn.Learn&nbsp;l)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLDS(int)" class="member-name-link">setLDS</a><wbr>(int&nbsp;discrepancy)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLearner(org.chocosolver.solver.search.loop.learn.Learn)" class="member-name-link">setLearner</a><wbr>(org.chocosolver.solver.search.loop.learn.Learn&nbsp;l)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the learner.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLearningSignedClauses()" class="member-name-link">setLearningSignedClauses</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLinearRestart(long,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setLinearRestart</a><wbr>(long&nbsp;scaleFactor,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLearningSignedClauses()" class="member-name-link">setLearningSignedClauses</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLinearRestart(long,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setLinearRestart</a><wbr>(long&nbsp;scaleFactor,
  org.chocosolver.solver.search.limits.ICounter&nbsp;restartStrategyLimit,
  int&nbsp;restartLimit)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor,org.chocosolver.solver.search.limits.ICounter)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor,
- org.chocosolver.solver.search.limits.ICounter&nbsp;restartCounter)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor,org.chocosolver.solver.search.limits.ICounter,org.chocosolver.solver.Solution)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor,org.chocosolver.solver.search.limits.ICounter)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor,
+ org.chocosolver.solver.search.limits.ICounter&nbsp;restartCounter)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor,org.chocosolver.solver.search.limits.ICounter,org.chocosolver.solver.Solution)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor,
  org.chocosolver.solver.search.limits.ICounter&nbsp;restartCounter,
  org.chocosolver.solver.Solution&nbsp;bootstrap)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor,org.chocosolver.solver.Solution)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor,
- org.chocosolver.solver.Solution&nbsp;bootstrap)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLubyRestart(long,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setLubyRestart</a><wbr>(long&nbsp;scaleFactor,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLNS(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor,org.chocosolver.solver.Solution)" class="member-name-link">setLNS</a><wbr>(org.chocosolver.solver.search.loop.lns.neighbors.INeighbor&nbsp;neighbor,
+ org.chocosolver.solver.Solution&nbsp;bootstrap)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setLubyRestart(long,org.chocosolver.solver.search.limits.ICounter,int)" class="member-name-link">setLubyRestart</a><wbr>(long&nbsp;scaleFactor,
  org.chocosolver.solver.search.limits.ICounter&nbsp;restartStrategyLimit,
  int&nbsp;restartLimit)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMove(org.chocosolver.solver.search.loop.move.Move...)" class="member-name-link">setMove</a><wbr>(org.chocosolver.solver.search.loop.move.Move...&nbsp;m)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMove(org.chocosolver.solver.search.loop.move.Move...)" class="member-name-link">setMove</a><wbr>(org.chocosolver.solver.search.loop.move.Move...&nbsp;m)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the move.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNoGoodRecordingFromRestarts()" class="member-name-link">setNoGoodRecordingFromRestarts</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNoGoodRecordingFromSolutions(org.chocosolver.solver.variables.IntVar...)" class="member-name-link">setNoGoodRecordingFromSolutions</a><wbr>(org.chocosolver.solver.variables.IntVar...&nbsp;vars)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNoGoodRecordingFromRestarts()" class="member-name-link">setNoGoodRecordingFromRestarts</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNoLearning()" class="member-name-link">setNoLearning</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNoGoodRecordingFromSolutions(org.chocosolver.solver.variables.IntVar...)" class="member-name-link">setNoGoodRecordingFromSolutions</a><wbr>(org.chocosolver.solver.variables.IntVar...&nbsp;vars)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setObjectiveManager(org.chocosolver.solver.objective.IObjectiveManager)" class="member-name-link">setObjectiveManager</a><wbr>(org.chocosolver.solver.objective.IObjectiveManager&lt;?&gt;&nbsp;om)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNoLearning()" class="member-name-link">setNoLearning</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setObjectiveManager(org.chocosolver.solver.objective.IObjectiveManager)" class="member-name-link">setObjectiveManager</a><wbr>(org.chocosolver.solver.objective.IObjectiveManager&lt;?&gt;&nbsp;om)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the objective manager.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRestartOnSolutions()" class="member-name-link">setRestartOnSolutions</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRestarts(org.chocosolver.util.criteria.LongCriterion,org.chocosolver.solver.search.restart.ICutoff,int)" class="member-name-link">setRestarts</a><wbr>(org.chocosolver.util.criteria.LongCriterion&nbsp;restartCriterion,
- org.chocosolver.solver.search.restart.ICutoff&nbsp;restartStrategy,
- int&nbsp;restartsLimit)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRestartOnSolutions()" class="member-name-link">setRestartOnSolutions</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRestarts(org.chocosolver.util.criteria.LongCriterion,org.chocosolver.solver.search.restart.ICutoff,int,boolean)" class="member-name-link">setRestarts</a><wbr>(org.chocosolver.util.criteria.LongCriterion&nbsp;restartCriterion,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRestarts(org.chocosolver.util.criteria.LongCriterion,org.chocosolver.solver.search.restart.ICutoff,int)" class="member-name-link">setRestarts</a><wbr>(org.chocosolver.util.criteria.LongCriterion&nbsp;restartCriterion,
+ org.chocosolver.solver.search.restart.ICutoff&nbsp;restartStrategy,
+ int&nbsp;restartsLimit)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setRestarts(org.chocosolver.util.criteria.LongCriterion,org.chocosolver.solver.search.restart.ICutoff,int,boolean)" class="member-name-link">setRestarts</a><wbr>(org.chocosolver.util.criteria.LongCriterion&nbsp;restartCriterion,
  org.chocosolver.solver.search.restart.ICutoff&nbsp;restartStrategy,
  int&nbsp;restartsLimit,
  boolean&nbsp;resetCutoffOnSolution)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSearch(org.chocosolver.solver.search.strategy.strategy.AbstractStrategy...)" class="member-name-link">setSearch</a><wbr>(org.chocosolver.solver.search.strategy.strategy.AbstractStrategy...&nbsp;strategies)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setSearch(org.chocosolver.solver.search.strategy.strategy.AbstractStrategy...)" class="member-name-link">setSearch</a><wbr>(org.chocosolver.solver.search.strategy.strategy.AbstractStrategy...&nbsp;strategies)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the search.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeout(long)" class="member-name-link">setTimeout</a><wbr>(long&nbsp;seconds)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeout(long)" class="member-name-link">setTimeout</a><wbr>(long&nbsp;seconds)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the timeout.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeoutMs(long)" class="member-name-link">setTimeoutMs</a><wbr>(long&nbsp;mseconds)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTimeoutMs(long)" class="member-name-link">setTimeoutMs</a><wbr>(long&nbsp;mseconds)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the timeout ms.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUserInterruption(boolean)" class="member-name-link">setUserInterruption</a><wbr>(boolean&nbsp;b)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUserInterruption(boolean)" class="member-name-link">setUserInterruption</a><wbr>(boolean&nbsp;b)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the user interruption.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVerbosity(int)" class="member-name-link">setVerbosity</a><wbr>(int&nbsp;level)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVerbosity(int)" class="member-name-link">setVerbosity</a><wbr>(int&nbsp;level)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the verbosity level by attaching a <code>VerboseSolving</code> monitor to the
  solver.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showContradiction()" class="member-name-link">showContradiction</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showContradiction()" class="member-name-link">showContradiction</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show contradiction.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDashboard()" class="member-name-link">showDashboard</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDashboard()" class="member-name-link">showDashboard</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show dashboard.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDecisions()" class="member-name-link">showDecisions</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Show decisions.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDecisions(int)" class="member-name-link">showDecisions</a><wbr>(int&nbsp;nChars)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDecisions()" class="member-name-link">showDecisions</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show decisions.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDecisions(org.chocosolver.solver.trace.IMessage)" class="member-name-link">showDecisions</a><wbr>(org.chocosolver.solver.trace.IMessage&nbsp;message)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDecisions(int)" class="member-name-link">showDecisions</a><wbr>(int&nbsp;nChars)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show decisions.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showRestarts()" class="member-name-link">showRestarts</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showDecisions(org.chocosolver.solver.trace.IMessage)" class="member-name-link">showDecisions</a><wbr>(org.chocosolver.solver.trace.IMessage&nbsp;message)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Show restarts.</div>
+<div class="block">Show decisions.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showRestarts(org.chocosolver.solver.trace.IMessage)" class="member-name-link">showRestarts</a><wbr>(org.chocosolver.solver.trace.IMessage&nbsp;message)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showRestarts()" class="member-name-link">showRestarts</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show restarts.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showShortStatistics()" class="member-name-link">showShortStatistics</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showRestarts(org.chocosolver.solver.trace.IMessage)" class="member-name-link">showRestarts</a><wbr>(org.chocosolver.solver.trace.IMessage&nbsp;message)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Show restarts.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showShortStatistics()" class="member-name-link">showShortStatistics</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show short statistics.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showShortStatisticsOnShutdown()" class="member-name-link">showShortStatisticsOnShutdown</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showShortStatisticsOnShutdown()" class="member-name-link">showShortStatisticsOnShutdown</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show short statistics on shutdown.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showSolutions()" class="member-name-link">showSolutions</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Show solutions.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showSolutions(org.chocosolver.solver.trace.IMessage)" class="member-name-link">showSolutions</a><wbr>(org.chocosolver.solver.trace.IMessage&nbsp;message)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showSolutions()" class="member-name-link">showSolutions</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show solutions.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showSolutions(org.chocosolver.solver.variables.Variable...)" class="member-name-link">showSolutions</a><wbr>(org.chocosolver.solver.variables.Variable...&nbsp;variables)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showSolutions(org.chocosolver.solver.trace.IMessage)" class="member-name-link">showSolutions</a><wbr>(org.chocosolver.solver.trace.IMessage&nbsp;message)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show solutions.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showStatistics()" class="member-name-link">showStatistics</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showSolutions(org.chocosolver.solver.variables.Variable...)" class="member-name-link">showSolutions</a><wbr>(org.chocosolver.solver.variables.Variable...&nbsp;variables)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Show solutions.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showStatistics()" class="member-name-link">showStatistics</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show statistics.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showStatisticsDuringResolution(long)" class="member-name-link">showStatisticsDuringResolution</a><wbr>(long&nbsp;f)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showStatisticsDuringResolution(long)" class="member-name-link">showStatisticsDuringResolution</a><wbr>(long&nbsp;f)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Show statistics during resolution.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Solves the problem using the configured solver.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(java.lang.String)" class="member-name-link">solve</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filename)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Solve.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve(java.lang.String)" class="member-name-link">solve</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;filename)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Solve.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;org.chocosolver.solver.Solution&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#streamOptimalSolutions(org.chocosolver.solver.variables.IntVar,boolean,org.chocosolver.util.criteria.Criterion...)" class="member-name-link">streamOptimalSolutions</a><wbr>(org.chocosolver.solver.variables.IntVar&nbsp;objective,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;org.chocosolver.solver.Solution&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#streamOptimalSolutions(org.chocosolver.solver.variables.IntVar,boolean,org.chocosolver.util.criteria.Criterion...)" class="member-name-link">streamOptimalSolutions</a><wbr>(org.chocosolver.solver.variables.IntVar&nbsp;objective,
  boolean&nbsp;maximize,
  org.chocosolver.util.criteria.Criterion...&nbsp;stop)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;org.chocosolver.solver.Solution&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#streamSolutions(org.chocosolver.util.criteria.Criterion...)" class="member-name-link">streamSolutions</a><wbr>(org.chocosolver.util.criteria.Criterion...&nbsp;stop)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;org.chocosolver.solver.Solution&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tableSampling(int,int,double,java.util.Random,org.chocosolver.util.criteria.Criterion...)" class="member-name-link">tableSampling</a><wbr>(int&nbsp;pivot,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#streamSolutions(org.chocosolver.util.criteria.Criterion...)" class="member-name-link">streamSolutions</a><wbr>(org.chocosolver.util.criteria.Criterion...&nbsp;stop)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;org.chocosolver.solver.Solution&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tableSampling(int,int,double,java.util.Random,org.chocosolver.util.criteria.Criterion...)" class="member-name-link">tableSampling</a><wbr>(int&nbsp;pivot,
  int&nbsp;nbVariablesInTable,
  double&nbsp;probaTuple,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Random.html" title="class or interface in java.util" class="external-link">Random</a>&nbsp;random,
  org.chocosolver.util.criteria.Criterion...&nbsp;criterion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#throwsException(org.chocosolver.solver.ICause,org.chocosolver.solver.variables.Variable,java.lang.String)" class="member-name-link">throwsException</a><wbr>(org.chocosolver.solver.ICause&nbsp;c,
- org.chocosolver.solver.variables.Variable&nbsp;v,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Throws exception.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toArray()" class="member-name-link">toArray</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">To array.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toCSV()" class="member-name-link">toCSV</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">To CSV.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toDimacsString()" class="member-name-link">toDimacsString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">To dimacs string.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toMultiLineString()" class="member-name-link">toMultiLineString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">To multi line string.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toOneLineString()" class="member-name-link">toOneLineString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">To one line string.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unplugAllSearchMonitors()" class="member-name-link">unplugAllSearchMonitors</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#throwsException(org.chocosolver.solver.ICause,org.chocosolver.solver.variables.Variable,java.lang.String)" class="member-name-link">throwsException</a><wbr>(org.chocosolver.solver.ICause&nbsp;c,
+ org.chocosolver.solver.variables.Variable&nbsp;v,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Throws exception.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toArray()" class="member-name-link">toArray</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">To array.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toCSV()" class="member-name-link">toCSV</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">To CSV.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toDimacsString()" class="member-name-link">toDimacsString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">To dimacs string.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toMultiLineString()" class="member-name-link">toMultiLineString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">To multi line string.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toOneLineString()" class="member-name-link">toOneLineString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">To one line string.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unplugAllSearchMonitors()" class="member-name-link">unplugAllSearchMonitors</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Unplug all search monitors.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unplugMonitor(org.chocosolver.solver.search.loop.monitors.ISearchMonitor)" class="member-name-link">unplugMonitor</a><wbr>(org.chocosolver.solver.search.loop.monitors.ISearchMonitor&nbsp;sm)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unplugMonitor(org.chocosolver.solver.search.loop.monitors.ISearchMonitor)" class="member-name-link">unplugMonitor</a><wbr>(org.chocosolver.solver.search.loop.monitors.ISearchMonitor&nbsp;sm)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Unplug monitor.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verboseSolving(long)" class="member-name-link">verboseSolving</a><wbr>(long&nbsp;frequencyInMilliseconds)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#verboseSolving(long)" class="member-name-link">verboseSolving</a><wbr>(long&nbsp;frequencyInMilliseconds)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Verbose solving.</div>
 </div>
 </div>
@@ -2687,9 +2690,13 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <section class="detail" id="nConstraints()">
 <h3>nConstraints</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">nConstraints</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../core/IConstraintGroupSolver.html#nConstraints()">IConstraintGroupSolver</a></code></span></div>
+<div class="block">N constraints.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../core/IConstraintGroupSolver.html#nConstraints()">nConstraints</a></code>&nbsp;in interface&nbsp;<code><a href="../core/IConstraintGroupSolver.html" title="interface in fr.univartois.cril.approximation.core">IConstraintGroupSolver</a></code></dd>
+<dt>Returns:</dt>
+<dd>the int</dd>
 </dl>
 </section>
 </li>
@@ -2734,14 +2741,14 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <h3>solve</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></span>&nbsp;<span class="element-name">solve</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="MyISolver.html#solve()">MyISolver</a></code></span></div>
-<div class="block">Solve.</div>
+<div class="block">Solves the problem using the configured solver.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="IApproximationSolver.html#solve()">solve</a></code>&nbsp;in interface&nbsp;<code><a href="IApproximationSolver.html" title="interface in fr.univartois.cril.approximation.solver">IApproximationSolver</a></code></dd>
 <dt>Specified by:</dt>
 <dd><code><a href="MyISolver.html#solve()">solve</a></code>&nbsp;in interface&nbsp;<code><a href="MyISolver.html" title="interface in fr.univartois.cril.approximation.solver">MyISolver</a></code></dd>
 <dt>Returns:</dt>
-<dd>the universe solver result</dd>
+<dd>The result of the solving process as a <a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver"><code>UniverseSolverResult</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -2763,7 +2770,7 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <h3>getConstraint</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.chocosolver.solver.constraints.Constraint</span>&nbsp;<span class="element-name">getConstraint</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../core/IConstraintGroupSolver.html#getConstraint(int)">IConstraintGroupSolver</a></code></span></div>
-<div class="block">Gives the constraint with the specified index</div>
+<div class="block">Gives the constraint with the specified index.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../core/IConstraintGroupSolver.html#getConstraint(int)">getConstraint</a></code>&nbsp;in interface&nbsp;<code><a href="../core/IConstraintGroupSolver.html" title="interface in fr.univartois.cril.approximation.core">IConstraintGroupSolver</a></code></dd>
@@ -2778,10 +2785,13 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <section class="detail" id="getGroups()">
 <h3>getGroups</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../core/GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a>&gt;</span>&nbsp;<span class="element-name">getGroups</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../core/IConstraintGroupSolver.html#getGroups()">IConstraintGroupSolver</a></code></span></div>
+<div class="block">Gets the groups.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../core/IConstraintGroupSolver.html#getGroups()">getGroups</a></code>&nbsp;in interface&nbsp;<code><a href="../core/IConstraintGroupSolver.html" title="interface in fr.univartois.cril.approximation.core">IConstraintGroupSolver</a></code></dd>
 <dt>Returns:</dt>
+<dd>the groups</dd>
 </dl>
 </section>
 </li>
@@ -2789,10 +2799,15 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <section class="detail" id="getGroup(int)">
 <h3>getGroup</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../core/GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a></span>&nbsp;<span class="element-name">getGroup</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../core/IConstraintGroupSolver.html#getGroup(int)">IConstraintGroupSolver</a></code></span></div>
+<div class="block">Gets the group.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../core/IConstraintGroupSolver.html#getGroup(int)">getGroup</a></code>&nbsp;in interface&nbsp;<code><a href="../core/IConstraintGroupSolver.html" title="interface in fr.univartois.cril.approximation.core">IConstraintGroupSolver</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>index</code> - the index</dd>
 <dt>Returns:</dt>
+<dd>the group</dd>
 </dl>
 </section>
 </li>
@@ -2800,10 +2815,13 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <section class="detail" id="nGroups()">
 <h3>nGroups</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">nGroups</span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../core/IConstraintGroupSolver.html#nGroups()">IConstraintGroupSolver</a></code></span></div>
+<div class="block">N groups.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../core/IConstraintGroupSolver.html#nGroups()">nGroups</a></code>&nbsp;in interface&nbsp;<code><a href="../core/IConstraintGroupSolver.html" title="interface in fr.univartois.cril.approximation.core">IConstraintGroupSolver</a></code></dd>
 <dt>Returns:</dt>
+<dd>the int</dd>
 </dl>
 </section>
 </li>
@@ -2812,12 +2830,12 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <h3>displaySolution</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">displaySolution</span><wbr><span class="parameters">(org.chocosolver.parser.xcsp.XCSP&nbsp;xcsp)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="IApproximationSolver.html#displaySolution(org.chocosolver.parser.xcsp.XCSP)">IApproximationSolver</a></code></span></div>
-<div class="block">Display solution.</div>
+<div class="block">Displays the solution using the provided XCSP parser.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="IApproximationSolver.html#displaySolution(org.chocosolver.parser.xcsp.XCSP)">displaySolution</a></code>&nbsp;in interface&nbsp;<code><a href="IApproximationSolver.html" title="interface in fr.univartois.cril.approximation.solver">IApproximationSolver</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>xcsp</code> - the xcsp</dd>
+<dd><code>xcsp</code> - The XCSP parser instance used for displaying the solution.</dd>
 </dl>
 </section>
 </li>
@@ -2886,18 +2904,6 @@ implements <a href="MyISolver.html" title="interface in fr.univartois.cril.appro
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the solution</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="restoreSolution()">
-<h3>restoreSolution</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">restoreSolution</span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="IApproximationSolver.html#restoreSolution()">IApproximationSolver</a></code></span></div>
-<div class="block">Restore solution.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="IApproximationSolver.html#restoreSolution()">restoreSolution</a></code>&nbsp;in interface&nbsp;<code><a href="IApproximationSolver.html" title="interface in fr.univartois.cril.approximation.solver">IApproximationSolver</a></code></dd>
 </dl>
 </section>
 </li>

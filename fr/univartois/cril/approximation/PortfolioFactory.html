@@ -77,7 +77,16 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PortfolioFactory</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">A factory for creating Portfolio objects.</div>
+<div class="block">A factory class for creating <a href="solver/Portfolio.html" title="class in fr.univartois.cril.approximation.solver"><code>Portfolio</code></a> objects.
+ <p>
+ This class is responsible for initializing a portfolio of solvers based on
+ a configuration file. The created portfolio can manage multiple solvers,
+ including default solvers and approximation-based solvers.
+ </p>
+ <p>
+ The portfolio configuration is read from a file, where each line defines a
+ solver instance with its parameters.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -95,7 +104,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="solver/Portfolio.html" title="class in fr.univartois.cril.approximation.solver">Portfolio</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#newDefaultPortfolio(net.sourceforge.argparse4j.inf.Namespace)" class="member-name-link">newDefaultPortfolio</a><wbr>(net.sourceforge.argparse4j.inf.Namespace&nbsp;args)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">New default portfolio.</div>
+<div class="block">Creates a new default <a href="solver/Portfolio.html" title="class in fr.univartois.cril.approximation.solver"><code>Portfolio</code></a> using the specified arguments.</div>
 </div>
 </div>
 </div>
@@ -118,12 +127,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="newDefaultPortfolio(net.sourceforge.argparse4j.inf.Namespace)">
 <h3>newDefaultPortfolio</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="solver/Portfolio.html" title="class in fr.univartois.cril.approximation.solver">Portfolio</a></span>&nbsp;<span class="element-name">newDefaultPortfolio</span><wbr><span class="parameters">(net.sourceforge.argparse4j.inf.Namespace&nbsp;args)</span></div>
-<div class="block">New default portfolio.</div>
+<div class="block">Creates a new default <a href="solver/Portfolio.html" title="class in fr.univartois.cril.approximation.solver"><code>Portfolio</code></a> using the specified arguments.
+ <p>
+ This method reads a portfolio configuration file and initializes solvers
+ accordingly. Each solver instance is added to the portfolio.
+ </p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>args</code> - the args</dd>
+<dd><code>args</code> - The parsed command-line arguments containing configuration options.</dd>
 <dt>Returns:</dt>
-<dd>the portfolio</dd>
+<dd>A configured <a href="solver/Portfolio.html" title="class in fr.univartois.cril.approximation.solver"><code>Portfolio</code></a> instance.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If the portfolio configuration file is missing.</dd>
 </dl>
 </section>
 </li>

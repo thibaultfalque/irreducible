@@ -82,7 +82,13 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">IConstraintGroupSolver</span><span class="extends-implements">
 extends org.chocosolver.solver.ISolver</span></div>
-<div class="block">The IConstraintGroupSolver</div>
+<div class="block">Interface defining a solver that handles constraint groups.
+ <p>
+ The <code>IConstraintGroupSolver</code> extends <code>ISolver</code> and provides
+ additional functionality to manage constraints organized into groups.
+ It allows retrieval of constraints and constraint groups, as well as
+ querying the number of groups and constraints.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -100,7 +106,7 @@ extends org.chocosolver.solver.ISolver</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>org.chocosolver.solver.constraints.Constraint</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getConstraint(int)" class="member-name-link">getConstraint</a><wbr>(int&nbsp;index)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gives the constraint with the specified index</div>
+<div class="block">Gives the constraint with the specified index.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;org.chocosolver.solver.constraints.Constraint&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getConstraints()" class="member-name-link">getConstraints</a>()</code></div>
@@ -109,16 +115,24 @@ extends org.chocosolver.solver.ISolver</span></div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getGroup(int)" class="member-name-link">getGroup</a><wbr>(int&nbsp;index)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Gets the group.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getGroups()" class="member-name-link">getGroups</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Gets the groups.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#nConstraints()" class="member-name-link">nConstraints</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">N constraints.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#nGroups()" class="member-name-link">nGroups</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">N groups.</div>
+</div>
 </div>
 </div>
 </div>
@@ -163,7 +177,7 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="getConstraint(int)">
 <h3>getConstraint</h3>
 <div class="member-signature"><span class="return-type">org.chocosolver.solver.constraints.Constraint</span>&nbsp;<span class="element-name">getConstraint</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
-<div class="block">Gives the constraint with the specified index</div>
+<div class="block">Gives the constraint with the specified index.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>index</code> - the index of the constraint</dd>
@@ -176,8 +190,10 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="getGroups()">
 <h3>getGroups</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a>&gt;</span>&nbsp;<span class="element-name">getGroups</span>()</div>
+<div class="block">Gets the groups.</div>
 <dl class="notes">
 <dt>Returns:</dt>
+<dd>the groups</dd>
 </dl>
 </section>
 </li>
@@ -185,10 +201,12 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="getGroup(int)">
 <h3>getGroup</h3>
 <div class="member-signature"><span class="return-type"><a href="GroupConstraint.html" title="class in fr.univartois.cril.approximation.core">GroupConstraint</a></span>&nbsp;<span class="element-name">getGroup</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="block">Gets the group.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>index</code> - </dd>
+<dd><code>index</code> - the index</dd>
 <dt>Returns:</dt>
+<dd>the group</dd>
 </dl>
 </section>
 </li>
@@ -196,8 +214,10 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="nGroups()">
 <h3>nGroups</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">nGroups</span>()</div>
+<div class="block">N groups.</div>
 <dl class="notes">
 <dt>Returns:</dt>
+<dd>the int</dd>
 </dl>
 </section>
 </li>
@@ -205,6 +225,11 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="nConstraints()">
 <h3>nConstraints</h3>
 <div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">nConstraints</span>()</div>
+<div class="block">N constraints.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the int</dd>
+</dl>
 </section>
 </li>
 </ul>

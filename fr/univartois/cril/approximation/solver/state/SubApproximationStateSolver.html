@@ -139,7 +139,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNbRemoved()" class="member-name-link">getNbRemoved</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the nb removed.</div>
+<div class="block">Retrieves the number of removed constraints.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRestored()" class="member-name-link">isRestored</a>()</code></div>
@@ -149,17 +149,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSafe()" class="member-name-link">isSafe</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Checks if is safe.</div>
+<div class="block">Checks if the solver state is considered safe.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nextState()" class="member-name-link">nextState</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Next state.</div>
+<div class="block">Moves to the next state of the solver.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#previousState()" class="member-name-link">previousState</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Previous state.</div>
+<div class="block">Moves to the previous state of the solver.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resetLimitSolver()" class="member-name-link">resetLimitSolver</a>()</code></div>
@@ -175,12 +175,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Solve.</div>
+<div class="block">Solves the current state of the solver.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#solveStarter()" class="member-name-link">solveStarter</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Solve starter.</div>
+<div class="block">Solves using the initial state setup.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -249,10 +249,10 @@ loadScripts(document, 'script');</script>
 <h3>solve</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></span>&nbsp;<span class="element-name">solve</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#solve()">ISolverState</a></code></span></div>
-<div class="block">Solve.</div>
+<div class="block">Solves the current state of the solver.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the universe solver result</dd>
+<dd>The result of the solving process as a <a href="../UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver"><code>UniverseSolverResult</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -261,10 +261,10 @@ loadScripts(document, 'script');</script>
 <h3>nextState</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a></span>&nbsp;<span class="element-name">nextState</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#nextState()">ISolverState</a></code></span></div>
-<div class="block">Next state.</div>
+<div class="block">Moves to the next state of the solver.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the i solver state</dd>
+<dd>The next solver state.</dd>
 </dl>
 </section>
 </li>
@@ -273,10 +273,10 @@ loadScripts(document, 'script');</script>
 <h3>solveStarter</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></span>&nbsp;<span class="element-name">solveStarter</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#solveStarter()">ISolverState</a></code></span></div>
-<div class="block">Solve starter.</div>
+<div class="block">Solves using the initial state setup.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the universe solver result</dd>
+<dd>The result of the solving process as a <a href="../UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver"><code>UniverseSolverResult</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -285,10 +285,10 @@ loadScripts(document, 'script');</script>
 <h3>previousState</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ISolverState.html" title="interface in fr.univartois.cril.approximation.solver.state">ISolverState</a></span>&nbsp;<span class="element-name">previousState</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#previousState()">ISolverState</a></code></span></div>
-<div class="block">Previous state.</div>
+<div class="block">Moves to the previous state of the solver.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the i solver state</dd>
+<dd>The previous solver state.</dd>
 </dl>
 </section>
 </li>
@@ -333,10 +333,10 @@ loadScripts(document, 'script');</script>
 <h3>getNbRemoved</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getNbRemoved</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#getNbRemoved()">ISolverState</a></code></span></div>
-<div class="block">Gets the nb removed.</div>
+<div class="block">Retrieves the number of removed constraints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the nb removed</dd>
+<dd>The number of constraints removed during solving.</dd>
 </dl>
 </section>
 </li>
@@ -357,10 +357,10 @@ loadScripts(document, 'script');</script>
 <h3>isSafe</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isSafe</span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ISolverState.html#isSafe()">ISolverState</a></code></span></div>
-<div class="block">Checks if is safe.</div>
+<div class="block">Checks if the solver state is considered safe.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>true, if is safe</dd>
+<dd><code>true</code> if the state is safe, <code>false</code> otherwise.</dd>
 </dl>
 </section>
 </li>

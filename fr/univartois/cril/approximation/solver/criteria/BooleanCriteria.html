@@ -82,7 +82,16 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">BooleanCriteria</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.chocosolver.util.criteria.Criterion</span></div>
-<div class="block">The Class BooleanCriteria.</div>
+<div class="block">A criterion that allows stopping a solving process based on a boolean flag.
+ <p>
+ The <code>BooleanCriteria</code> class implements <code>Criterion</code> and provides a simple
+ mechanism to signal when a solver should stop by setting an atomic boolean value.
+ </p>
+
+ <p>
+ This criterion is useful for managing termination conditions across multiple solvers
+ running in parallel.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -112,11 +121,13 @@ implements org.chocosolver.util.criteria.Criterion</span></div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isMet()" class="member-name-link">isMet</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Checks whether the stop condition is met.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setStop(boolean)" class="member-name-link">setStop</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the stop.</div>
+<div class="block">Sets the stop condition.</div>
 </div>
 </div>
 </div>
@@ -153,10 +164,10 @@ implements org.chocosolver.util.criteria.Criterion</span></div>
 <section class="detail" id="setStop(boolean)">
 <h3>setStop</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setStop</span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
-<div class="block">Sets the stop.</div>
+<div class="block">Sets the stop condition.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - the new stop</dd>
+<dd><code>value</code> - <code>true</code> to indicate stopping, <code>false</code> otherwise.</dd>
 </dl>
 </section>
 </li>
@@ -164,9 +175,12 @@ implements org.chocosolver.util.criteria.Criterion</span></div>
 <section class="detail" id="isMet()">
 <h3>isMet</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isMet</span>()</div>
+<div class="block">Checks whether the stop condition is met.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>isMet</code>&nbsp;in interface&nbsp;<code>org.chocosolver.util.criteria.Criterion</code></dd>
+<dt>Returns:</dt>
+<dd><code>true</code> if stopping is required, otherwise <code>false</code>.</dd>
 </dl>
 </section>
 </li>

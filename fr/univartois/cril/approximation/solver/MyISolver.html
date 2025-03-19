@@ -86,7 +86,12 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">MyISolver</span><span class="extends-implements">
 extends org.chocosolver.solver.ISolver</span></div>
-<div class="block">The Interface MyISolver.</div>
+<div class="block">Interface defining a solver with additional functionalities.
+ <p>
+ The <code>MyISolver</code> interface extends <code>ISolver</code> and provides
+ methods for solving, managing search monitors, handling objectives,
+ and defining stop criteria.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -104,22 +109,22 @@ extends org.chocosolver.solver.ISolver</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#addStopCriterion(org.chocosolver.util.criteria.Criterion...)" class="member-name-link">addStopCriterion</a><wbr>(org.chocosolver.util.criteria.Criterion...&nbsp;criterion)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Adds the stop criterion.</div>
+<div class="block">Adds one or more stop criteria to the solver.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;V extends org.chocosolver.solver.variables.Variable&gt;<br>org.chocosolver.solver.objective.IObjectiveManager&lt;V&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getObjectiveManager()" class="member-name-link">getObjectiveManager</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the objective manager.</div>
+<div class="block">Retrieves the objective manager handling optimization objectives.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#plugMonitor(org.chocosolver.solver.search.loop.monitors.ISearchMonitor)" class="member-name-link">plugMonitor</a><wbr>(org.chocosolver.solver.search.loop.monitors.ISearchMonitor&nbsp;monitor)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Plug monitor.</div>
+<div class="block">Attaches a search monitor to the solver.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#solve()" class="member-name-link">solve</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Solve.</div>
+<div class="block">Solves the problem using the configured solver.</div>
 </div>
 </div>
 </div>
@@ -154,10 +159,10 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="solve()">
 <h3>solve</h3>
 <div class="member-signature"><span class="return-type"><a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver">UniverseSolverResult</a></span>&nbsp;<span class="element-name">solve</span>()</div>
-<div class="block">Solve.</div>
+<div class="block">Solves the problem using the configured solver.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the universe solver result</dd>
+<dd>The result of the solving process as a <a href="UniverseSolverResult.html" title="enum class in fr.univartois.cril.approximation.solver"><code>UniverseSolverResult</code></a>.</dd>
 </dl>
 </section>
 </li>
@@ -165,10 +170,10 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="plugMonitor(org.chocosolver.solver.search.loop.monitors.ISearchMonitor)">
 <h3>plugMonitor</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">plugMonitor</span><wbr><span class="parameters">(org.chocosolver.solver.search.loop.monitors.ISearchMonitor&nbsp;monitor)</span></div>
-<div class="block">Plug monitor.</div>
+<div class="block">Attaches a search monitor to the solver.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>monitor</code> - the monitor</dd>
+<dd><code>monitor</code> - The search monitor to be plugged in.</dd>
 </dl>
 </section>
 </li>
@@ -177,12 +182,12 @@ extends org.chocosolver.solver.ISolver</span></div>
 <h3>getObjectiveManager</h3>
 <div class="member-signature"><span class="type-parameters-long">&lt;V extends org.chocosolver.solver.variables.Variable&gt;</span>
 <span class="return-type">org.chocosolver.solver.objective.IObjectiveManager&lt;V&gt;</span>&nbsp;<span class="element-name">getObjectiveManager</span>()</div>
-<div class="block">Gets the objective manager.</div>
+<div class="block">Retrieves the objective manager handling optimization objectives.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
-<dd><code>V</code> - the value type</dd>
+<dd><code>V</code> - The type of the objective variable.</dd>
 <dt>Returns:</dt>
-<dd>the objective manager</dd>
+<dd>The objective manager associated with this solver.</dd>
 </dl>
 </section>
 </li>
@@ -190,10 +195,10 @@ extends org.chocosolver.solver.ISolver</span></div>
 <section class="detail" id="addStopCriterion(org.chocosolver.util.criteria.Criterion...)">
 <h3>addStopCriterion</h3>
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">addStopCriterion</span><wbr><span class="parameters">(org.chocosolver.util.criteria.Criterion...&nbsp;criterion)</span></div>
-<div class="block">Adds the stop criterion.</div>
+<div class="block">Adds one or more stop criteria to the solver.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>criterion</code> - the criterion</dd>
+<dd><code>criterion</code> - The stop criteria to be added.</dd>
 </dl>
 </section>
 </li>
