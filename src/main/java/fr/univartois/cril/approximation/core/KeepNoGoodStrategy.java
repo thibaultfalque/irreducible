@@ -1,12 +1,13 @@
 /**
- * JUniverse, a solver interface.
- * Copyright (c) 2022 - Univ Artois, CNRS & Exakis Nelite.
+ * approximation, a constraint programming solver based on Choco, utilizing relaxation
+ * techniques.
+ * Copyright (c) 2025 - Univ Artois, CNRS & Luxembourg University.
  * All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * version 3 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,52 +28,79 @@ import fr.univartois.cril.approximation.solver.state.ISolverState;
 import fr.univartois.cril.approximation.solver.state.NormalStateSolver;
 
 /**
- * The KeepNoGoodStrategy
+ * The KeepNoGoodStrategy.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
 public enum KeepNoGoodStrategy {
+
+    /** The always. */
     ALWAYS {
 
         @Override
         public void resetNoGoods(AbstractState state, Solver ace) {
-            
         }
 
         @Override
         public void resetNoGoods(NormalStateSolver state, Solver ace) {
-            
         }
-    },NEVER {
+
+    },
+    
+    /** The never. */
+    NEVER {
 
         @Override
         public void resetNoGoods(AbstractState state, Solver ace) {
-            //todo
+            // todo
         }
 
         @Override
         public void resetNoGoods(NormalStateSolver state, Solver ace) {
-        	//todo
+            // todo
         }
-    },NORMAL_ONLY {
+
+    },
+    
+    /** The normal only. */
+    NORMAL_ONLY {
 
         @Override
         public void resetNoGoods(AbstractState state, Solver ace) {
-           
         }
 
         @Override
         public void resetNoGoods(NormalStateSolver state, Solver ace) {
         }
+
     };
 
+    /**
+     * Reset no goods.
+     *
+     * @param state the state
+     * @param ace the ace
+     */
     public void resetNoGoods(ISolverState state, Solver ace) {
         state.resetNoGoods(this, ace);
     }
-    public abstract void resetNoGoods(AbstractState state, Solver ace);
-    public abstract void resetNoGoods(NormalStateSolver state, Solver ace);
-}
 
+    /**
+     * Reset no goods.
+     *
+     * @param state the state
+     * @param ace the ace
+     */
+    public abstract void resetNoGoods(AbstractState state, Solver ace);
+
+    /**
+     * Reset no goods.
+     *
+     * @param state the state
+     * @param ace the ace
+     */
+    public abstract void resetNoGoods(NormalStateSolver state, Solver ace);
+
+}

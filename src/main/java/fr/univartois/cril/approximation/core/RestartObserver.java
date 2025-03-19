@@ -1,10 +1,22 @@
 /**
- * This file is a part of the {@code fr.univartois.cril.approximation.core} package.
- *
- * It contains the type RestartObserver.
- *
- * (c) 2023 Romain Wallon - approximation.
+ * approximation, a constraint programming solver based on Choco, utilizing relaxation
+ * techniques.
+ * Copyright (c) 2025 - Univ Artois, CNRS & Luxembourg University.
  * All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ * If not, see {@link http://www.gnu.org/licenses}.
  */
 
 package fr.univartois.cril.approximation.core;
@@ -19,36 +31,42 @@ import org.chocosolver.solver.variables.events.IEventType;
 
 import fr.univartois.cril.approximation.solver.ApproximationSolverDecorator;
 
-
 /**
- * The RestartObserver
+ * The RestartObserver.
  *
  * @author Romain Wallon
- *
  * @version 0.1.0
  */
 public class RestartObserver implements IVariableMonitor, IMonitorRestart {
-	
-	private Set<String> assignedVars = new HashSet<>();
 
+    /** The assigned vars. */
+    private Set<String> assignedVars = new HashSet<>();
+
+    /** The solver. */
     private final ApproximationSolverDecorator solver;
 
-
+    /** The nb runs. */
     private int nbRuns;
 
+    /** The ratio limit. */
     private final double ratioLimit;
 
+    /** The restart limit. */
     private int restartLimit;
 
+    /** The restart factor. */
     private final double restartFactor;
 
     /**
      * Creates a new RestartObserver.
-     * @param solver
-     * @param ratioLimit
-     * @param restartLimit
+     *
+     * @param solver the solver
+     * @param ratioLimit the ratio limit
+     * @param restartLimit the restart limit
+     * @param restartFactor the restart factor
      */
-    public RestartObserver(ApproximationSolverDecorator solver, double ratioLimit, int restartLimit, double restartFactor) {
+    public RestartObserver(ApproximationSolverDecorator solver, double ratioLimit, int restartLimit,
+            double restartFactor) {
         this.solver = solver;
         this.ratioLimit = ratioLimit;
         this.restartLimit = (int) (restartLimit / restartFactor);
@@ -82,15 +100,18 @@ public class RestartObserver implements IVariableMonitor, IMonitorRestart {
         assignedVars.clear();
     }
 
-
-	@Override
-	public void onUpdate(Variable variable, IEventType event) {
-		if (variable.getDomainSize() == 1 && !assignedVars.contains(variable.getName())) {
-			assignedVars.add(variable.getName());
-		} else if (variable.getDomainSize() != 1 && assignedVars.contains(variable.getName())) {
-			assignedVars.remove(variable.getName());
-		} 
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.chocosolver.solver.variables.IVariableMonitor#onUpdate(org.chocosolver.solver.variables.Variable, org.chocosolver.solver.variables.events.IEventType)
+     */
+    @Override
+    public void onUpdate(Variable variable, IEventType event) {
+        if (variable.getDomainSize() == 1 && !assignedVars.contains(variable.getName())) {
+            assignedVars.add(variable.getName());
+        } else if (variable.getDomainSize() != 1 && assignedVars.contains(variable.getName())) {
+            assignedVars.remove(variable.getName());
+        }
+    }
 
 }
-
