@@ -31,7 +31,6 @@ import org.chocosolver.solver.search.loop.monitors.ISearchMonitor;
 import org.chocosolver.solver.search.loop.monitors.SearchMonitorList;
 import org.chocosolver.solver.search.loop.monitors.SolvingStatisticsFlow;
 import org.chocosolver.solver.search.loop.move.Move;
-import org.chocosolver.solver.search.loop.propagate.Propagate;
 import org.chocosolver.solver.search.measure.IMeasures;
 import org.chocosolver.solver.search.measure.MeasuresRecorder;
 import org.chocosolver.solver.search.restart.AbstractRestart;
@@ -509,15 +508,6 @@ public class MyISolverAdapter implements MyISolver {
     }
 
     /**
-     * Gets the propagate.
-     *
-     * @return the propagate
-     */
-    public Propagate getPropagate() {
-        return adaptee.getPropagate();
-    }
-
-    /**
      * Gets the reading time count.
      *
      * @return the reading time count
@@ -668,16 +658,6 @@ public class MyISolverAdapter implements MyISolver {
      */
     public boolean hasObjective() {
         return adaptee.hasObjective();
-    }
-
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return adaptee.hashCode();
     }
 
     /**
@@ -920,17 +900,6 @@ public class MyISolverAdapter implements MyISolver {
     }
 
     /**
-     * Output search tree to CP profiler.
-     *
-     * @param domain the domain
-     *
-     * @return the closeable
-     */
-    public Closeable outputSearchTreeToCPProfiler(boolean domain) {
-        return adaptee.outputSearchTreeToCPProfiler(domain);
-    }
-
-    /**
      * Output search tree to gephi.
      *
      * @param gexfFilename the gexf filename
@@ -1149,8 +1118,8 @@ public class MyISolverAdapter implements MyISolver {
      * long)
      */
     @Override
-    public void setHBFS(double a, double b, long N) {
-        adaptee.setHBFS(a, b, N);
+    public void setHBFS(double a, double b, long n) {
+        adaptee.setHBFS(a, b, n);
     }
 
     /**
@@ -1314,15 +1283,6 @@ public class MyISolverAdapter implements MyISolver {
         adaptee.setObjectiveManager(om);
     }
 
-    /**
-     * Sets the propagate.
-     *
-     * @param p the new propagate
-     */
-    public void setPropagate(Propagate p) {
-        adaptee.setPropagate(p);
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -1383,15 +1343,6 @@ public class MyISolverAdapter implements MyISolver {
      */
     public void showDashboard() {
         adaptee.showDashboard();
-    }
-
-    /**
-     * Show dashboard.
-     *
-     * @param refresh the refresh
-     */
-    public void showDashboard(long refresh) {
-        adaptee.showDashboard(refresh);
     }
 
     /**

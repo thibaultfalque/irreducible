@@ -23,30 +23,37 @@ package fr.univartois.cril.approximation.util;
 import java.lang.reflect.Constructor;
 
 /**
- * The AbstractFactory
+ * The AbstractFactory.
  *
  * @author Thibault Falque
  * @author Romain Wallon
- *
  * @version 0.1.0
+ * @param <T> the generic type
  */
 public abstract class AbstractFactory<T> {
-	@SuppressWarnings("unchecked")
-	protected Constructor<T> createByName(String className,Class<?>...args) {
-	        try {
-	        	var clz = Class.forName(className);
-	            return (Constructor<T>) clz.getDeclaredConstructor(args);
-	        } catch (SecurityException e) {
-	            System.err.println(e.getLocalizedMessage());
-	        } catch (IllegalArgumentException e) {
-	            System.err.println(e.getLocalizedMessage());
-	        } catch (NoSuchMethodException e) {
-	            System.err.println(e.getLocalizedMessage());
-	        } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-	        return null;
-	    }
-}
 
+    /**
+     * Creates a new Abstract object.
+     *
+     * @param className the class name
+     * @param args the args
+     * @return the constructor< t>
+     */
+    @SuppressWarnings("unchecked")
+    protected Constructor<T> createByName(String className, Class<?>... args) {
+        try {
+            var clz = Class.forName(className);
+            return (Constructor<T>) clz.getDeclaredConstructor(args);
+        } catch (SecurityException e) {
+            System.err.println(e.getLocalizedMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getLocalizedMessage());
+        } catch (NoSuchMethodException e) {
+            System.err.println(e.getLocalizedMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+}

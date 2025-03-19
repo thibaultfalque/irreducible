@@ -30,7 +30,9 @@ import fr.univartois.cril.approximation.util.collections.heaps.Heap;
  *
  * @author Thibault Falque
  * @author Romain Wallon
+ *
  * @version 0.1.0
+ *
  * @param <T> the generic type
  */
 public abstract class AbstractConstraintRemover<T> implements IConstraintsRemover {
@@ -49,7 +51,7 @@ public abstract class AbstractConstraintRemover<T> implements IConstraintsRemove
      *
      * @param groupSolver the group solver
      */
-    public AbstractConstraintRemover(IConstraintGroupSolver groupSolver) {
+    protected AbstractConstraintRemover(IConstraintGroupSolver groupSolver) {
         this.groupSolver = groupSolver;
     }
 
