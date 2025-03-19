@@ -49,14 +49,11 @@ public class Main {
         var parser = CLI.createCLIParser(true);
         try {
             var arguments = parser.parseArgs(args);
-            if (arguments.getBoolean("portfolio")) {
+            if (Boolean.TRUE.equals(arguments.getBoolean("portfolio"))) {
                 var portfolio = PortfolioFactory.newDefaultPortfolio(arguments);
-                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                    portfolio.stop();
-                }));
+                Runtime.getRuntime().addShutdownHook(new Thread(portfolio::stop));
                 portfolio.solve();
             } else {
-                System.out.println("c " + arguments);
                 List<String> chocoArgs = new ArrayList<>();
                 chocoArgs.add(arguments.<String>get("instance"));
                 chocoArgs.addAll(arguments.getList("remaining"));
@@ -80,9 +77,8 @@ public class Main {
 
                 var solver = builder.initState(arguments).build();
 
-                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                    solver.displaySolution(xcsp);
-                }));
+                Runtime.getRuntime()
+                        .addShutdownHook(new Thread(() -> solver.displaySolution(xcsp)));
                 solver.solve();
             }
 
