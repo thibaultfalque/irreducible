@@ -1950,10 +1950,10 @@ public class ApproximationSolverDecorator
             finalOutPut(solver);
             if (solution.exists()) {
                 var map = (new XCSPParserExtension(xcsp.parsers[0])).getVarsOfProblem();
-                System.out.println(printSolution(false, map));
+                listener.onSolution(printSolution(false, map));
             }
         } else {
-            System.out.println("s UNKNOWN");
+            listener.onResult(state, UniverseSolverResult.UNKNOWN);
         }
     }
 

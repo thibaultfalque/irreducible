@@ -130,7 +130,6 @@ public class NormalStateSolver extends AbstractState {
         solver.limitSolution(Integer.MAX_VALUE);
 
         var r = internalSolve();
-        System.out.println(this + " " + r);
         solver.unplugMonitor(observerSolution);
         listener.onResult(this, r);
         listener.onStateSolved(this);
