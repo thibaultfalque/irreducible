@@ -96,6 +96,12 @@ jacocoTestReport {
  * Javadoc Configuration *
  *************************/
 
+tasks.withType(Javadoc) {
+      failOnError false
+      options.addStringOption('Xdoclint:none', '-quiet')
+      options.addStringOption('encoding', 'UTF-8')
+      options.addStringOption('charSet', 'UTF-8')
+}
 
 
 /****************
@@ -107,70 +113,6 @@ java {
     withJavadocJar()
     withSourcesJar()
 }
-
-// Configuring the POM file to publish.
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-
-            versionMapping {
-                usage("java-api") {
-                    fromResolutionOf("runtimeClasspath")
-                }
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
-            }
-
-            pom {
-                name = "JNarcotics"
-                description = "a veRy quiCkly cOded constraint pRogramming Solver in java"
-                url = "https://github.com/crillab/jnarcotics"
-
-                licenses {
-                    license {
-                        name = "GNU Lesser General Public License, Version 3"
-                        url = "https://www.gnu.org/licenses/lgpl-3.0.html"
-                    }
-                }
-
-                developers {
-                    developer {
-                        id = "thibaultfalque"
-                        name = "Thibault Falque"
-                        email = "falque@cril.fr"
-                    }
-
-                    developer {
-                        id = "romainwallon"
-                        name = "Romain Wallon"
-                        email = "wallon@cril.fr"
-                    }
-                }
-
-                scm {
-                    connection = "scm:git:https://github.com/crillab/jnarcotics"
-                    developerConnection = "scm:git:https://github.com/crillab/jnarcotics"
-                    url = "https://github.com/crillab/jnarcotics"
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/crillab/jnarcotics")
-            credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
-                password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
-
-
 
 /*************
  * Packaging *
@@ -190,7 +132,7 @@ task collectExternalDependencies(type: Copy) {
     into "${jarDir}"
 }
 
-// Creating a gzipped-tarball with Sat4j-CSP and its dependencies.
+// Creating a gzipped-tarball with approximation and its dependencies.
 task approx(type: Tar) {
     dependsOn jar
     dependsOn collectExternalDependencies
@@ -203,7 +145,7 @@ task approx(type: Tar) {
     compression = Compression.GZIP
 }
 
-// Removes the binary files of Sat4j-CSP when cleaning.
+// Removes the binary files of approximation when cleaning.
 task removeBinaries(type: Delete) {
     delete "dist"
 }
