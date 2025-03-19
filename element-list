@@ -1,0 +1,14 @@
+fr.univartois.cril.approximation
+fr.univartois.cril.approximation.cli
+fr.univartois.cril.approximation.core
+fr.univartois.cril.approximation.solver
+fr.univartois.cril.approximation.solver.criteria
+fr.univartois.cril.approximation.solver.state
+fr.univartois.cril.approximation.subapproximation.measure
+fr.univartois.cril.approximation.subapproximation.remover
+fr.univartois.cril.approximation.util
+fr.univartois.cril.approximation.util.collections
+fr.univartois.cril.approximation.util.collections.dynamic
+fr.univartois.cril.approximation.util.collections.heaps
+fr.univartois.cril.approximation.util.collections.indexed
+fr.univartois.cril.approximation.util.collections.maps
