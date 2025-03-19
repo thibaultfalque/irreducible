@@ -24,7 +24,6 @@ import fr.univartois.cril.approximation.core.IConstraintsRemover;
 import fr.univartois.cril.approximation.solver.state.PathStrategy;
 
 /**
- * /**
  * The {@code SolverConfiguration} class defines the configuration settings
  * for an approximation-based solver. It encapsulates various parameters
  * controlling the solver’s execution, such as the number of failed,
